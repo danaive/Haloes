@@ -74,13 +74,24 @@ WSGI_APPLICATION = 'Haloes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+import platform
 
+dbinfo = {}
+
+if 'Darwin' in platform.system():
+    dbinfo['ENGINE'] = 'django.db.backends.sqlite3'
+    dbinfo['NAME'] = os.path.join(BASE_DIR, 'db.sqlite3')
+else:
+    dbinfo['ENGINE'] = 'django.db.backends.mysql'
+    dbinfo['NAME'] = 'haloes'
+    dbinfo['USER'] = 'root'
+    dbinfo['PASSWORD'] = ''
+    dbinfo['HOST'] = ''
+    dbinfo['PORT'] = '3306'
+
+DATABASES = {
+    'default': dbinfo
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
