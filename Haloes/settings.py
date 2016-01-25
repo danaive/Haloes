@@ -25,7 +25,7 @@ SECRET_KEY = 't9rd&$vms)e%+=k_mf(az)s*vqn%ni+e4+)5pi+8!*g!&fjps6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -122,12 +122,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'statics/')
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-STATICFILES_DIR = [
-    ('download', os.path.join(BASE_DIR, 'static/')),
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
 ]
