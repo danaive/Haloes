@@ -2,12 +2,86 @@
 doctype html
 html(lang="en")
   head
-    title TEST
-    script(src='{% static "test.js" %}')
-  body
-    h1.title Jade - node template engine
-    #container
-      if youAreUsingJade
-        p You are amazing
-      else
-        p i merged templates #{ haha }
+    block head
+      title TEST
+      link(rel="stylesheet" href="{% static 'bootflat/css/site.min.css' %}")
+      link(rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}")
+
+  body(style="background-color: #f1f2f6;")
+
+    nav.navbar.navbar-default.navbar-custom(role="navigation")
+      .container
+        .navbar-header
+          a.navbar-brand(href="#"): img(src="{% static 'img/logo.png' %}", height="40")
+        .collapse.navbar-collapse
+          ul.nav.navbar-nav.navbar-left
+            li: a.nav-link(href="#") Challenge
+            li: a.nav-link(href="#") Contest
+            li: a.nav-link(href="#") WriteUp
+            li: a.nav-link(href="#") Team
+            li: a.nav-link(href="#") Rank
+          ul.nav.navbar-nav.navbar-right
+            li: a.nav-link(href="#") Sign Up
+            li: a.nav-link(href="#") Sign In
+
+    .container(style="padding-top: 60px")
+      .row
+        .col-md-12
+            .btn-group
+              button.btn.btn-info.dropdown-toggle(type="button" data-toggle="dropdown")
+                | test&nbsp;
+                span.caret
+              ul.dropdown-menu(role="menu")
+                li: a(href="#") #{haha}
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+
+
+    br
+    .footer
+      .container
+        .clearfix
+        .footer-copyright.text-center Copyright © 2016 DAWN Team @ Wuhan University. All rights reserved.
+    block script
+      script(src="{% static 'bootflat/js/jquery-1.10.1.min.js' %}")
+      script(src="{% static 'bootflat/js/site.min.js' %}")
