@@ -3,4 +3,4 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 # Create your views here.
 def test(request):
-    return render(request, 'test.jade', {'username': 'danlei'})
+    return render(request, 'users.jade', {'username': 'danlei'})

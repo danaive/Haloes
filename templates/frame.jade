@@ -2,8 +2,8 @@
 doctype html
 html(lang="en")
   head
+    title Haloes
     block head
-      title Haloes
       link(rel="stylesheet" href="{% static 'assets/bootflat/css/site.min.css' %}")
       link(rel="stylesheet" href="{% static 'assets/bootflat/fonts/fonts.googleapis.com.css' %}")
       link(rel="stylesheet" href="{% static 'assets/font-awesome/css/font-awesome.min.css' %}")
@@ -13,7 +13,7 @@ html(lang="en")
     nav.navbar.navbar-default.navbar-custom(role="navigation")
       .container
         .navbar-header
-          a.navbar-brand(href="#"): img(src="{% static 'img/logox.png' %}", height="40")
+          a.navbar-brand(href="#"): img(src="{% static 'img/logo-lg.png' %}", height="40")
         .collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-left
             li: a.nav-link(href="#") Challenge
@@ -38,19 +38,12 @@ html(lang="en")
               li: a.nav-link(href="#") Sign in
 
     .container(style="padding-top: 80px;")
-      .row
-        .col-md-12
-            .btn-group
-              button.btn.btn-info.dropdown-toggle(type="button" data-toggle="dropdown")
-                | test&nbsp;
-                span.caret
-              ul.dropdown-menu(role="menu")
-                li: a(href="#") #{haha}
+      block content
 
     .footer(style="padding: 20px 0px;")
       .container
         .footer-copyright.pull-left
-          | Powered by DAWN Team @ Wuhan University.
+          | Powered by <b>DAWN</b> Team @ Wuhan University.
         .footer-copyright.pull-right
           | Feel Free to Folk <a href="https://github.com/jne0915/Haloes">Haloes <i class="fa fa-github fa-lg"></i></a>
         br
