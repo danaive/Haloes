@@ -1,3 +1,54 @@
-extends ./frame
+extends ./frame.jade
+{% load staticfiles %}
 
-block content
+block container
+  .row
+    .col-md-8
+      .row(style="margin-bottom: 20px;")
+        .col-md-3(style="margin-right: -20px;")
+          img#figure.img-thumbnail(src="{% static 'img/logox.png' %}", width="120", height="120")
+        .col-md-5(style="margin-left: -20px;")
+          h2#nikename(style="margin-bottom: 5px;")= username
+          a#updateBtn.btn.btn-link
+            | update&nbsp;
+            i.fa.fa-chevron-down
+          a#finishBtn.btn.btn-link(style="display: none;")
+            | finish&nbsp;
+            i.fa.fa-chevron-up
+      .row
+        .col-md-5.col-md-offset-1
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-crosshairs
+            li(style="width: 120px;"): h4 &nbsp;Major&nbsp;
+            li: h4 Misc
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-star
+            li(style="width: 120px;"): h4 &nbsp;Score&nbsp;
+            li: h4 250
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-flag
+            li(style="width: 120px;"): h4 &nbsp;Solves&nbsp;
+            li: h4 4
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-pencil
+            li(style="width: 120px;"): h4 &nbsp;WriteUps&nbsp;
+            li: h4 2
+        .col-md-6
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-bookmark
+            li(style="width: 120px;"): h4 &nbsp;Team&nbsp;
+            li: h4 DAWN
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-home
+            li(style="width: 120px;"): h4 &nbsp;University&nbsp;
+            li: h4 WHU
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-envelope
+            li(style="width: 120px;"): h4 &nbsp;Mail&nbsp;
+            li: h4 jne0915@gmail.com
+          ul.list-inline
+            li(style="width: 40px;"): i.fa.fa-2x.fa-github
+            li(style="width: 120px;"): h4 &nbsp;Blog&nbsp;
+            li: h4 danlei.github.io
+    .col-md-4
+
