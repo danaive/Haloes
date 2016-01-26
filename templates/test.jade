@@ -3,7 +3,7 @@ doctype html
 html(lang="en")
   head
     block head
-      title TEST
+      title Haloes
       link(rel="stylesheet" href="{% static 'bootflat/css/site.min.css' %}")
       link(rel="stylesheet" href="{% static 'bootflat/fonts/fonts.googleapis.com.css' %}")
       link(rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}")
@@ -13,7 +13,7 @@ html(lang="en")
     nav.navbar.navbar-default.navbar-custom(role="navigation")
       .container
         .navbar-header
-          a.navbar-brand(href="#"): img(src="{% static 'img/logo.png' %}", height="40")
+          a.navbar-brand(href="#"): img(src="{% static 'img/logox.png' %}", height="40")
         .collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-left
             li: a.nav-link(href="#") Challenge
@@ -21,15 +21,23 @@ html(lang="en")
             li: a.nav-link(href="#") WriteUp
             li: a.nav-link(href="#") Team
             li: a.nav-link(href="#") Rank
+
+          form.navbar-form.navbar-left(role="search" style="margin-left: 20px;")
+            .form-search.search-only
+              i.search-icon.fa.fa-search
+              input.form-control.search-query(type="text")
+
           ul.nav.navbar-nav.navbar-right
             if username
-              li: a.nav-link(href="#")= username
+              li: a.nav-link(href="#" style="font-size: 16px;")
+                b= username
+                span.badge.badge-danger(style="margin-left: 6px; vertical-align: top;") 1
               li: a.nav-link(href="#") Sign out
             else
               li: a.nav-link(href="#") Sign up
               li: a.nav-link(href="#") Sign in
 
-    .container(style="padding-top: 80px")
+    .container(style="padding-top: 80px;")
       .row
         .col-md-12
             .btn-group
@@ -39,18 +47,26 @@ html(lang="en")
               ul.dropdown-menu(role="menu")
                 li: a(href="#") #{haha}
 
-    .footer(style="margin-top: 1000px; padding: 20px 0;")
+    .footer(style="padding: 20px 0px;")
       .container
         .footer-copyright.pull-left
           | Powered by DAWN Team @ Wuhan University.
         .footer-copyright.pull-right
-          | Feel Free to Folk the Haloes <a href="https://github.com/jne0915/Haloes"><i class="fa fa-github fa-lg"></i></a>
+          | Feel Free to Folk <a href="https://github.com/jne0915/Haloes">Haloes <i class="fa fa-github fa-lg"></i></a>
         br
         .footer-copyright.pull-left
-          | Source Lisenced under <a href="http://www.gnu.org/licenses/gpl-3.0.html">GNU Public Lisence v3</a>.
+          | Source Lisenced under <a href="http://www.gnu.org/licenses/gpl-3.0.html">GNU General Public Lisence v3</a>.
         .footer-copyright.pull-right
           | <a href=mailto:jne0915@gmail.com>Bugs Report</a> and <a href="https://github.com/jne0915/Haloes/issues">Issues</a> are Welcomed.
 
     block script
       script(src="{% static 'bootflat/js/jquery-1.10.1.min.js' %}")
       script(src="{% static 'bootflat/js/site.min.js' %}")
+      script.
+        $(document).ready(function() {
+            var docHeight = $(window).height();
+            var footerTop = $('.footer').position().top + $('.footer').height() + 40;
+            if (footerTop < docHeight) {
+                $('.footer').css('margin-top', (docHeight - footerTop) + 'px');
+            }
+        });
