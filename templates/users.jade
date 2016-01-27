@@ -12,6 +12,14 @@ mixin chartLabel(label, color)
     li(style='width: 10px; height: 10px; background-color: #{color}')
     li= label
 
+mixin newsList(title, url, logo, time, content)
+  li.media
+    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=logo)
+    .media-body
+      h4.media-heading= title
+      p= time
+      p= content
+
 block container
   .row
     .col-md-8
@@ -32,44 +40,14 @@ block container
           +personalInfo('Score', '250', 'star')
           +personalInfo('Solve', '4', 'flag')
           +personalInfo('WriteUp', '2', 'pencil')
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-crosshairs
-        //     li(style='width: 100px;'): h5 &nbsp;Major&nbsp;
-        //     li: h5 Misc
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-star
-        //     li(style='width: 120px;'): h4 &nbsp;Score&nbsp;
-        //     li: h4 250
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-flag
-        //     li(style='width: 120px;'): h4 &nbsp;Solves&nbsp;
-        //     li: h4 4
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-pencil
-        //     li(style='width: 120px;'): h4 &nbsp;WriteUps&nbsp;
-        //     li: h4 2
         .col-md-6
           +personalInfo('Team', 'DAWN', 'bookmark')
           +personalInfo('School', 'WHU', 'university')
           +personalInfo('Mail', 'jne0915@gmail.com', 'envelope')
           +personalInfo('Blog', 'danlei.github.io', 'github')
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-bookmark
-        //     li(style='width: 120px;'): h4 &nbsp;Team&nbsp;
-        //     li: h4 DAWN
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-home
-        //     li(style='width: 120px;'): h4 &nbsp;University&nbsp;
-        //     li: h4 WHU
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-envelope
-        //     li(style='width: 120px;'): h4 &nbsp;Mail&nbsp;
-        //     li: h4 jne0915@gmail.com
-        //   ul.list-inline
-        //     li(style='width: 20px;'): i.fa.fa-lg.fa-github
-        //     li(style='width: 120px;'): h4 &nbsp;Blog&nbsp;
-        //     li: h4 danlei.github.io
-      hr(style='background-color: transparent; margin-bottom: 10px;')
+
+      hr(style='background-color: transparent; margin-bottom: 30px;')
+
       .row(style='margin-bottom: 30px;')
         .col-md-4
           canvas#pieChart(height='220', width='220', style='margin-left: 30px; margin-top: 30px;')
@@ -86,7 +64,23 @@ block container
           ul.list-unstyled
             +chartLabel('danlei', '#DCDCDC')
             +chartLabel('xiami', '#97BBCD')
-    .col-md-4#test
+    .col-md-4
+      ul.nav.nav-pills
+        li.dropdown.active
+          a.dropdown-toggle(href='#', data-toggle='dropdown')
+            | News&nbsp;
+            b.caret
+          ul.dropdown-menu
+            li: a(href='#allnews') All
+            li: a(href='#teamnews') Team
+            li: a(href='#follownews') Follow
+            li: a(href='#othersnews') Others
+        li
+          a(href='#') My Writeup
+      ul.media-list(style='margin-top: 30px;')
+        +newsList('DAWN', '#', 'static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
+        +newsList('DAWN', '#', 'static/img/logo.png', '12 Apr, 2015 at 12:50', 'submitted writeup actf2015 of Dice Game.')
+        +newsList('danlei', '#', 'static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
 
 append script
   script(src='{% static "assets/charts/chart.min.js" %}')

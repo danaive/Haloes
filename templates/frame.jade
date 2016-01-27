@@ -10,7 +10,7 @@ html(lang='en')
 
   body
 
-    nav.navbar.navbar-default.navbar-custom(role='navigation', style='background-color: #434a54;')
+    nav.navbar.navbar-default.navbar-custom(role='navigation', style='background-color: #434A54;')
       .container
         .navbar-header
           a.navbar-brand(href='#'): img(src='{% static "img/logo-lg.png" %}', height='40')
@@ -29,7 +29,7 @@ html(lang='en')
 
           ul.nav.navbar-nav.navbar-right
             if username
-              li: a.nav-link(href='#' style='font-size: 16px;')
+              li: a.nav-link.current(href='#' style='font-size: 16px;')
                 b= username
                 span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
               li: a.nav-link(href='#') Sign out
@@ -40,7 +40,7 @@ html(lang='en')
     .container(style='padding-top: 80px;')
       block container
 
-    .footer(style='padding: 20px 0px;')
+    .footer(style='padding: 15px 0px; background-color: #DEDEDE;')
       .container
         .footer-copyright.pull-left
           | Powered by <b>DAWN</b> Team @ Wuhan University.
@@ -55,11 +55,4 @@ html(lang='en')
     block script
       script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
       script(src='{% static "assets/bootflat/js/site.min.js" %}')
-      script.
-        $(document).ready(function() {
-            var docHeight = $(window).height();
-            var footerTop = $('.footer').position().top + $('.footer').height() + 40;
-            if (footerTop < docHeight) {
-                $('.footer').css('margin-top', (docHeight - footerTop) + 'px');
-            }
-        });
+      script(src='{% static "build/stick-footer.js" %}')
