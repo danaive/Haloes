@@ -1,60 +1,60 @@
 {% load staticfiles %}
 doctype html
-html(lang="en")
+html(lang='en')
   head
     title Haloes
     block head
-      link(rel="stylesheet" href="{% static 'assets/bootflat/css/site.min.css' %}")
-      link(rel="stylesheet" href="{% static 'assets/bootflat/fonts/fonts.googleapis.com.css' %}")
-      link(rel="stylesheet" href="{% static 'assets/font-awesome/css/font-awesome.min.css' %}")
+      link(rel='stylesheet' href='{% static "assets/bootflat/css/site.min.css" %}')
+      link(rel='stylesheet' href='{% static "assets/bootflat/fonts/fonts.googleapis.com.css" %}')
+      link(rel='stylesheet' href='{% static "assets/font-awesome/css/font-awesome.min.css" %}')
 
-  body(style="background-color: #f1f2f6;")
+  body
 
-    nav.navbar.navbar-default.navbar-custom(role="navigation")
+    nav.navbar.navbar-default.navbar-custom(role='navigation', style='background-color: #434a54;')
       .container
         .navbar-header
-          a.navbar-brand(href="#"): img(src="{% static 'img/logo-lg.png' %}", height="40")
+          a.navbar-brand(href='#'): img(src='{% static "img/logo-lg.png" %}', height='40')
         .collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-left
-            li: a.nav-link(href="#") Challenge
-            li: a.nav-link(href="#") Contest
-            li: a.nav-link(href="#") WriteUp
-            li: a.nav-link(href="#") Team
-            li: a.nav-link(href="#") Rank
+            li: a.nav-link(href='#') Challenge
+            li: a.nav-link(href='#') Contest
+            li: a.nav-link(href='#') WriteUp
+            li: a.nav-link(href='#') Team
+            li: a.nav-link(href='#') Rank
 
-          form.navbar-form.navbar-left(role="search" style="margin-left: 20px;")
+          form.navbar-form.navbar-left(role='search' style='margin-left: 20px;')
             .form-search.search-only
               i.search-icon.fa.fa-search
-              input.form-control.search-query(type="text")
+              input.form-control.search-query(type='text')
 
           ul.nav.navbar-nav.navbar-right
             if username
-              li: a.nav-link(href="#" style="font-size: 16px;")
+              li: a.nav-link(href='#' style='font-size: 16px;')
                 b= username
-                span.badge.badge-danger(style="margin-left: 6px; vertical-align: top;") 1
-              li: a.nav-link(href="#") Sign out
+                span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
+              li: a.nav-link(href='#') Sign out
             else
-              li: a.nav-link(href="#") Sign up
-              li: a.nav-link(href="#") Sign in
+              li: a.nav-link(href='#') Sign up
+              li: a.nav-link(href='#') Sign in
 
-    .container(style="padding-top: 80px;")
+    .container(style='padding-top: 80px;')
       block container
 
-    .footer(style="padding: 20px 0px;")
+    .footer(style='padding: 20px 0px;')
       .container
         .footer-copyright.pull-left
           | Powered by <b>DAWN</b> Team @ Wuhan University.
         .footer-copyright.pull-right
-          | Feel Free to Folk <a href="https://github.com/jne0915/Haloes">Haloes <i class="fa fa-github fa-lg"></i></a>
+          | Feel Free to Folk <a href='https://github.com/jne0915/Haloes'>Haloes <i class='fa fa-github fa-lg'></i></a>
         br
         .footer-copyright.pull-left
-          | Source Lisenced under <a href="http://www.gnu.org/licenses/gpl-3.0.html">GNU General Public Lisence v3</a>.
+          | Source Lisenced under <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU General Public Lisence v3</a>.
         .footer-copyright.pull-right
-          | <a href=mailto:jne0915@gmail.com>Bugs Report</a> and <a href="https://github.com/jne0915/Haloes/issues">Issues</a> are Welcomed.
+          | <a href=mailto:jne0915@gmail.com>Bugs Report</a> and <a href='https://github.com/jne0915/Haloes/issues'>Issues</a> are Welcomed.
 
     block script
-      script(src="{% static 'assets/bootflat/js/jquery-1.10.1.min.js' %}")
-      script(src="{% static 'assets/bootflat/js/site.min.js' %}")
+      script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
+      script(src='{% static "assets/bootflat/js/site.min.js" %}')
       script.
         $(document).ready(function() {
             var docHeight = $(window).height();

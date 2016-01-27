@@ -1,54 +1,134 @@
-extends ./frame.jade
+extends frame.jade
 {% load staticfiles %}
+
+mixin personalInfo(key, value, icon)
+  ul.list-inline
+    li(style='width: 20px;'): i.fa.fa-lg(class='fa-#{icon}')
+    li(style='width: 100px;'): h5 &nbsp;#{key}&nbsp;
+    li: h5 #{value}
+
+mixin chartLabel(label, color)
+  li: ul.list-inline
+    li(style='width: 10px; height: 10px; background-color: #{color}')
+    li= label
 
 block container
   .row
     .col-md-8
-      .row(style="margin-bottom: 20px;")
-        .col-md-3(style="margin-right: -20px;")
-          img#figure.img-thumbnail(src="{% static 'img/logox.png' %}", width="120", height="120")
-        .col-md-5(style="margin-left: -20px;")
-          h2#nikename(style="margin-bottom: 5px;")= username
+      .row(style='margin-bottom: 20px;')
+        .col-md-3(style='margin-right: -20px;')
+          img#figure.img-thumbnail(src='{% static "img/logox.png" %}', width='120', height='120')
+        .col-md-5(style='margin-left: -20px;')
+          h2#nikename(style='margin-bottom: 5px;')= username
           a#updateBtn.btn.btn-link
             | update&nbsp;
             i.fa.fa-chevron-down
-          a#finishBtn.btn.btn-link(style="display: none;")
+          a#finishBtn.btn.btn-link(style='display: none;')
             | finish&nbsp;
             i.fa.fa-chevron-up
       .row
         .col-md-5.col-md-offset-1
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-crosshairs
-            li(style="width: 120px;"): h4 &nbsp;Major&nbsp;
-            li: h4 Misc
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-star
-            li(style="width: 120px;"): h4 &nbsp;Score&nbsp;
-            li: h4 250
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-flag
-            li(style="width: 120px;"): h4 &nbsp;Solves&nbsp;
-            li: h4 4
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-pencil
-            li(style="width: 120px;"): h4 &nbsp;WriteUps&nbsp;
-            li: h4 2
+          +personalInfo('Major', 'Misc', 'crosshairs')
+          +personalInfo('Score', '250', 'star')
+          +personalInfo('Solve', '4', 'flag')
+          +personalInfo('WriteUp', '2', 'pencil')
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-crosshairs
+        //     li(style='width: 100px;'): h5 &nbsp;Major&nbsp;
+        //     li: h5 Misc
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-star
+        //     li(style='width: 120px;'): h4 &nbsp;Score&nbsp;
+        //     li: h4 250
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-flag
+        //     li(style='width: 120px;'): h4 &nbsp;Solves&nbsp;
+        //     li: h4 4
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-pencil
+        //     li(style='width: 120px;'): h4 &nbsp;WriteUps&nbsp;
+        //     li: h4 2
         .col-md-6
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-bookmark
-            li(style="width: 120px;"): h4 &nbsp;Team&nbsp;
-            li: h4 DAWN
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-home
-            li(style="width: 120px;"): h4 &nbsp;University&nbsp;
-            li: h4 WHU
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-envelope
-            li(style="width: 120px;"): h4 &nbsp;Mail&nbsp;
-            li: h4 jne0915@gmail.com
-          ul.list-inline
-            li(style="width: 40px;"): i.fa.fa-2x.fa-github
-            li(style="width: 120px;"): h4 &nbsp;Blog&nbsp;
-            li: h4 danlei.github.io
-    .col-md-4
+          +personalInfo('Team', 'DAWN', 'bookmark')
+          +personalInfo('School', 'WHU', 'university')
+          +personalInfo('Mail', 'jne0915@gmail.com', 'envelope')
+          +personalInfo('Blog', 'danlei.github.io', 'github')
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-bookmark
+        //     li(style='width: 120px;'): h4 &nbsp;Team&nbsp;
+        //     li: h4 DAWN
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-home
+        //     li(style='width: 120px;'): h4 &nbsp;University&nbsp;
+        //     li: h4 WHU
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-envelope
+        //     li(style='width: 120px;'): h4 &nbsp;Mail&nbsp;
+        //     li: h4 jne0915@gmail.com
+        //   ul.list-inline
+        //     li(style='width: 20px;'): i.fa.fa-lg.fa-github
+        //     li(style='width: 120px;'): h4 &nbsp;Blog&nbsp;
+        //     li: h4 danlei.github.io
+      hr(style='background-color: transparent; margin-bottom: 10px;')
+      .row(style='margin-bottom: 30px;')
+        .col-md-4
+          canvas#pieChart(height='220', width='220', style='margin-left: 30px; margin-top: 30px;')
+        .col-md-2
+          ul.list-unstyled
+            +chartLabel('PWN', '#68BC31')
+            +chartLabel('REVERSE', '#2091CF')
+            +chartLabel('WEB', '#AF4E96')
+            +chartLabel('CRYPTO', '#DA5430')
+            +chartLabel('MISC', '#FFA400')
+        .col-md-4
+          canvas#radarChart(height='300', width='300', style='margin-left: 30px;')
+        .col-md-2
+          ul.list-unstyled
+            +chartLabel('danlei', '#DCDCDC')
+            +chartLabel('xiami', '#97BBCD')
+    .col-md-4#test
 
+append script
+  script(src='{% static "assets/charts/chart.min.js" %}')
+  script.
+    var pdata = [
+      { label: 'PWN', value: 387, color: '#68BC31' },
+      { label: 'REVERSE', value: 245, color: '#2091CF' },
+      { label: 'WEB', value: 82, color: '#AF4E96' },
+      { label: 'CRYPTO', value: 186, color: '#DA5430' },
+      { label: 'MISC', value: 100, color: '#FFA400'}
+    ];
+
+    var rdata = {
+        labels: ['PWN', 'REVERSE', 'WEB', 'CRYPTO', 'MISC'],
+        datasets: [
+            {
+                label: 'danlei',
+                fillColor: 'rgba(220,220,220,0.2)',
+                strokeColor: 'rgba(220,220,220,1)',
+                pointColor: 'rgba(220,220,220,1)',
+                pointStrokeColor: '#fff',
+                pointHighlightFill: '#fff',
+                pointHighlightStroke: 'rgba(220,220,220,1)',
+                data: [65, 59, 90, 81, 56]
+            },
+            {
+                label: 'xiami',
+                fillColor: 'rgba(151,187,205,0.2)',
+                strokeColor: 'rgba(151,187,205,1)',
+                pointColor: 'rgba(151,187,205,1)',
+                pointStrokeColor: '#fff',
+                pointHighlightFill: '#fff',
+                pointHighlightStroke: 'rgba(151,187,205,1)',
+                data: [28, 48, 40, 19, 96]
+            }
+        ]
+    };
+    var pctx = $('#pieChart').get(0).getContext('2d');
+    var PieChart = new Chart(pctx).Pie(pdata, {
+      animateScale: true
+    });
+    var rctx = $('#radarChart').get(0).getContext('2d');
+    var RadarChart = new Chart(rctx).Radar(rdata, {
+      pointDot: false,
+    });
