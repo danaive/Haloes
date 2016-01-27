@@ -36,15 +36,15 @@ block container
             i.fa.fa-chevron-up
       .row
         .col-md-5.col-md-offset-1
-          +personalInfo('Major', 'Misc', 'crosshairs')
-          +personalInfo('Score', '250', 'star')
-          +personalInfo('Solve', '4', 'flag')
-          +personalInfo('WriteUp', '2', 'pencil')
+          +personalInfo('Major', major, 'crosshairs')
+          +personalInfo('Score', score, 'star')
+          +personalInfo('Solve', solve, 'flag')
+          +personalInfo('WriteUp', writeup, 'pencil')
         .col-md-6
-          +personalInfo('Team', 'DAWN', 'bookmark')
-          +personalInfo('School', 'WHU', 'university')
-          +personalInfo('Mail', 'jne0915@gmail.com', 'envelope')
-          +personalInfo('Blog', 'danlei.github.io', 'github')
+          +personalInfo('Team', team, 'bookmark')
+          +personalInfo('School', school, 'university')
+          +personalInfo('Mail', mail, 'envelope')
+          +personalInfo('Blog', blog, 'github')
 
       hr(style='background-color: transparent; margin-bottom: 30px;')
 
@@ -62,8 +62,9 @@ block container
           canvas#radarChart(height='300', width='300', style='margin-left: 30px;')
         .col-md-2
           ul.list-unstyled
-            +chartLabel('danlei', '#DCDCDC')
-            +chartLabel('xiami', '#97BBCD')
+            +chartLabel(username, '#DCDCDC')
+            if pageuser
+              +chartLabel(pageuser, '#97BBCD')
     .col-md-4
       ul.nav.nav-pills
         li.dropdown.active
@@ -84,45 +85,5 @@ block container
 
 append script
   script(src='{% static "assets/charts/chart.min.js" %}')
-  script.
-    var pdata = [
-      { label: 'PWN', value: 387, color: '#68BC31' },
-      { label: 'REVERSE', value: 245, color: '#2091CF' },
-      { label: 'WEB', value: 82, color: '#AF4E96' },
-      { label: 'CRYPTO', value: 186, color: '#DA5430' },
-      { label: 'MISC', value: 100, color: '#FFA400'}
-    ];
+  script(src='{% static "build/draw-chart.js" %}')
 
-    var rdata = {
-        labels: ['PWN', 'REVERSE', 'WEB', 'CRYPTO', 'MISC'],
-        datasets: [
-            {
-                label: 'danlei',
-                fillColor: 'rgba(220,220,220,0.2)',
-                strokeColor: 'rgba(220,220,220,1)',
-                pointColor: 'rgba(220,220,220,1)',
-                pointStrokeColor: '#fff',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(220,220,220,1)',
-                data: [65, 59, 90, 81, 56]
-            },
-            {
-                label: 'xiami',
-                fillColor: 'rgba(151,187,205,0.2)',
-                strokeColor: 'rgba(151,187,205,1)',
-                pointColor: 'rgba(151,187,205,1)',
-                pointStrokeColor: '#fff',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(151,187,205,1)',
-                data: [28, 48, 40, 19, 96]
-            }
-        ]
-    };
-    var pctx = $('#pieChart').get(0).getContext('2d');
-    var PieChart = new Chart(pctx).Pie(pdata, {
-      animateScale: true
-    });
-    var rctx = $('#radarChart').get(0).getContext('2d');
-    var RadarChart = new Chart(rctx).Radar(rdata, {
-      pointDot: false,
-    });
