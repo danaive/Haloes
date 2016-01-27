@@ -40,17 +40,17 @@ html(lang='en')
     .container(style='padding-top: 80px;')
       block container
 
-    .footer(style='padding: 15px 0px; background-color: #DEDEDE;')
+    .footer(style='padding: 15px 0px; background-color: #DEDEDE; font-size: 10px;')
       .container
         .footer-copyright.pull-left
           | Powered by <b>DAWN</b> Team @ Wuhan University.
         .footer-copyright.pull-right
-          | Feel Free to Folk <a href='https://github.com/jne0915/Haloes'>Haloes <i class='fa fa-github fa-lg'></i></a>
+          | Feel Free to Folk #[a(href='https://github.com/jne0915/Haloes') Haloes #[i.fa.fa-github.fa-lg]]
         br
         .footer-copyright.pull-left
-          | Source Lisenced under <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU General Public Lisence v3</a>.
+          | Source Lisenced under #[a(href='http://www.gnu.org/licenses/gpl-3.0.html') GNU General Public Lisence v3].
         .footer-copyright.pull-right
-          | <a href=mailto:jne0915@gmail.com>Bugs Report</a> and <a href='https://github.com/jne0915/Haloes/issues'>Issues</a> are Welcomed.
+          | #[a(href='mailto:jne0915@gmail.com') Bug Report] and #[a(href='https://github.com/jne0915/Haloes/issues') Issue] are Welcomed.
 
     block script
       script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
