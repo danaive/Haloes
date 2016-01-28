@@ -18,14 +18,14 @@ mixin newsList(title, url, logo, time, content)
     .media-body
       h4.media-heading= title
       p= time
-      p= content
+      p!= content
 
 block container
   .row
     .col-md-8
       .row(style='margin-bottom: 20px;')
         .col-md-3(style='margin-right: -20px;')
-          img#figure.img-thumbnail(src='{% static "img/logox.png" %}', width='120', height='120')
+          img#figure.img-thumbnail(src='{% static "img/danlei.jpeg" %}', width='120', height='120')
         .col-md-5(style='margin-left: -20px;')
           h2#nikename(style='margin-bottom: 5px;')= username
           a#updateBtn.btn.btn-link
@@ -35,7 +35,7 @@ block container
             | finish&nbsp;
             i.fa.fa-chevron-up
       .row
-        .col-md-5.col-md-offset-1
+        .col-md-5
           +personalInfo('Major', major, 'crosshairs')
           +personalInfo('Score', score, 'star')
           +personalInfo('Solve', solve, 'flag')
@@ -50,7 +50,7 @@ block container
 
       .row(style='margin-bottom: 30px;')
         .col-md-4
-          canvas#pieChart(height='220', width='220', style='margin-left: 30px; margin-top: 30px;')
+          canvas#pieChart(height='220', width='220', style='margin-left: 10px; margin-top: 30px;')
         .col-md-2
           ul.list-unstyled
             +chartLabel('PWN', '#68BC31')
@@ -62,9 +62,10 @@ block container
           canvas#radarChart(height='300', width='300', style='margin-left: 30px;')
         .col-md-2
           ul.list-unstyled
-            +chartLabel(username, '#DCDCDC')
+            +chartLabel(username, '#89729E')
             if pageuser
               +chartLabel(pageuser, '#97BBCD')
+
     .col-md-4
       ul.nav.nav-pills
         li.dropdown.active
@@ -76,12 +77,19 @@ block container
             li: a(href='#teamnews') Team
             li: a(href='#follownews') Follow
             li: a(href='#othersnews') Others
-        li
-          a(href='#') My Writeup
-      ul.media-list(style='margin-top: 30px;')
-        +newsList('DAWN', '#', 'static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
-        +newsList('DAWN', '#', 'static/img/logo.png', '12 Apr, 2015 at 12:50', 'submitted writeup actf2015 of Dice Game.')
-        +newsList('danlei', '#', 'static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown')
+            | Focus&nbsp;
+            b.caret
+          ul.dropdown-menu
+            li: a(href='#following') Following
+            li: a(href='#followers') Followers
+            li: a(href='#starred') Starred
+
+      ul#newsList.media-list(style='margin-top: 30px;')
+        +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
+        +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'submitted writeup actf2015 of Dice Game.')
+        +newsList('danlei', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
 
 append script
   script(src='{% static "assets/charts/chart.min.js" %}')

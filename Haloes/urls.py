@@ -18,6 +18,9 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'users.views.test'),
-    url(r'^getscore/$', 'users.views.score'),
+    url(r'^usr/', include('users.urls', namespace='users')),
+    url(r'^challenge/', include('challenge.urls', namespace='challenge')),
+    url(r'^writeup/', include('writeup.urls', namespace='writeup')),
+    url(r'^team/', include('team.urls', namespace='team')),
+    url(r'^contest/', include('contest.urls', namespace='contest')),
 ]

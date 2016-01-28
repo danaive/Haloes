@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Create your views here.
-def test(request):
+def index(request):
     return render(request, 'users.jade', {
         'username': 'danlei',
         'pageuser': 'xiami',
@@ -33,3 +33,7 @@ def score(request):
             }
         ]
     }), content_type='application/json')
+
+
+def writeup(request):
+    return render(request, 'writeup.jade', {})

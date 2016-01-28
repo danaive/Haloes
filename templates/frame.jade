@@ -1,5 +1,6 @@
-{% load staticfiles %}
 doctype html
+{% load staticfiles %}
+
 html(lang='en')
   head
     title Haloes
@@ -29,7 +30,7 @@ html(lang='en')
 
           ul.nav.navbar-nav.navbar-right
             if username
-              li: a.nav-link.current(href='#' style='font-size: 16px;')
+              li: a.nav-link(href='#' style='font-size: 16px;')
                 b= username
                 span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
               li: a.nav-link(href='#') Sign out
