@@ -1,11 +1,18 @@
-extends frame.jade
+extends frame
 {% load staticfiles %}
 
 mixin personalInfo(key, value, icon)
   ul.list-inline
     li(style='width: 20px;'): i.fa.fa-lg(class='fa-#{icon}')
     li(style='width: 100px;'): h5 &nbsp;#{key}&nbsp;
-    li: h5 #{value}
+    li: h5(id='info#{key}')= value
+
+mixin updateInfo(key, icon)
+  .input-group(style="margin-bottom: 20px;")
+    span.input-group-addon(style="width: 105px; text-align: left")
+      i.fa(class='fa-#{icon}')
+      | &nbsp;#{key}
+    input.form-control(id='update#{key}' type='text')
 
 mixin chartLabel(label, color)
   li: ul.list-inline
@@ -25,20 +32,20 @@ block container
     .col-md-8
       .row(style='margin-bottom: 20px;')
         .col-md-3(style='margin-right: -20px;')
-          img#figure.img-thumbnail(src='{% static "img/danlei.jpeg" %}', width='120', height='120')
+          img#avatar.img-thumbnail(src='{% static "img/danlei.jpeg" %}', width='120', height='120')
         .col-md-5(style='margin-left: -20px;')
-          h2#nikename(style='margin-bottom: 5px;')= username
+          h2#nickname(style='margin-bottom: 5px;')= username
           a#updateBtn.btn.btn-link
             | update&nbsp;
             i.fa.fa-chevron-down
-          a#finishBtn.btn.btn-link(style='display: none;')
-            | finish&nbsp;
+          a#cancelBtn.btn.btn-link(style='display: none;')
+            | cancel&nbsp;
             i.fa.fa-chevron-up
       .row
         .col-md-5
           +personalInfo('Major', major, 'crosshairs')
           +personalInfo('Score', score, 'star')
-          +personalInfo('Solve', solve, 'flag')
+          +personalInfo('Solved', solve, 'flag')
           +personalInfo('WriteUp', writeup, 'pencil')
         .col-md-6
           +personalInfo('Team', team, 'bookmark')
@@ -47,6 +54,21 @@ block container
           +personalInfo('Blog', blog, 'github')
 
       hr(style='background-color: transparent; margin-bottom: 30px;')
+
+      .row#updateForm(style='display: none;')
+        .col-md-5
+          +updateInfo('Major', 'crosshairs')
+          +updateInfo('School', 'university')
+          +updateInfo('Avatar', 'photo')
+
+        .col-md-6
+          +updateInfo('Mail', 'envelope')
+          +updateInfo('Blog', 'github')
+          a#confBtn.btn.btn-info
+            i.fa.fa-check
+            | &nbsp;Confirm
+
+        hr(style='background-color: transparent; margin-bottom: 30px;'))
 
       .row(style='margin-bottom: 30px;')
         .col-md-4
@@ -73,10 +95,10 @@ block container
             | News&nbsp;
             b.caret
           ul.dropdown-menu
-            li: a(href='#allnews') All
-            li: a(href='#teamnews') Team
-            li: a(href='#follownews') Follow
-            li: a(href='#othersnews') Others
+            li: a(href='#all') All
+            li: a(href='#team') Team
+            li: a(href='#follow') Follow
+            li: a(href='#others') Others
         li.dropdown
           a.dropdown-toggle(href='#', data-toggle='dropdown')
             | Focus&nbsp;
@@ -84,7 +106,6 @@ block container
           ul.dropdown-menu
             li: a(href='#following') Following
             li: a(href='#followers') Followers
-            li: a(href='#starred') Starred
 
       ul#newsList.media-list(style='margin-top: 30px;')
         +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
@@ -92,6 +113,6 @@ block container
         +newsList('danlei', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
 
 append script
+  script(src='{% static "assets/bootflat/js/icheck.min.js" %}')
   script(src='{% static "assets/charts/chart.min.js" %}')
   script(src='{% static "build/draw-chart.js" %}')
-
