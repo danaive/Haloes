@@ -1,20 +1,37 @@
 extends frame
 {% load staticfiles %}
 
-mixin newsList(action, title, url, time, content)
-  li.media
-    if action == 'Edit'
-      a.pull-right.btn.btn-info
-        i.fa.fa-pencil
-        | &nbsp;#{action}
-    else
-      a.pull-right.btn.btn-default
-        i.fa.fa-star
-        | &nbsp;#{action}
+mixin writeupList(wu, url)
+  tr
+    td: a(href=url)= wu.title
+    td= wu.challenge
+    td= wu.category
+    td= wu.author
+    td= wu.team
+    td
+      i.fa.fa-comments-o &nbsp;#{wu.comment}
+      | &nbsp;&nbsp;
+      i.fa.fa-thumbs-o-up &nbsp;#{wu.like}
+
+mixin mineList(wu, url)
+  li.media(style='margin-bottom: 25px;')
+    a.pull-right.btn.btn-info
+      i.fa.fa-pencil
+      | &nbsp;Edit
     .media-body
-      h4.media-heading: a(href=url)= title
-      p= time
-      p!= content
+      h4.media-heading: a(href=url)= wu.title
+      p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
+      p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
+
+mixin starredList(wu, url)
+  li.media(style='margin-bottom: 25px;')
+    a.pull-right.btn.btn-default
+      i.fa.fa-star-o
+      | &nbsp;Unstar
+    .media-body
+      h4.media-heading: a(href=url)= wu.title
+      p= wu.challenge
+      p= wu.author
 
 block container
   .row
@@ -31,26 +48,26 @@ block container
               th Team
               th
           tbody
-            tr
-              td 呵呵hehhehehehehe
-              td Dice Game
-              td MISC
-              td danlei
-              td DAWN
-              td
-                i.fa.fa-comments-o &nbsp;16
-                | &nbsp;
-                i.fa.fa-thumbs-o-up &nbsp;25
+            for item in writeups
+              +writeupList(item, item.url)
+
     .col-md-4
       ul.nav.nav-pills
         li.active
-          a.dropdown-toggle(href='#my')
+          a(href='#mine', data-toggle='pill')
             | My WriteUp&nbsp;
-            span.badge.badge-danger 2
+            span.badge.badge-primary= minelen
         li
-          a.dropdown-toggle(href='#starred')
+          a(href='#starred', data-toggle='pill')
             | Starred WriteUp&nbsp;
-            span.badge.badge-danger 4
+            span.badge.badge-primary= starredlen
+      .tab-content
+        #mine.tab-pane.fade.in.active: ul#mine.media-list(style='margin-top: 30px;')
+          for item in mywu
+            +mineList(item, item.url)
+        #starred.tab-pane.fade: ul#starred.media-list(style='margin-top: 30px;')
+          for item in starredwu
+            +starredList(item, item.url)
 
-      ul.media-list(style='margin-top: 30px;')
-        +newsList('Unstar', 'DAWN', '#', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
+append script
+  script(src='{% static "build/writeup.js" %}')
