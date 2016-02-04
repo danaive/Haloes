@@ -5,15 +5,45 @@ import json
 
 
 def index(request):
-    return render(request, 'challenge.jade', {
-        'username': 'danlei',
-        'pageuser': 'xiami',
-        'major': 'Misc',
-        'score': '233',
-        'solve': 4,
-        'writeup': 2,
-        'team': 'DAWN',
-        'school': 'WHU',
-        'mail': 'jne0915@gmail.com',
-        'blog': 'danlei.github.io'
+    return render(request, 'contest.jade', {
+        'contests': [{
+            'name': 'WHU CTF 2016',
+            'start': '2016-3-3 08:00',
+            'length': '36:00',
+            'status': 'pending',
+            'register': 233,
+            'url': 16
+        },
+        {
+            'name': 'WHU CTF',
+            'start': '2016-3-3',
+            'length': '36:00',
+            'status': 'running',
+            'register': -1,
+            'url': 16
+        },
+        {
+            'name': 'WHU CTF',
+            'start': '2016-3-3',
+            'length': '36:00',
+            'status': 'pending',
+            'register': -1,
+            'url': 16
+        },
+        {
+            'name': 'WHU CTF',
+            'start': '2016-3-3',
+            'length': '36:00',
+            'status': 'pending',
+            'register': -1,
+            'url': 16
+        },
+        {
+            'name': 'WHU CTF',
+            'start': '2016-3-3',
+            'length': '36:00',
+            'status': 'ended',
+            'register': -1,
+            'url': 16
+        },]
     })

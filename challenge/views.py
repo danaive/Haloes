@@ -13,7 +13,7 @@ def index(request):
             'score': 300,
             'solved': 3,
             'state': 1,
-
+            'status': 'ton'
         },
         {
             'url': 15,
@@ -21,7 +21,8 @@ def index(request):
             'source': '31c3_2015',
             'score': 300,
             'solved': 3,
-            'state': 0
+            'state': 0,
+            'status': 'toff'
         },
         {
             'url': 15,
@@ -29,7 +30,8 @@ def index(request):
             'source': '31c3_2015',
             'score': 300,
             'solved': 3,
-            'state': -1
+            'state': -1,
+            'status': 'on'
         },
         {
             'url': 15,
@@ -37,7 +39,8 @@ def index(request):
             'source': '31c3_2015',
             'score': 300,
             'solved': 3,
-            'state': -1
+            'state': -1,
+            'status': 'on'
         },
         {
             'url': 15,
@@ -45,7 +48,7 @@ def index(request):
             'source': '31c3_2015',
             'score': 300,
             'solved': 3,
-            'state': 2
+            'state': 2,
+            'status': 'off'
         },],
-        'st': -1
     })

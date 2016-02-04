@@ -1,0 +1,48 @@
+extends frame
+{% load staticfiles %}
+
+mixin constestList(ct, url)
+  tr
+    td.text-center: a(href=url)= ct.name
+    td.text-center= ct.start
+    td.text-center= ct.length
+    td.text-center
+      if ct.status == 'pending'
+        span.label.label-warning Pending
+      if ct.status == 'running'
+        span.label.label-danger Running
+      if ct.status == 'ended'
+        span.label.label-success Ended
+    if ct.register == -1
+      td.text-center: span.label Registration ended
+    else
+      td.text-center
+        a.btn.btn-xs.btn-info(href=url) Register
+        | &nbsp;&nbsp;
+        i.fa.fa-user
+        | &nbsp;#{ct.register}
+
+block container
+  .row
+    .col-md-8
+      .panel.panel-default
+        .panel-heading Contest List
+        table.table.table-hover
+          thead
+            tr
+              th.text-center Name
+              th.text-center Start (UTC+8)
+              th.text-center Length
+              th.text-center Status
+              th
+          tbody
+            for item in contests
+              +constestList(item, item.url)
+    .col-md-4
+      .panel.panel-primary
+        .panel-heading Attention
+        ul.list-group
+          li.list-group-item Registration to WHU CTF 2016 is Closing in hh:mm:ss
+          li.list-group-item BCTF 2016 is coming on 3.1
+          li.list-group-item BCTF 2016 is coming on 3.1
+
