@@ -1,0 +1,57 @@
+extends frame
+{% load staticfiles %}
+
+mixin challengeList(clg, url)
+  tr
+    td.text-center: a(href=url)= clg.title
+    td.text-center= clg.source
+    td.text-center= clg.category
+    td.text-center= clg.score
+    td.text-center= clg.solved
+    if clg.state == 0
+      td.text-center(data-toggle='tooltip', data-placement='bottom', title='Attempted')
+        i.fa.fa-thumb-tack
+    if clg.state == 1
+      td.text-center(data-toggle='tooltip', data-placement='bottom', title='Solved')
+        i.fa.fa-flag
+    if clg.state == 2
+      td.text-center(data-toggle='tooltip', data-placement='bottom', title='Team-Solved')
+        i.fa.fa-flag-checkered
+    if clg.state == -1
+      td.text-center &nbsp;
+
+block container
+  .row
+    .col-md-12
+      .panel.panel-default
+        .panel-heading
+          | Challenge List
+          .btn-group.pull-right
+            button.btn.btn-primary.btn-xs PWN
+            button.btn.btn-success.btn-xs REVERSE
+            button.btn.btn-danger.btn-xs WEB
+            button.btn.btn-info.btn-xs CRYPTO
+            button.btn.btn-warning.btn-xs MISC
+            button.btn.btn-xs Attempted
+        table.table.table-hover
+          thead
+            tr
+              th.text-center Title
+              th.text-center Source
+              th.text-center Category
+              th.text-center Score
+              th.text-center Solved
+              th
+          tbody
+            for item in challenges
+              +challengeList(item, item.url)
+      .btn-group.pull-right
+        button#prev.btn.btn-info(data-page): i.fa.fa-long-arrow-left
+        button#next.btn.btn-info: i.fa.fa-long-arrow-right
+
+
+append script
+  script.
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });

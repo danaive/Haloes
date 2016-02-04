@@ -3,12 +3,12 @@ extends frame
 
 mixin writeupList(wu, url)
   tr
-    td: a(href=url)= wu.title
-    td= wu.challenge
-    td= wu.category
-    td= wu.author
-    td= wu.team
-    td
+    td.text-center: a(href=url)= wu.title
+    td.text-center= wu.challenge
+    td.text-center= wu.category
+    td.text-center= wu.author
+    td.text-center= wu.team
+    td.text-center
       i.fa.fa-comments-o &nbsp;#{wu.comment}
       | &nbsp;&nbsp;
       i.fa.fa-thumbs-o-up &nbsp;#{wu.like}
@@ -36,20 +36,30 @@ mixin starredList(wu, url)
 block container
   .row
     .col-md-8
-      .panel.panel-info
-        .panel-heading WriteUp List
-        table.table
+      .panel.panel-default
+        .panel-heading
+          | WriteUp List
+          .btn-group.pull-right
+            button.btn.btn-primary.btn-xs PWN
+            button.btn.btn-success.btn-xs REVERSE
+            button.btn.btn-danger.btn-xs WEB
+            button.btn.btn-info.btn-xs CRYPTO
+            button.btn.btn-warning.btn-xs MISC
+        table.table.table-hover
           thead
             tr
-              th Title
-              th Challenge
-              th Category
-              th Author
-              th Team
+              th.text-center Title
+              th.text-center Challenge
+              th.text-center Category
+              th.text-center Author
+              th.text-center Team
               th
           tbody
             for item in writeups
               +writeupList(item, item.url)
+      .btn-group.pull-right
+        button#prev.btn.btn-info(data-page): i.fa.fa-long-arrow-left
+        button#next.btn.btn-info: i.fa.fa-long-arrow-right
 
     .col-md-4
       ul.nav.nav-pills

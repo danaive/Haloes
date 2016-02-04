@@ -17,11 +17,11 @@ html(lang='en')
           a.navbar-brand(href='#'): img(src='{% static "img/logo-lg.png" %}', height='40')
         .collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-left
-            li: a.nav-link(href='#') Challenge
-            li: a.nav-link(href='#') Contest
-            li: a.nav-link(href='#') WriteUp
-            li: a.nav-link(href='#') Team
-            li: a.nav-link(href='#') Rank
+            li: a.nav-link(href='{% url "challenge:index" %}') Challenge
+            li: a.nav-link(href='{% url "contest:index" %}') Contest
+            li: a.nav-link(href='{% url "writeup:index" %}') WriteUp
+            li: a.nav-link(href='{% url "team:index" %}') Team
+            li: a.nav-link(href='{% url "rank" %}') Rank
 
           form.navbar-form.navbar-left(role='search' style='margin-left: 20px;')
             .form-search.search-only
@@ -46,12 +46,12 @@ html(lang='en')
         .footer-copyright.pull-left
           | Powered by #[b DAWN] Team @ Wuhan University.
         .footer-copyright.pull-right
-          | Feel Free to Folk #[a(href='https://github.com/jne0915/Haloes') Haloes #[i.fa.fa-github.fa-lg]]
+          | Feel Free to Folk #[a(href='https://github.com/jne0915/Haloes', target='_blank') Haloes #[i.fa.fa-github.fa-lg]]
         br
         .footer-copyright.pull-left
-          | Source Lisenced under #[a(href='http://www.gnu.org/licenses/gpl-3.0.html') GNU General Public Lisence v3].
+          | Source Lisenced under #[a(href='http://www.gnu.org/licenses/gpl-3.0.html', target='_blank') GNU General Public Lisence v3].
         .footer-copyright.pull-right
-          | #[a(href='mailto:jne0915@gmail.com') Bug Report] and #[a(href='https://github.com/jne0915/Haloes/issues') Issue] are Welcomed.
+          | #[a(href='mailto:jne0915@gmail.com', target='_blank') Bug Report] and #[a(href='https://github.com/jne0915/Haloes/issues', target='_blank') Issue] are Welcomed.
 
     block script
       script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
