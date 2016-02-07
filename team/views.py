@@ -6,14 +6,65 @@ import json
 
 def index(request):
     return render(request, 'team.jade', {
-        'username': 'danlei',
-        'pageuser': 'xiami',
-        'major': 'Misc',
-        'score': '233',
-        'solve': 4,
-        'writeup': 2,
-        'team': 'DAWN',
-        'school': 'WHU',
-        'mail': 'jne0915@gmail.com',
-        'blog': 'danlei.github.io'
+        'newmember': 1,
+        'rankings': [{
+            'name': 'BCTF 2015',
+            'rank': 3,
+            'total': 700,
+            'url': 16
+        }],
+        'writeups': [{
+            'url': 15,
+            'title': 'DAWN',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
+        },
+        {
+            'url': 15,
+            'title': 'DAWN',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
+        },
+        {
+            'url': 15,
+            'title': 'DAWN',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
+        },
+        {
+            'url': 15,
+            'title': 'DAWN',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
+        },
+        {
+            'url': 15,
+            'title': 'DAWN',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
+        },
+        {
+            'url': 15,
+            'title': 'DAWN',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
+        }],
     })

@@ -1,2 +1,108 @@
 extends frame
 {% load staticfiles %}
+
+mixin writeupList(wu, url)
+  li.media(style='margin-bottom: 25px;')
+    .media-body
+      h4.media-heading
+        a(href=url)= wu.title
+        span.text-muted &nbsp;&nbsp;#{wu.author}
+      p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
+      p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
+
+mixin rankingList(rk, url)
+  p.pull-right #{rk.rank} / #{rk.total}
+  p: a(href=url)= rk.name
+
+mixin memberList(mb, url)
+  li.media
+    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=logo)
+    .media-body
+      h4.media-heading= title
+      p= time
+      p!= content
+
+block container
+  .row
+    .col-md-8
+      .btn-group.pull-right
+        button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
+          | Add&nbsp;
+          span.caret
+        ul.dropdown-menu
+          li: a(href='#addst') Single Task
+          li: a(href='#addtl') Task List
+      h3(style='margin-top: 0px;') Tasks
+
+      hr
+      button.btn.btn-info.pull-right New Discussion
+      h3(style='margin-top: 0px;') Discussions
+
+    .col-md-4
+      ul.nav.nav-pills
+        li.active
+          a(href='#overview', data-toggle='pill')
+            | Overview
+        li
+          a(href='#member', data-toggle='pill')
+            | Membership&nbsp;
+            if newmember
+              span.badge.badge-danger= newmember
+        li
+          a(href='#writeup' data-toggle='pill')
+            | WriteUp
+      .tab-content
+        #overview.tab-pane.fade.in.active
+          h4 Challenge Solved
+          #accordion.panel-group
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapsePwn')
+                    | PWN
+                    span.badge.badge-info.pull-right 23
+              #collapsePwn.panel-collapse.collapse PWN
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseReverse')
+                    | REVERSE
+                    span.badge.badge-info.pull-right 23
+              #collapseReverse.panel-collapse.collapse: .panel-body REVERSE
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseWeb')
+                    | WEB
+                    span.badge.badge-info.pull-right 23
+              #collapseWeb.panel-collapse.collapse WEB
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseCrypto')
+                    | CRYPTO
+                    span.badge.badge-info.pull-right 23
+              #collapseCrypto.panel-collapse.collapse CRYPTO
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseMisc')
+                    | MISC
+                    span.badge.badge-info.pull-right 23
+              #collapseMisc.panel-collapse.collapse MISC
+
+          h4 Contest Ranking
+          for item in rankings
+            +rankingList(item, item.url)
+        #writeup.tab-pane.fade
+          ul.media-list
+            for item in writeups
+              +writeupList(item, item.url)
+        #member.tab-pane.fade
+          ul.media-list
+            for item in newmembers
+              +memberList(item, item.url)
+          hr
+          ul.media-list
+            for item in members
+              +memberList(item, item.url)

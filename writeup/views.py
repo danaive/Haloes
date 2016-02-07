@@ -97,91 +97,61 @@ def index(request):
             'challenge': 'dice game',
             'comment': 15,
             'like': 25
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-        },],
+        }],
         'starredwu': [{
             'url': 15,
             'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
         },
         {
             'url': 15,
             'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
         },
         {
             'url': 15,
             'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
         },
         {
             'url': 15,
             'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
         },
         {
             'url': 15,
             'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
         },
         {
             'url': 15,
             'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'author': 'danlei',
-            'challenge': 'cube game',
-        },],
+            'time': '2015-12-12',
+            'challenge': 'dice game',
+            'comment': 15,
+            'like': 25,
+            'author': 'danlei'
+        }],
         'minelen': 14,
         'starredlen': 20
     })

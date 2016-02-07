@@ -5,7 +5,17 @@ mixin writeupList(wu, url)
   tr
     td.text-center: a(href=url)= wu.title
     td.text-center= wu.challenge
-    td.text-center= wu.category
+    td.text-center
+      if wu.category == 'pwn'
+        span.label.label-primary PWN
+      if wu.category == 'reverse'
+        span.label.label-success REVERSE
+      if wu.category == 'web'
+        span.label.label-danger WEB
+      if wu.category == 'crypto'
+        span.label.label-info CRYPTO
+      if wu.category == 'misc'
+        span.label.label-warning MISC
     td.text-center= wu.author
     td.text-center= wu.team
     td.text-center
@@ -29,9 +39,11 @@ mixin starredList(wu, url)
       i.fa.fa-star-o
       | &nbsp;Unstar
     .media-body
-      h4.media-heading: a(href=url)= wu.title
-      p= wu.challenge
-      p= wu.author
+      h4.media-heading
+        a(href=url)= wu.title
+        span.text-muted &nbsp;&nbsp;#{wu.author}
+      p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
+      p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
 
 block container
   .row
@@ -72,10 +84,10 @@ block container
             | Starred WriteUp&nbsp;
             span.badge.badge-primary= starredlen
       .tab-content
-        #mine.tab-pane.fade.in.active: ul#mine.media-list(style='margin-top: 30px;')
+        #mine.tab-pane.fade.in.active: ul.media-list(style='margin-top: 30px;')
           for item in mywu
             +mineList(item, item.url)
-        #starred.tab-pane.fade: ul#starred.media-list(style='margin-top: 30px;')
+        #starred.tab-pane.fade: ul.media-list(style='margin-top: 30px;')
           for item in starredwu
             +starredList(item, item.url)
 
