@@ -6,15 +6,15 @@ mixin writeupList(wu, url)
     td.text-center: a(href=url)= wu.title
     td.text-center= wu.challenge
     td.text-center
-      if wu.category == 'pwn'
+      if wu.category == 'PWN'
         span.label.label-primary PWN
-      if wu.category == 'reverse'
+      if wu.category == 'REVERSE'
         span.label.label-success REVERSE
-      if wu.category == 'web'
+      if wu.category == 'WEB'
         span.label.label-danger WEB
-      if wu.category == 'crypto'
+      if wu.category == 'CRYPTO'
         span.label.label-info CRYPTO
-      if wu.category == 'misc'
+      if wu.category == 'MISC'
         span.label.label-warning MISC
     td.text-center= wu.author
     td.text-center= wu.team

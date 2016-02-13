@@ -1,6 +1,28 @@
 extends frame
 {% load staticfiles %}
 
+mixin memberList(mb, url, avatar)
+  li.media
+    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
+    a.pull-right.btn.btn-info
+      | Approve&nbsp;
+      i.fa.fa-check
+    .media-body
+      h4.media-heading= mb.name
+      p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
+      p #[i.fa.fa-university]&nbsp;#{mb.univ}
+
+mixin newMemberList(mb, url, avatar)
+  li.media
+    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
+    a.pull-right.btn.btn-info
+      | Approve&nbsp;
+      i.fa.fa-check
+    .media-body
+      h4.media-heading= mb.name
+      p applying member
+      p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
+
 mixin writeupList(wu, url)
   li.media(style='margin-bottom: 25px;')
     .media-body
@@ -13,14 +35,6 @@ mixin writeupList(wu, url)
 mixin rankingList(rk, url)
   p.pull-right #{rk.rank} / #{rk.total}
   p: a(href=url)= rk.name
-
-mixin memberList(mb, url)
-  li.media
-    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=logo)
-    .media-body
-      h4.media-heading= title
-      p= time
-      p!= content
 
 block container
   .row
@@ -43,15 +57,20 @@ block container
         li.active
           a(href='#overview', data-toggle='pill')
             | Overview
-        li
-          a(href='#member', data-toggle='pill')
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown')
             | Membership&nbsp;
-            if newmember
-              span.badge.badge-danger= newmember
+            b.caret
+          ul.dropdown-menu
+            li: a(href='#applying', data-toggle='pill')
+              | Applying&nbsp;
+              if newmember
+                span.badge.badge-danger= newmember
+            li: a(href='#member', data-toggle='pill') Members
         li
           a(href='#writeup' data-toggle='pill')
             | WriteUp
-      .tab-content
+      .tab-content(style='margin-top: 15px;')
         #overview.tab-pane.fade.in.active
           h4 Challenge Solved
           #accordion.panel-group
@@ -98,11 +117,11 @@ block container
           ul.media-list
             for item in writeups
               +writeupList(item, item.url)
-        #member.tab-pane.fade
+        #applying.tab-pane.fade
           ul.media-list
             for item in newmembers
-              +memberList(item, item.url)
-          hr
+              +newMemberList(item, item.url, item.avatar)
+        #member.tab-pane.fade
           ul.media-list
             for item in members
-              +memberList(item, item.url)
+              +memberList(item, item.url, item.avatar)
