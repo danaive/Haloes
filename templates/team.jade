@@ -4,9 +4,8 @@ extends frame
 mixin memberList(mb, url, avatar)
   li.media
     a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
-    a.pull-right.btn.btn-info
-      | Approve&nbsp;
-      i.fa.fa-check
+    a.pull-right.btn.btn-link
+      i.fa.fa-user-times
     .media-body
       h4.media-heading= mb.name
       p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
@@ -17,7 +16,7 @@ mixin newMemberList(mb, url, avatar)
     a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
     a.pull-right.btn.btn-info
       | Approve&nbsp;
-      i.fa.fa-check
+      i.fa.fa-user-plus
     .media-body
       h4.media-heading= mb.name
       p applying member
