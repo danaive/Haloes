@@ -9,16 +9,13 @@ class Person(models.Model):
     school = models.CharField(max_length=50, blank=True)
     mail = models.EmailField()
     blog = models.URLField()
-    avatar = models.FilePathField()
+    avatar = models.FilePathField(default='/default.png')
     follow = models.ManyToManyField('self', symmetrical=False)
-    solved = models.ManyToManyField(Challenge, through='Submit')
-    #attampt = models.ManyToManyField(Challenge, through='Submit')
-    #team = models.ForeignKey('team.Team')
+    team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)
 
 
 class Submit(models.Model):
     person = models.ForeignKey(Person)
     challenge = models.ForeignKey(Challenge)
     date = models.DateTimeField(auto_now_add=True)
-
-
+    status = models.BooleanField()
