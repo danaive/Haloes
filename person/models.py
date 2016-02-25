@@ -12,6 +12,7 @@ class Person(models.Model):
     avatar = models.FilePathField(default='/default.png')
     follow = models.ManyToManyField('self', symmetrical=False)
     team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)
+    submits = models.ManyToManyField(Challenge, through='Submit')
 
 
 class Submit(models.Model):
