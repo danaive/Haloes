@@ -1,7 +1,6 @@
 from django.db import models
 from challenge.models import Challenge
 
-
 class Person(models.Model):
     name = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
@@ -14,7 +13,7 @@ class Person(models.Model):
     follow = models.ManyToManyField('self', symmetrical=False)
     solved = models.ManyToManyField(Challenge, through='Submit')
     #attampt = models.ManyToManyField(Challenge, through='Submit')
-    #team = models.ForeignKey('Team')
+    #team = models.ForeignKey('team.Team')
 
 
 class Submit(models.Model):

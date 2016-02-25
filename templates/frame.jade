@@ -29,7 +29,7 @@ html(lang='en')
 
           ul.nav.navbar-nav.navbar-right
             if username
-              li: a.nav-link(href='{% url "users:index" %}', style='font-size: 16px;')
+              li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
                 b= username
                 span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
               li: a.nav-link(href='#') Sign out

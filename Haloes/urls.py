@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^writeup/', include('writeup.urls', namespace='writeup')),
     url(r'^team/', include('team.urls', namespace='team')),
     url(r'^contest/', include('contest.urls', namespace='contest')),
-    url(r'^rank/', 'users.views.rank', name='rank')
+    url(r'^rank/', 'person.views.rank', name='rank')
 ]
