@@ -1,3 +1,7 @@
 from django.db import models
+from person.models import Person
 
-# Create your models here.
+
+class Team(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    captain = models.OneToOneField(Person)

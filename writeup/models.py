@@ -1,3 +1,6 @@
 from django.db import models
+from challenge.models import Challenge
+from person.models import Person
 
-# Create your models here.
+
+class Writeup(models.Model): pass

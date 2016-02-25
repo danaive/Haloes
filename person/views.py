@@ -5,7 +5,7 @@ import json
 
 
 def index(request):
-    return render(request, 'users.jade', {
+    return render(request, 'person.jade', {
         'username': 'danlei',
         'pageuser': 'xiami',
         'major': 'Misc',
@@ -19,7 +19,7 @@ def index(request):
     })
 
 def rank(request):
-    return render(request, 'users.jade', {
+    return render(request, 'person.jade', {
         'username': 'danlei',
         'pageuser': 'xiami',
         'major': 'Misc',

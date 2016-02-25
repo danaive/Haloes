@@ -69,7 +69,7 @@ def index(request):
         }],
         'members': [{
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '1',
             'major': 'MISC',
             'score': 233,
@@ -77,7 +77,7 @@ def index(request):
         },
         {
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '#',
             'major': 'MISC',
             'score': 233,
@@ -85,7 +85,7 @@ def index(request):
         },
         {
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '#',
             'major': 'MISC',
             'score': 233,
@@ -93,7 +93,7 @@ def index(request):
         },
         {
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '#',
             'major': 'MISC',
             'score': 233,
@@ -101,7 +101,7 @@ def index(request):
         }],
         'newmembers': [{
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '#',
             'major': 'MISC',
             'score': 233,
@@ -109,7 +109,7 @@ def index(request):
         },
         {
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '#',
             'major': 'MISC',
             'score': 233,
@@ -117,7 +117,7 @@ def index(request):
         },
         {
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '#',
             'major': 'MISC',
             'score': 233,
@@ -125,7 +125,7 @@ def index(request):
         },
         {
             'name': 'danlei',
-            'avatar': '/static/img/danlei.jpeg',
+            'avatar': '/static/img/danlei.jpg',
             'url': '#',
             'major': 'MISC',
             'score': 233,
