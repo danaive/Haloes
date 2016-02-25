@@ -1,6 +1,7 @@
 from django.db import models
 from person.models import Person
 from challenge.models import Challenge
+from contest.models import Contest
 
 class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -12,10 +13,10 @@ class Team(models.Model):
     web_list = models.ManyToManyField(Challenge, related_name='+')
     crypto_list = models.ManyToManyField(Challenge, related_name='+')
     misc_list = models.ManyToManyField(Challenge, related_name='+')
-    ranks = models.ManyToManyField('contest.Contest', through='Ranking')
+    ranks = models.ManyToManyField(Contest, through='Ranking')
 
 
 class Ranking(models.Model):
     team = models.ForeignKey(Team)
-    contest = models.ForeignKey('contest.Contest')
+    contest = models.ForeignKey(Contest)
     ranking = models.PositiveIntegerField()
