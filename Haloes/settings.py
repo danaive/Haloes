@@ -98,6 +98,7 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '172.16.217.233' if 'Darwin' in platform.system() else '',
         'PORT': '3306'
+    }
 }
 
 # Internationalization
