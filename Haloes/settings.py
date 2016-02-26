@@ -90,21 +90,14 @@ WSGI_APPLICATION = 'Haloes.wsgi.application'
 
 import platform
 
-dbinfo = {}
-
-if 'Darwin' in platform.system():
-    dbinfo['ENGINE'] = 'django.db.backends.sqlite3'
-    dbinfo['NAME'] = os.path.join(BASE_DIR, 'db.sqlite3')
-else:
-    dbinfo['ENGINE'] = 'django.db.backends.mysql'
-    dbinfo['NAME'] = 'haloes'
-    dbinfo['USER'] = 'root'
-    dbinfo['PASSWORD'] = ''
-    dbinfo['HOST'] = ''
-    dbinfo['PORT'] = '3306'
-
 DATABASES = {
-    'default': dbinfo
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'haloes',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '172.16.217.233' if 'Darwin' in platform.system() else '',
+        'PORT': '3306'
 }
 
 # Internationalization
