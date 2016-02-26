@@ -9,3 +9,4 @@ class Challenge(models.Model):
     status = models.CharField(max_length=10)
     solved = models.PositiveIntegerField(default=0)
     contest = models.ForeignKey(Contest, null=True, blank=True, on_delete=models.SET_NULL)
+    url = models.URLField()
