@@ -7,6 +7,7 @@ class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)
     leader = models.OneToOneField(Person, related_name='led_team')
     score = models.PositiveIntegerField(default=0)
+    avatar = models.FilePathField()
     solved = models.ManyToManyField(Challenge)
     pwn_list = models.ManyToManyField(Challenge, related_name='+')
     reverse_list = models.ManyToManyField(Challenge, related_name='+')

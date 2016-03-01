@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'haloes',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '172.16.217.233' if 'Darwin' in platform.system() else '',
+        'HOST': '',
         'PORT': '3306'
     }
 }
