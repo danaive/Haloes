@@ -121,17 +121,8 @@ def index(request):
     })
 
 def rank(request):
-    return render(request, 'person.jade', {
-        'username': 'danlei',
-        'pageuser': 'xiami',
-        'major': 'Misc',
-        'score': '233',
-        'solve': 4,
-        'writeup': 2,
-        'team': 'DAWN',
-        'school': 'WHU',
-        'mail': 'jne0915@gmail.com',
-        'blog': 'danlei.github.io'
+    return render(request, 'signin.jade', {
+        'wtfs': [i for i in range(66)]
     })
 
 @csrf_exempt
