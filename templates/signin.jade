@@ -15,14 +15,14 @@ html(lang='en')
           .finger
     .login-form
       h1 Sign In
-      input(placeholder='Email / Username')
-      input(placeholder='Password', type='password')
-      button Sign in
+      input#username(placeholder='Email / Username')
+      input#password(placeholder='Password', type='password')
+      button#signIn Sign in
     .reg-form
       h1 Sign Up
-      input(placeholder='Email')
-      input(placeholder='Username')
-      input(placeholder='Password', type='password')
-      button Sign up
+      input#remail(placeholder='Email')
+      input#rusername(placeholder='Username')
+      input#rpassword(placeholder='Password', type='password')
+      button#signUp Sign up
     script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
     script(src='{% static "assets/keyboard/keyboard.js" %}')

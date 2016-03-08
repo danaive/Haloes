@@ -234,17 +234,17 @@ button{
   width: 70px;
   height: 30px;
   background-color: transparent;
-  border: 1px solid #86939e;
+  border: 1px solid #666;
   border-radius: 3px;
-  color: #86939e;
+  color: #666;
   margin-top: 20px;
   position: relative;
   left: 250px;
 }
 
-a.button.hover{
-  border: 1px solid #666;
-  color: #666;
+button:hover{
+  border: 1px solid #86939e;
+  color: #86939e;
 }
 
 body ::-webkit-input-placeholder{
