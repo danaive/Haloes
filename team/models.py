@@ -4,10 +4,13 @@ from challenge.models import Challenge
 from contest.models import Contest
 
 class Team(models.Model):
+    def upload_to(instance, filename):
+        return 'avatar/team/' + instance.name + filename.split('.')[-1]
+
     name = models.CharField(max_length=50, unique=True)
     leader = models.OneToOneField(Person, related_name='led_team')
     score = models.PositiveIntegerField(default=0)
-    avatar = models.FilePathField()
+    avatar = models.ImageField(upload_to=upload_to)
     solved = models.ManyToManyField(Challenge)
     pwn_list = models.ManyToManyField(Challenge, related_name='+')
     reverse_list = models.ManyToManyField(Challenge, related_name='+')
