@@ -14,12 +14,16 @@ html(lang='en')
           .text
           .finger
     .login-form
+      {% csrf_token %}
       h1 Sign In
       input#username(placeholder='Email / Username')
       input#password(placeholder='Password', type='password')
-      button#signIn Sign in
-      .alert.alert-success: strong Welcome!
-      .alert.alert-warning: strong Invalid Username or Password
+      button#signIn(data-salt=salt) Sign in
+      #signInDone.alert.alert-success: strong Welcome!
+      #signInFail.alert.alert-warning: strong Invalid Username or Password
+      #alertError.alert.alert-warning
+        strong Some Error Occured
+        | &nbsp;&nbsp;ㄟ(▔,▔)ㄏ
     .reg-form
       h1 Sign Up
       input#remail(placeholder='Email')
@@ -30,5 +34,7 @@ html(lang='en')
       .alert.alert-warning: strong Occupied Username or Email
 
     script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
+    script(src='{% static "assets/bootflat/js/jquery.cookie.min.js" %}')
+    script(src='{% static "assets/bootflat/js/jquery.sha256.js" %}')
     script(src='{% static "assets/keyboard/keyboard.js" %}')
     script(src='{% static "build/login.js" %}')

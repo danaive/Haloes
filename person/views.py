@@ -2,7 +2,8 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
+from django.core.urlresolvers import reverse
+from django.template.context_processors import csrf
 from django import forms
 from .models import Person
 import json
@@ -30,7 +31,7 @@ class UpdateForm(forms.Form):
     blog = forms.URLField()
 
 
-def register(request):
+def sign_up(request):
     if request.is_ajax:
         rform = RegForm(request.POST)
         if rform.is_valid():
@@ -49,23 +50,25 @@ def register(request):
             return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
     return HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
 
-def login(request):
+def sign_in(request):
     if request.is_ajax:
         lform = LoginForm(request.POST)
         if lform.is_valid():
+            return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
             username = lform.cleaned_data['username']
             password = lform.cleaned_data['password']
             salt = lform.cleaned_data['salt']
             user = Person.objects.filter(username=username)
-            from hashlib import md5
-            if md5(user.password + salt) == password:
+            from hashlib import sha256
+            if user and sha256(user[0].password + salt).hexdigest() == password:
                 request.session['uid'] = username
                 return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
             return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
     return HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
 
-def logout(request): pass
-
+def sign_out(request):
+    del request.session['uid']
+    return HttpResponseRedirect(reverse('login'))
 
 def update_avatar(request):
     if request.is_ajax:
@@ -104,7 +107,13 @@ def update_info(request):
     return HttpResponse(json.dumps({'msg':'fail'}), content_type='application/json')
 
 def login(request):
-    return render(request, 'login.jade', {'wtfs': [i for i in range(66)]})
+    from os import urandom
+    salt = urandom(8).encode('hex')
+    request.session['salt'] = salt
+    return render(request, 'login.jade', {
+        'wtfs': [i for i in range(66)],
+        'salt': salt
+    })
 
 
 #----------------------- DEBUG -----------------------#
@@ -127,7 +136,7 @@ def rank(request):
         'wtfs': [i for i in range(66)]
     })
 
-@csrf_exempt
+
 def score(request):
     return HttpResponse(json.dumps({
         'score': [123,65,83,25,233],

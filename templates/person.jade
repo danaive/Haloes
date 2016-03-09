@@ -8,8 +8,8 @@ mixin personalInfo(key, value, icon)
     li: h5(id='info#{key}')= value
 
 mixin updateInfo(key, icon)
-  .input-group(style="margin-bottom: 20px;")
-    span.input-group-addon(style="width: 105px; text-align: left")
+  .input-group(style='margin-bottom: 20px;')
+    span.input-group-addon(style='width: 105px; text-align: left')
       i.fa(class='fa-#{icon}')
       | &nbsp;#{key}
     input.form-control(id='update#{key}' type='text')

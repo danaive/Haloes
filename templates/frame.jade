@@ -10,6 +10,7 @@ html(lang='en')
       link(rel='stylesheet', href='{% static "assets/font-awesome/css/font-awesome.min.css" %}')
 
   body
+    {% csrf_token %}
     nav.navbar.navbar-default.navbar-custom(role='navigation', style='background-color: #434A54;')
       .container
         .navbar-header
@@ -54,5 +55,6 @@ html(lang='en')
 
     block script
       script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
+      script(src='{% static "assets/bootflat/js/jquery.cookie.min.js" %}')
       script(src='{% static "assets/bootflat/js/site.min.js" %}')
       script(src='{% static "build/stick-footer.js" %}')
