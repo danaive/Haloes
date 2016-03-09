@@ -227,6 +227,7 @@ h1{
   color: #666;
   position: relative;
   left: 40px;
+  font-family: Helvetica;
 }
 
 button{
@@ -240,6 +241,7 @@ button{
   margin-top: 20px;
   position: relative;
   left: 250px;
+  cursor: pointer;
 }
 
 button:hover{
@@ -254,4 +256,28 @@ body ::-webkit-input-placeholder{
 body input:focus{
   outline: none;
   border-bottom: 1px solid rgba(28, 171, 233, 0.5);
+}
+
+.alert{
+  padding: 15px 15px;
+  background: transparent;
+  border: 1px solid transparent;
+  position: relative;
+  width: 250px;
+  left: 40px;
+  height: 20px;
+  margin-top: 20px;
+  border-radius: 4px;
+  font-family: Helvetica;
+  cursor: pointer;
+  display: none;
+}
+.alert-success{
+  border-color: #3C763D;
+  color: #3C763D;
+}
+
+.alert-warning{
+  border-color: #A94442;
+  color: #A94442;
 }

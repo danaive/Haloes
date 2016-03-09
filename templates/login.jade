@@ -18,11 +18,17 @@ html(lang='en')
       input#username(placeholder='Email / Username')
       input#password(placeholder='Password', type='password')
       button#signIn Sign in
+      .alert.alert-success: strong Welcome!
+      .alert.alert-warning: strong Invalid Username or Password
     .reg-form
       h1 Sign Up
       input#remail(placeholder='Email')
       input#rusername(placeholder='Username')
       input#rpassword(placeholder='Password', type='password')
       button#signUp Sign up
+      .alert.alert-success: strong Welcome!
+      .alert.alert-warning: strong Occupied Username or Email
+
     script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
     script(src='{% static "assets/keyboard/keyboard.js" %}')
+    script(src='{% static "build/login.js" %}')

@@ -103,6 +103,8 @@ def update_info(request):
             return HttpResponse(json.dumps({'msg':'okay'}), content_type='application/json')
     return HttpResponse(json.dumps({'msg':'fail'}), content_type='application/json')
 
+def login(request):
+    return render(request, 'login.jade', {'wtfs': [i for i in range(66)]})
 
 
 #----------------------- DEBUG -----------------------#
