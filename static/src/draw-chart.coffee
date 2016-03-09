@@ -6,9 +6,9 @@ $ ->
     success: (data) ->
       score = data.score
       label = ['PWN', 'REVERSE', 'WEB', 'CRYPTO', 'MISC']
-      # color = ['#D1DBE5', '#9BA9B3', '#B9D8FF', '#A7CFFF', '#95B7CD']
-      color = ['#68BC31', '#2091CF', '#AF4E96', '#DA5430', '#FFA400']
-      highlight = ['#7CD045', '#34A5E3', '#C362AA', '#EE6844', '#FFB814']
+      color = ['#3BAFDA', '#8CC152', '#ED5565', '#37BC9B', '#FFCE54']
+      # color = ['#68BC31', '#2091CF', '#AF4E96', '#DA5430', '#FFA400']
+      highlight = ['#4FC3EE', '#A0D566', '#FF6979', '#4BD0AF', '#FFE268']
       pdata = ({
         label: label[i],
         value: score[i],

@@ -10,8 +10,8 @@
         var _, capacity, color, highlight, i, label, pctx, pdata, rctx, rdata, rgba;
         score = data.score;
         label = ['PWN', 'REVERSE', 'WEB', 'CRYPTO', 'MISC'];
-        color = ['#68BC31', '#2091CF', '#AF4E96', '#DA5430', '#FFA400'];
-        highlight = ['#7CD045', '#34A5E3', '#C362AA', '#EE6844', '#FFB814'];
+        color = ['#3BAFDA', '#8CC152', '#ED5565', '#37BC9B', '#FFCE54'];
+        highlight = ['#4FC3EE', '#A0D566', '#FF6979', '#4BD0AF', '#FFE268'];
         pdata = (function() {
           var j, len, results;
           results = [];
