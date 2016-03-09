@@ -59,4 +59,4 @@ target/
 # Database
 db*
 *.db
-
+00*

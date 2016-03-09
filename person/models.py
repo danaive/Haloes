@@ -1,12 +1,10 @@
 from django.db import models
 from challenge.models import Challenge
 
+def upload_to(instance, filename):
+    return 'avatar/person/' + instance.username + filename.split('.')[-1]
+
 class Person(models.Model):
-
-    def upload_to(instance, filename):
-        from os import urandom
-        return 'avatar/person/' + instance.username + filename.split('.')[-1]
-
     username = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
     major = models.CharField(max_length=10, default='')

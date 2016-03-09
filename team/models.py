@@ -3,10 +3,10 @@ from person.models import Person
 from challenge.models import Challenge
 from contest.models import Contest
 
-class Team(models.Model):
-    def upload_to(instance, filename):
-        return 'avatar/team/' + instance.name + filename.split('.')[-1]
+def upload_to(instance, filename):
+    return 'avatar/team/' + instance.name + filename.split('.')[-1]
 
+class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)
     leader = models.OneToOneField(Person, related_name='led_team')
     score = models.PositiveIntegerField(default=0)
