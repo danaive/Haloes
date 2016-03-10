@@ -6,11 +6,11 @@ def upload_to(instance, filename):
 
 class Person(models.Model):
     username = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
+    password = models.CharField(max_length=100)
     major = models.CharField(max_length=10, default='')
     score = models.PositiveIntegerField(default=0)
     school = models.CharField(max_length=50, blank=True)
-    mail = models.EmailField()
+    email = models.EmailField(unique=True)
     blog = models.URLField()
     avatar = models.ImageField(upload_to=upload_to)
     follow = models.ManyToManyField('self', symmetrical=False)

@@ -38,15 +38,17 @@ def sign_up(request):
             username = rform.cleaned_data['username']
             password = rform.cleaned_data['password']
             email = rform.cleaned_data['email']
-            user = Person.objects.filter(username=username)
-            if not user:
-                Person.objects.create(
-                    username = username,
-                    password = password,
-                    email = email
-                )
-                request.session['uid'] = username
-                return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
+            if '@' not in username
+                try:
+                    Person.objects.create(
+                        username = username,
+                        password = password,
+                        email = email
+                    )
+                    request.session['uid'] = username
+                    return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
+                except:
+                    continue
             return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
     return HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
 
@@ -54,11 +56,13 @@ def sign_in(request):
     if request.is_ajax:
         lform = LoginForm(request.POST)
         if lform.is_valid():
-            return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
             username = lform.cleaned_data['username']
             password = lform.cleaned_data['password']
             salt = lform.cleaned_data['salt']
-            user = Person.objects.filter(username=username)
+            if '@' not in username:
+                user = Person.objects.filter(username=username)
+            else:
+                user = Person.objects.filter(email=username)
             from hashlib import sha256
             if user and sha256(user[0].password + salt).hexdigest() == password:
                 request.session['uid'] = username
