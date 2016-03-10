@@ -41,15 +41,23 @@ block container
       .row(style='margin-bottom: 20px;')
         .col-md-3(style='margin-right: -20px;')
           img#avatar.img-thumbnail(src='{% static "img/danlei.jpg" %}', width='120', height='120')
-        .col-md-5(style='margin-left: -20px;')
+        .col-md-3(style='margin-left: -20px;')
           h2#nickname(style='margin-bottom: 5px;')= username
           unless self
             a#updateBtn.btn.btn-link
               | update&nbsp;
               i.fa.fa-chevron-down
-          a#cancelBtn.btn.btn-link(style='display: none;')
-            | cancel&nbsp;
-            i.fa.fa-chevron-up
+            a#cancelBtn.btn.btn-link(style='display: none;')
+              | cancel&nbsp;
+              i.fa.fa-chevron-up
+          else
+            a#unfollowBtn.btn.btn-info
+              i.fa.fa-mars-double
+              | &nbsp;Follow
+            a#followBtn.btn(data-follow=follow)
+              | Unfollow
+            #followAlert.alert.alert-success: strong Success
+
       .row
         .col-md-5
           +personalInfo('Major', major, 'crosshairs')
@@ -123,5 +131,4 @@ block container
 
 append script
   script(src='{% static "assets/charts/chart.min.js" %}')
-  script(src='{% static "build/draw-chart.js" %}')
   script(src='{% static "build/person.js" %}')

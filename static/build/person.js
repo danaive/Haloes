@@ -22,7 +22,7 @@
       $('#updateBtn').show();
       return $('#updateForm').fadeToggle();
     });
-    return $('#confBtn').on('click', function() {
+    $('#confBtn').on('click', function() {
       return $.ajax({
         url: 'update-info/',
         type: 'post',
@@ -47,6 +47,7 @@
         }
       });
     });
+    return $('#followBtn').on('click', function() {});
   });
 
 }).call(this);

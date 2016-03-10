@@ -4,31 +4,9 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template.context_processors import csrf
-from django import forms
+from .forms import *
 from .models import Person
 import json
-
-
-class RegForm(forms.Form):
-    email = forms.EmailField()
-    username = forms.CharField(max_length=50)
-    password = forms.CharField(widget=forms.PasswordInput())
-
-
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=50)
-    password = forms.CharField(widget=forms.PasswordInput())
-    salt = forms.CharField(max_length=50)
-
-class ImageForm(forms.Form):
-    image = forms.ImageField()
-
-class UpdateForm(forms.Form):
-    major = forms.CharField(max_length=50, required=False)
-    school = forms.CharField(max_length=50, required=False)
-    email = forms.EmailField(required=False)
-    blog = forms.URLField(required=False)
-
 
 def sign_up(request):
     if request.is_ajax:
@@ -122,12 +100,26 @@ def login(request):
         'salt': salt
     })
 
-def index(request, pageowner=''):
-    if pageowner:
+def follow(request):
+    if request.is_ajax:
+        fform = FollowForm(request.POST)
+        if fform.is_valid():
+            try:
+                user = Person.objects.get(username=fform.cleaned_data['username'])
+            except:
+                return render(request, '404.jade')
+            else:
+                follower = Person.objects.get(pk=request.session['uid'])
+                follower.follow.add(user)
+                return HttpResponse(json.dumps({'msg':'okay'}), content_type='application/json')
+    return HttpResponse(json.dumps({'msg':'error'}), content_type='application/json')
+
+def index(request, page_user=''):
+    if page_user:
         try:
-            user = Person.objects.get(username=pageowner)
+            user = Person.objects.get(username=page_user)
         except:
-            return render(request, 'person.jade')
+            return render(request, '404.jade')
     else:
         user = Person.objects.get(pk=request.session['uid'])
     data = {
@@ -141,10 +133,15 @@ def index(request, pageowner=''):
         'email': user.email,
         'blog': user.blog,
     }
-    if pageowner:
-        data['self'] = Person.objects.get(pk=request.session['uid']).username
+    if page_user:
+        visitor = Person.objects.get(pk=request.session['uid'])
+        data['self'] = visitor.username
+        if visitor.follow.filter(username=page_user):
+            data['follow'] = True
     return render(request, 'person.jade', data)
 
+# def score(request):
+#     if request.is_ajax:
 
 
 ######################## DEBUG ########################
@@ -157,10 +154,12 @@ def rank(request):
 def score(request):
     return HttpResponse(json.dumps({
         'score': [123,65,83,25,233],
+        # 'score': [0,0,0,0,0],
         'capacity': [
             {
                 'name': 'danlei',
-                'score': [65, 59, 90, 81, 56]
+                # 'score': [65, 59, 90, 81, 56]
+                'score': [0,0,0,0,0],
             },
             {
                 'name': 'xiami',
