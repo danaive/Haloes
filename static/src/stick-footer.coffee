@@ -5,4 +5,9 @@ $ ->
     $('.footer').css 'margin-top': (docHeight - footerTop) + 'px'
 
   csrftoken = $.cookie('csrftoken')
-  console.log csrftoken
+  csrfSafeMethod = (method) ->
+    /^(GET|HEAD|OPTIONS|TRACE)$/.test(method)
+  $.ajaxSetup
+    beforeSend: (xhr, settings) ->
+      unless csrfSafeMethod(settings.type) or this.crossDomain
+        xhr.setRequestHeader('X-CSRFToken', csrftoken)
