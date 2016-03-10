@@ -15,10 +15,8 @@ $ ->
         color: color[i],
         highlight: highlight[i]
       } for _, i in label)
-      pctx = $("#pieChart").get(0).getContext('2d')
-      new Chart(pctx).Pie(pdata, {
-        animateScale: true
-      });
+      pctx = $("#pieChart").get(0).getContext '2d'
+      new Chart(pctx).Pie pdata, {animateScale: true}
 
       capacity = data.capacity
       rgba = ['rgba(137,114,158,1)', 'rgba(151,187,205,1)']
@@ -34,5 +32,5 @@ $ ->
           data: capacity[i].score
         } for _, i in capacity)
       }
-      rctx = $('#radarChart').get(0).getContext('2d')
-      new Chart(rctx).Radar(rdata, {})
+      rctx = $('#radarChart').get(0).getContext '2d'
+      new Chart(rctx).Radar rdata, {}

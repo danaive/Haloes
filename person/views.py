@@ -24,11 +24,10 @@ class ImageForm(forms.Form):
     image = forms.ImageField()
 
 class UpdateForm(forms.Form):
-    major = forms.CharField(max_length=50)
-    school = forms.CharField(max_length=50)
-    avatar = forms.URLField()
-    email = forms.EmailField()
-    blog = forms.URLField()
+    major = forms.CharField(max_length=50, required=False)
+    school = forms.CharField(max_length=50, required=False)
+    email = forms.EmailField(required=False)
+    blog = forms.URLField(required=False)
 
 
 def sign_up(request):
@@ -38,17 +37,19 @@ def sign_up(request):
             username = rform.cleaned_data['username']
             password = rform.cleaned_data['password']
             email = rform.cleaned_data['email']
-            if '@' not in username
+            msg = 'fail'
+            if '@' not in username and len(username) <= 16:
                 try:
-                    Person.objects.create(
+                    user = Person.objects.create(
                         username = username,
                         password = password,
                         email = email
                     )
-                    request.session['uid'] = username
-                    return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
                 except:
-                    continue
+                    return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
+                else:
+                    request.session['uid'] = user.pk
+                    return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
             return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
     return HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
 
@@ -65,7 +66,7 @@ def sign_in(request):
                 user = Person.objects.filter(email=username)
             from hashlib import sha256
             if user and sha256(user[0].password + salt).hexdigest() == password:
-                request.session['uid'] = username
+                request.session['uid'] = user[0].pk
                 return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
             return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
     return HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
@@ -89,7 +90,7 @@ def update_avatar(request):
             suffix = popen('file ' + filepath).read().split(':')[-1].strip().split()[0]
             if suffix not in ['GIF', 'JPEG', 'PNG'] or suffix != filepath.split('.')[-1].upper():
                 return HttpResponse(json.dumps({'msg':'Invalid File Type!'}), content_type='application/json')
-            user = Person.objects.get(request.session['uid'])
+            user = Person.objects.get(pk=request.session['uid'])
             user.avatar = img
             return HttpResponse(json.dumps({'msg':'okay'}), content_type='application/json')
     return HttpResponse(json.dumps({'msg':'Invalid Request!'}), content_type='application/json')
@@ -99,16 +100,18 @@ def update_info(request):
     if request.is_ajax:
         uform = UpdateForm(request.POST)
         if uform.is_valid():
-            username = request.session['uname']
-            user = Person.objects.get(username=username)
-            user.major = uform.cleaned_data['major']
-            user.school = uform.cleaned_data['school']
-            user.avatar = uform.cleaned_data['avatar']
-            user.email = uform.cleaned_data['email']
-            user.blog = uform.cleaned_data['blog']
+            user = Person.objects.get(pk=request.session['uid'])
+            attr = ['major', 'school', 'email', 'blog']
+            map(lambda x: setattr(user, x, uform.cleaned_data[x]) if uform.cleaned_data[x] else None, attr)
             user.save()
-            return HttpResponse(json.dumps({'msg':'okay'}), content_type='application/json')
-    return HttpResponse(json.dumps({'msg':'fail'}), content_type='application/json')
+            return HttpResponse(json.dumps({
+                'msg':'okay',
+                'major': user.major,
+                'school': user.school,
+                'email': user.email,
+                'blog': user.blog
+            }), content_type='application/json')
+    return HttpResponse(json.dumps({'msg':'error'}), content_type='application/json')
 
 def login(request):
     from os import urandom
@@ -119,22 +122,32 @@ def login(request):
         'salt': salt
     })
 
+def index(request, pageowner=''):
+    if pageowner:
+        try:
+            user = Person.objects.get(username=pageowner)
+        except:
+            return render(request, 'person.jade')
+    else:
+        user = Person.objects.get(pk=request.session['uid'])
+    data = {
+        'username': user.username,
+        'major': user.major,
+        'score': user.score,
+        'solve': user.submits.filter(status=True).count(),
+        'writeup': user.writeup_set.count(),
+        'team': user.team.name if user.team else '',
+        'school': user.school,
+        'email': user.email,
+        'blog': user.blog,
+    }
+    if pageowner:
+        data['self'] = Person.objects.get(pk=request.session['uid']).username
+    return render(request, 'person.jade', data)
 
-#----------------------- DEBUG -----------------------#
-def index(request):
-    return render(request, 'person.jade', {
-        'username': 'danlei',
-        'pageuser': 'xiami',
-        'major': 'Misc',
-        'score': '233',
-        'solve': 4,
-        'writeup': 2,
-        'team': 'DAWN',
-        'school': 'WHU',
-        'mail': 'jne0915@gmail.com',
-        'blog': 'danlei.github.io'
-    })
 
+
+######################## DEBUG ########################
 def rank(request):
     return render(request, 'signin.jade', {
         'wtfs': [i for i in range(66)]
