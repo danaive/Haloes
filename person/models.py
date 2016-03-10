@@ -17,9 +17,21 @@ class Person(models.Model):
     team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)
     submits = models.ManyToManyField(Challenge, through='Submit')
 
+    def __unicode__(self):
+        return self.username + '_' + self.email
+
 
 class Submit(models.Model):
     person = models.ForeignKey(Person)
     challenge = models.ForeignKey(Challenge)
     date = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField()
+
+
+class MaxScore(models.Model):
+    category = models.CharField(max_length=10)
+    score = models.PositiveIntegerField(default=0)
+    person = models.ForeignKey(Person, null=True)
+
+    def __unicode__(self):
+        return self.category + ': ' + str(self.score)

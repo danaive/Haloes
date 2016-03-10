@@ -4,6 +4,7 @@ from contest.models import Contest
 class Challenge(models.Model):
     title = models.CharField(max_length=50, unique=True)
     category = models.CharField(max_length=10)
+    score = models.PositiveIntegerField()
     flag = models.CharField(max_length=50)
     source = models.CharField(max_length=50)
     status = models.CharField(max_length=10)

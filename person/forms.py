@@ -26,3 +26,4 @@ class UpdateForm(forms.Form):
 
 class FollowForm(forms.Form):
     username = forms.CharField(max_length=50)
+

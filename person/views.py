@@ -5,8 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template.context_processors import csrf
 from .forms import *
-from .models import Person
+from .models import Person, MaxScore
 import json
+
+okay = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
+fail = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
+error = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
+e404 = render(request, '404.jade')
 
 def sign_up(request):
     if request.is_ajax:
@@ -24,12 +29,12 @@ def sign_up(request):
                         email = email
                     )
                 except:
-                    return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
+                    return fail
                 else:
                     request.session['uid'] = user.pk
-                    return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
-            return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
-    return HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
+                    return okay
+            return fail
+    return error
 
 def sign_in(request):
     if request.is_ajax:
@@ -45,9 +50,9 @@ def sign_in(request):
             from hashlib import sha256
             if user and sha256(user[0].password + salt).hexdigest() == password:
                 request.session['uid'] = user[0].pk
-                return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
-            return HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
-    return HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
+                return okay
+            return fail
+    return error
 
 def sign_out(request):
     del request.session['uid']
@@ -70,8 +75,8 @@ def update_avatar(request):
                 return HttpResponse(json.dumps({'msg':'Invalid File Type!'}), content_type='application/json')
             user = Person.objects.get(pk=request.session['uid'])
             user.avatar = img
-            return HttpResponse(json.dumps({'msg':'okay'}), content_type='application/json')
-    return HttpResponse(json.dumps({'msg':'Invalid Request!'}), content_type='application/json')
+            return okay
+    return error
 
 def update_info(request):
     # email check to be added
@@ -89,7 +94,7 @@ def update_info(request):
                 'email': user.email,
                 'blog': user.blog
             }), content_type='application/json')
-    return HttpResponse(json.dumps({'msg':'error'}), content_type='application/json')
+    return error
 
 def login(request):
     from os import urandom
@@ -107,19 +112,19 @@ def follow(request):
             try:
                 user = Person.objects.get(username=fform.cleaned_data['username'])
             except:
-                return render(request, '404.jade')
+                return e404
             else:
                 follower = Person.objects.get(pk=request.session['uid'])
                 follower.follow.add(user)
-                return HttpResponse(json.dumps({'msg':'okay'}), content_type='application/json')
-    return HttpResponse(json.dumps({'msg':'error'}), content_type='application/json')
+                return okay
+    return error
 
 def index(request, page_user=''):
     if page_user:
         try:
             user = Person.objects.get(username=page_user)
         except:
-            return render(request, '404.jade')
+            return e404
     else:
         user = Person.objects.get(pk=request.session['uid'])
     data = {
@@ -140,8 +145,44 @@ def index(request, page_user=''):
             data['follow'] = True
     return render(request, 'person.jade', data)
 
-# def score(request):
-#     if request.is_ajax:
+def _score(request):
+    if request.is_ajax:
+        sform = FollowForm(request.POST)
+        if sform.is_valid():
+            try:
+                user = Person.objects.get(username=sform.cleaned_data['username'])
+            except:
+                return e404
+            else:
+                data = {
+                    'score': [0] * 5,
+                    'capacity': []
+                }
+                cate = {'PWN': 0, 'REVERSE': 1, 'WEB': 2, 'CRYPTO': 3, 'MISC': 4}
+                for submit in user.submits.filter(status=True)):
+                    data['score'][cate[submit.challenge.category]] += submit.challenge.score
+                data['capacity'].append({
+                    'score': map(
+                        lambda ct: 100 * data['score'][ct[1]] / MaxScore.objects.get(category=ct[0]),
+                        cate.iteritems()),
+                    'name': user.username
+                })
+                visitor = Person.objects.get(pk=request.session['uid'])
+                if visitor.username != user.username:
+                    tmp = [0] * 5
+                    for submit in visitor.submits.filter(status=True)):
+                        tmp[cate[submit.challenge.category]] += submit.challenge.score
+                    data['capacity'].append({
+                        'score': map(
+                            lambda ct: 100 * tmp[ct[1]] / MaxScore.objects.get(category=ct[0]),
+                            cate.iteritems()),
+                        'name': visitor.username
+                    })
+                if sum(data['score']) == 0:
+                    data['score'][0] = 1
+                return HttpResponse(json.dumps(data), content_type='application/json')
+        return error
+
 
 
 ######################## DEBUG ########################
@@ -156,11 +197,11 @@ def score(request):
         'score': [123,65,83,25,233],
         # 'score': [0,0,0,0,0],
         'capacity': [
-            {
-                'name': 'danlei',
-                # 'score': [65, 59, 90, 81, 56]
-                'score': [0,0,0,0,0],
-            },
+            # {
+            #     'name': 'danlei',
+            #     # 'score': [65, 59, 90, 81, 56]
+            #     'score': [0,0,0,0,0],
+            # },
             {
                 'name': 'xiami',
                 'score': [28, 48, 40, 19, 96]

@@ -59,8 +59,10 @@ $ ->
   # charts
   score = []
   $.ajax
-    url: 'getscore/'
+    url: 'get-score/'
     dataType: 'json'
+    data:
+      username: $('#nickname').text()
     success: (data) ->
       score = data.score
       label = ['PWN', 'REVERSE', 'WEB', 'CRYPTO', 'MISC']
