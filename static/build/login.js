@@ -31,7 +31,8 @@
           },
           success: function(data) {
             if (data.msg === 'okay') {
-              return $('#signInDone').fadeIn();
+              $('#signInDone').fadeIn();
+              return window.setTimeout('location.href="/person"', 500);
             } else if (data.msg === 'fail') {
               return $('#signInFail').fadeIn();
             } else {
@@ -54,7 +55,8 @@
           },
           success: function(data) {
             if (data.msg === 'okay') {
-              return $('#signUpDone').fadeIn();
+              $('#signUpDone').fadeIn();
+              return window.setTimeout('location.href="/person"', 500);
             } else if (data.msg === 'fail') {
               return $('#signUpFail').fadeIn();
             } else {

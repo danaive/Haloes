@@ -7,6 +7,7 @@ $ ->
       unless csrfSafeMethod(settings.type) or this.crossDomain
         xhr.setRequestHeader('X-CSRFToken', csrftoken)
 
+
   $('.alert').on 'click', ->
     $(this).fadeOut()
 
@@ -24,6 +25,7 @@ $ ->
         success: (data) ->
           if data.msg == 'okay'
             $('#signInDone').fadeIn()
+            window.setTimeout('location.href="/person"', 500)
           else if data.msg == 'fail'
             $('#signInFail').fadeIn()
           else
@@ -42,6 +44,7 @@ $ ->
         success: (data) ->
           if data.msg == 'okay'
             $('#signUpDone').fadeIn()
+            window.setTimeout('location.href="/person"', 500)
           else if data.msg == 'fail'
             $('#signUpFail').fadeIn()
           else
