@@ -7,6 +7,7 @@ $ ->
       unless csrfSafeMethod(settings.type) or this.crossDomain
         xhr.setRequestHeader('X-CSRFToken', csrftoken)
 
+  $('#username').focus()
 
   $('.alert').on 'click', ->
     $(this).fadeOut()

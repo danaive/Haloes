@@ -13,6 +13,7 @@
         }
       }
     });
+    $('#username').focus();
     $('.alert').on('click', function() {
       return $(this).fadeOut();
     });
