@@ -8,7 +8,7 @@ $ ->
       success: ->
         location.href = '/'
 
-  #update
+  #update info
   $('#updateBtn').on 'click', ->
     $('.alert').hide()
     $('#updateForm').fadeToggle()
@@ -59,6 +59,7 @@ $ ->
     data:
       username: $('#nickname').text()
     success: (data) ->
+      # pie chart
       score = data.score
       label = ['PWN', 'REVERSE', 'WEB', 'CRYPTO', 'MISC']
       color = ['#3BAFDA', '#8CC152', '#ED5565', '#37BC9B', '#FFCE54']
@@ -73,6 +74,7 @@ $ ->
       pctx = $("#pieChart").get(0).getContext '2d'
       new Chart(pctx).Pie pdata, {animateScale: true}
 
+      # radar chart
       capacity = data.capacity
       rgba = ['rgba(137,114,158,1)', 'rgba(151,187,205,1)']
       rdata = {
@@ -85,10 +87,18 @@ $ ->
           pointHighlightFill: '#fff'
           pointHighlightStroke: rgba[i]
           data: capacity[i].score
+          # data: [20,40,30,100,2]
         } for _, i in capacity)
       }
       rctx = $('#radarChart').get(0).getContext '2d'
-      new Chart(rctx).Radar rdata, {}
+      new Chart(rctx).Radar(
+        rdata
+        scaleOverride: true
+        scaleSteps: 5
+        scaleStepWidth: 25
+        scaleStartValue: -25
+      )
+
 
   # avatar
   $('[data-toggle="tooltip"]').tooltip()

@@ -162,7 +162,7 @@ def score(request):
                     data['score'][cate[submit.challenge.category]] += submit.challenge.score
                 data['capacity'].append({
                     'score': map(
-                        lambda ct: max(5, 100 * data['score'][ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1)),
+                        lambda ct: 100 * data['score'][ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1),
                         cate.iteritems()),
                     'name': user.username
                 })
