@@ -14,7 +14,7 @@ class LoginForm(forms.Form):
 
 
 class ImageForm(forms.Form):
-    image = forms.ImageField()
+    img = forms.ImageField()
 
 
 class UpdateForm(forms.Form):

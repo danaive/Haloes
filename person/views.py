@@ -3,7 +3,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.template.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Person, MaxScore
 import json
@@ -11,7 +11,6 @@ import json
 okay = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
 fail = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
 error = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
-e404 = render(request, '404.jade')
 
 def sign_up(request):
     if request.is_ajax:
@@ -58,24 +57,23 @@ def sign_out(request):
     del request.session['uid']
     return HttpResponseRedirect(reverse('login'))
 
+@csrf_exempt
 def update_avatar(request):
     if request.is_ajax:
         iform = ImageForm(request.POST, request.FILES)
         if iform.is_valid():
-            img = iform.FILES['img']
+            img = request.FILES['img']
             if img.size > 5 * 1024 * 1024:
                 return HttpResponse(json.dumps({'msg':'Image No Larger Than 5M is Accepted.'}), content_type='application/json')
-            from os import path, popen
-            filepath = path.join(settings.MEDIA_ROOT, 'tmp', request.session['uid'])
-            with open(filepath, 'wb+') as fw:
-                for chunk in img.chunks:
-                    fw.write(chunk)
-            suffix = popen('file ' + filepath).read().split(':')[-1].strip().split()[0]
-            if suffix not in ['GIF', 'JPEG', 'PNG'] or suffix != filepath.split('.')[-1].upper():
-                return HttpResponse(json.dumps({'msg':'Invalid File Type!'}), content_type='application/json')
+            print img.content_type
             user = Person.objects.get(pk=request.session['uid'])
             user.avatar = img
-            return okay
+            user.save()
+            return HttpResponse(json.dumps({
+                'msg': 'okay',
+                'path': settings.MEDIA_URL + user.avatar.name,
+            }), content_type='application/json')
+        return fail
     return error
 
 def update_info(request):
@@ -112,7 +110,7 @@ def follow(request):
             try:
                 user = Person.objects.get(username=fform.cleaned_data['username'])
             except:
-                return e404
+                return render(request, '404.jade')
             else:
                 follower = Person.objects.get(pk=request.session['uid'])
                 follower.follow.add(user)
@@ -124,7 +122,7 @@ def index(request, page_user=''):
         try:
             user = Person.objects.get(username=page_user)
         except:
-            return e404
+            return render(request, '404.jade')
     else:
         user = Person.objects.get(pk=request.session['uid'])
     data = {
@@ -137,6 +135,7 @@ def index(request, page_user=''):
         'school': user.school,
         'email': user.email,
         'blog': user.blog,
+        'avatar': user.avatar,
     }
     if page_user:
         visitor = Person.objects.get(pk=request.session['uid'])
@@ -145,32 +144,32 @@ def index(request, page_user=''):
             data['follow'] = True
     return render(request, 'person.jade', data)
 
-def _score(request):
+def score(request):
     if request.is_ajax:
         sform = FollowForm(request.POST)
         if sform.is_valid():
             try:
                 user = Person.objects.get(username=sform.cleaned_data['username'])
             except:
-                return e404
+                return render(request, '404.jade')
             else:
                 data = {
                     'score': [0] * 5,
                     'capacity': []
                 }
                 cate = {'PWN': 0, 'REVERSE': 1, 'WEB': 2, 'CRYPTO': 3, 'MISC': 4}
-                for submit in user.submits.filter(status=True)):
+                for submit in user.submits.filter(status=True):
                     data['score'][cate[submit.challenge.category]] += submit.challenge.score
                 data['capacity'].append({
                     'score': map(
-                        lambda ct: 100 * data['score'][ct[1]] / MaxScore.objects.get(category=ct[0]),
+                        lambda ct: max(5, 100 * data['score'][ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1)),
                         cate.iteritems()),
                     'name': user.username
                 })
                 visitor = Person.objects.get(pk=request.session['uid'])
                 if visitor.username != user.username:
                     tmp = [0] * 5
-                    for submit in visitor.submits.filter(status=True)):
+                    for submit in visitor.submits.filter(status=True):
                         tmp[cate[submit.challenge.category]] += submit.challenge.score
                     data['capacity'].append({
                         'score': map(
@@ -192,22 +191,22 @@ def rank(request):
     })
 
 
-def score(request):
-    return HttpResponse(json.dumps({
-        'score': [123,65,83,25,233],
-        # 'score': [0,0,0,0,0],
-        'capacity': [
-            # {
-            #     'name': 'danlei',
-            #     # 'score': [65, 59, 90, 81, 56]
-            #     'score': [0,0,0,0,0],
-            # },
-            {
-                'name': 'xiami',
-                'score': [28, 48, 40, 19, 96]
-            }
-        ]
-    }), content_type='application/json')
+# def score(request):
+#     return HttpResponse(json.dumps({
+#         'score': [123,65,83,25,233],
+#         # 'score': [0,0,0,0,0],
+#         'capacity': [
+#             # {
+#             #     'name': 'danlei',
+#             #     # 'score': [65, 59, 90, 81, 56]
+#             #     'score': [0,0,0,0,0],
+#             # },
+#             {
+#                 'name': 'xiami',
+#                 'score': [28, 48, 40, 19, 96]
+#             }
+#         ]
+#     }), content_type='application/json')
 
 
 def writeup(request):

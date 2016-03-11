@@ -40,16 +40,20 @@ block container
     .col-md-8
       .row(style='margin-bottom: 20px;')
         .col-md-3(style='margin-right: -20px;')
-          img#avatar.img-thumbnail(src='{% static "img/danlei.jpg" %}', width='120', height='120')
+          img#avatar.img-thumbnail(src='#{MEDIA_URL}#{avatar}',
+            width='120', height='120', style='cursor: pointer;',
+            data-toggle='tooltip', data-placement='bottom', title='Update Your Avatar')
+          #iconHolder.img-thumbnail(style='width: 120px; height: 120px; display: none;')
+            i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
+          form(enctype='multipart/form-data')
+            input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
         .col-md-3(style='margin-left: -20px;')
           h2#nickname(style='margin-bottom: 5px;')= username
           unless self
             a#updateBtn.btn.btn-link
               | update&nbsp;
               i.fa.fa-chevron-down
-            a#cancelBtn.btn.btn-link(style='display: none;')
-              | cancel&nbsp;
-              i.fa.fa-chevron-up
+
           else
             a#unfollowBtn.btn.btn-info
               i.fa.fa-mars-double
@@ -81,12 +85,14 @@ block container
         .col-md-6
           +updateInfo('Email', 'envelope')
           +updateInfo('Blog', 'github')
-          a#confBtn.btn.btn-info(style='margin-bottom: 15px;')
+          a#confBtn.btn.btn-info(style='margin-bottom: 15px; margin-left: 110px;')
             i.fa.fa-check
             | &nbsp;Confirm
+          a#cancelBtn.btn.btn-default(style='margin-bottom: 15px; margin-left: 5px;')
+            i.fa.fa-times
+            | &nbsp;Cancel
 
       hr(style='background-color: transparent; margin-bottom: 30px;'))
-
       .row(style='margin-bottom: 30px;')
         .col-md-4
           canvas#pieChart(height='220', width='220', style='margin-left: 10px; margin-top: 30px;')
@@ -131,4 +137,5 @@ block container
 
 append script
   script(src='{% static "assets/charts/chart.min.js" %}')
+  script(src='{% static "assets/bootflat/js/ajax-file-upload.js" %}')
   script(src='{% static "build/person.js" %}')

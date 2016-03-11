@@ -10,14 +10,10 @@ $ ->
 
   #update
   $('#updateBtn').on 'click', ->
-    $(this).hide()
-    $('#cancelBtn').show()
     $('.alert').hide()
     $('#updateForm').fadeToggle()
   $('#cancelBtn').on 'click', ->
-    $(this).hide()
-    $('#updateBtn').show()
-    $('#updateForm').fadeToggle()
+    $('#updateForm').fadeOut()
   $('#confBtn').on 'click', ->
     $.ajax
       url: 'update-info/'
@@ -31,9 +27,7 @@ $ ->
       success: (data) ->
         if data.msg == 'okay'
           $('.alert-success').fadeIn()
-          window.setTimeout("$('#updateForm').fadeOut()", 1000)
-          $('#cancelBtn').hide()
-          $('#updateBtn').show()
+          window.setTimeout "$('#updateForm').fadeOut()", 1000
           $('#infoMajor').text(data.major)
           $('#infoSchool').text(data.school)
           $('#infoEmail').text(data.email)
@@ -54,12 +48,13 @@ $ ->
       success: (data) ->
         if data.msg == 'okay'
           $('#followAlert').fadeIn()
-          window.setTimeout("$('#followAlert').fadeOut()", 2000)
+          window.setTimeout "$('#followAlert').fadeOut()", 2000
 
   # charts
   score = []
   $.ajax
     url: 'get-score/'
+    type: 'post'
     dataType: 'json'
     data:
       username: $('#nickname').text()
@@ -95,3 +90,24 @@ $ ->
       rctx = $('#radarChart').get(0).getContext '2d'
       new Chart(rctx).Radar rdata, {}
 
+  # avatar
+  $('[data-toggle="tooltip"]').tooltip()
+  $('#avatar').on 'click', ->
+    console.log $('#avatarHolder').val()
+    $('#avatarHolder').click()
+
+window.uploadAvatar = ->
+  $('#avatar').hide()
+  $('#iconHolder').show()
+  $.ajaxFileUpload
+    url: 'update-avatar/'
+    secureurl: false
+    fileElementId: 'avatarHolder'
+    dataType: 'json'
+    success: (data) ->
+      if data.msg == 'okay'
+        $('#avatar').attr 'src', data.path
+        $('#iconHolder').hide()
+        window.setTimeout "$('#avatar').show()", 50
+      else
+        console.log data

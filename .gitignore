@@ -60,3 +60,6 @@ target/
 db*
 *.db
 00*
+
+# Media Files
+media/

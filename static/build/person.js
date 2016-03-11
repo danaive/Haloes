@@ -13,15 +13,11 @@
       });
     });
     $('#updateBtn').on('click', function() {
-      $(this).hide();
-      $('#cancelBtn').show();
       $('.alert').hide();
       return $('#updateForm').fadeToggle();
     });
     $('#cancelBtn').on('click', function() {
-      $(this).hide();
-      $('#updateBtn').show();
-      return $('#updateForm').fadeToggle();
+      return $('#updateForm').fadeOut();
     });
     $('#confBtn').on('click', function() {
       return $.ajax({
@@ -38,8 +34,6 @@
           if (data.msg === 'okay') {
             $('.alert-success').fadeIn();
             window.setTimeout("$('#updateForm').fadeOut()", 1000);
-            $('#cancelBtn').hide();
-            $('#updateBtn').show();
             $('#infoMajor').text(data.major);
             $('#infoSchool').text(data.school);
             $('#infoEmail').text(data.email);
@@ -70,8 +64,9 @@
       });
     });
     score = [];
-    return $.ajax({
+    $.ajax({
       url: 'get-score/',
+      type: 'post',
       dataType: 'json',
       data: {
         username: $('#nickname').text()
@@ -126,6 +121,31 @@
         return new Chart(rctx).Radar(rdata, {});
       }
     });
+    $('[data-toggle="tooltip"]').tooltip();
+    return $('#avatar').on('click', function() {
+      console.log($('#avatarHolder').val());
+      return $('#avatarHolder').click();
+    });
   });
+
+  window.uploadAvatar = function() {
+    $('#avatar').hide();
+    $('#iconHolder').show();
+    return $.ajaxFileUpload({
+      url: 'update-avatar/',
+      secureurl: false,
+      fileElementId: 'avatarHolder',
+      dataType: 'json',
+      success: function(data) {
+        if (data.msg === 'okay') {
+          $('#avatar').attr('src', data.path);
+          $('#iconHolder').hide();
+          return window.setTimeout("$('#avatar').show()", 50);
+        } else {
+          return console.log(data);
+        }
+      }
+    });
+  };
 
 }).call(this);

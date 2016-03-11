@@ -2,7 +2,7 @@ from django.db import models
 from challenge.models import Challenge
 
 def upload_to(instance, filename):
-    return 'avatar/person/' + instance.username + filename.split('.')[-1]
+    return 'avatar/person/' + instance.username + '.' + filename.split('.')[-1]
 
 class Person(models.Model):
     username = models.CharField(max_length=50, unique=True)
@@ -12,7 +12,7 @@ class Person(models.Model):
     school = models.CharField(max_length=50, blank=True)
     email = models.EmailField(unique=True)
     blog = models.URLField()
-    avatar = models.ImageField(upload_to=upload_to)
+    avatar = models.ImageField(upload_to=upload_to, default='avatar/person/default.gif')
     follow = models.ManyToManyField('self', symmetrical=False)
     team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)
     submits = models.ManyToManyField(Challenge, through='Submit')
