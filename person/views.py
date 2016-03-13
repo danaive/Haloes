@@ -82,8 +82,8 @@ def update_info(request):
         uform = UpdateForm(request.POST)
         if uform.is_valid():
             user = Person.objects.get(pk=request.session['uid'])
-            attr = ['major', 'school', 'email', 'blog']
-            map(lambda x: setattr(user, x, uform.cleaned_data[x]) if uform.cleaned_data[x] else None, attr)
+            attrs = ['major', 'school', 'email', 'blog']
+            map(lambda attr: setattr(user, attr, uform.cleaned_data[attr]) if uform.cleaned_data[attr] else None, attrs)
             user.save()
             return HttpResponse(json.dumps({
                 'msg':'okay',
@@ -129,7 +129,7 @@ def index(request, page_user=''):
         'username': user.username,
         'major': user.major,
         'score': user.score,
-        'solve': user.submits.filter(status=True).count(),
+        'solve': user.submits.filter(submit__status=True).count(),
         'writeup': user.writeup_set.count(),
         'team': user.team.name if user.team else '',
         'school': user.school,
@@ -158,7 +158,7 @@ def score(request):
                     'capacity': []
                 }
                 cate = {'PWN': 0, 'REVERSE': 1, 'WEB': 2, 'CRYPTO': 3, 'MISC': 4}
-                for submit in user.submits.filter(status=True):
+                for submit in user.submits.filter(submit__status=True):
                     data['score'][cate[submit.challenge.category]] += submit.challenge.score
                 data['capacity'].append({
                     'score': map(
@@ -169,7 +169,7 @@ def score(request):
                 visitor = Person.objects.get(pk=request.session['uid'])
                 if visitor.username != user.username:
                     tmp = [0] * 5
-                    for submit in visitor.submits.filter(status=True):
+                    for submit in visitor.submits.filter(submit__status=True):
                         tmp[cate[submit.challenge.category]] += submit.challenge.score
                     data['capacity'].append({
                         'score': map(
