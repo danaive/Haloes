@@ -1,4 +1,13 @@
-editor = new Simditor
+$ ->
+
+  $('a[href$="challenge"]').addClass 'current'
+
+
+
+
+
+
+ditor = new Simditor
   textarea: null
   placeholder: ''
   defaultImage: 'images/image.png'

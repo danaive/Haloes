@@ -33,10 +33,10 @@ html(lang='en')
               li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
                 b= username
                 span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
-              li: a.nav-link(href='#') Sign out
+              li: a.nav-link(href='#signOut') Sign out
             else
-              li: a.nav-link(href='#') Sign up
-              li: a.nav-link(href='#') Sign in
+              li: a.nav-link(href='#signUp') Sign up
+              li: a.nav-link(href='#signIn') Sign in
 
     .container(style='padding-top: 80px;')
       block container

@@ -1,4 +1,7 @@
 $ ->
+
+  $('a[href$="person/"]').addClass 'current'
+
   # sign out
   $('[href="#logout"]').on 'click', ->
     $.ajax
@@ -87,7 +90,6 @@ $ ->
           pointHighlightFill: '#fff'
           pointHighlightStroke: rgba[i]
           data: capacity[i].score
-          # data: [20,40,30,100,2]
         } for _, i in capacity)
       }
       rctx = $('#radarChart').get(0).getContext '2d'
@@ -98,7 +100,6 @@ $ ->
         scaleStepWidth: 25
         scaleStartValue: -25
       )
-
 
   # avatar
   $('[data-toggle="tooltip"]').tooltip()
