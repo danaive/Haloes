@@ -1,11 +1,21 @@
 extends frame
 {% load staticfiles %}
 
-mixin challengeList(clg, url)
-  tr(style='display: none;')
-    td.text-center: a(href=url)= clg.title
+mixin challengeList(clg, pk, state, cate)
+  tr.ALL(class=cate, data-state=state, style='display: none;')
+    td.text-center: a(href=pk)= clg.title
     td.text-center= clg.source
-    td.text-center= clg.category
+    td.text-center
+      if clg.category == 'PWN'
+        span.label.label-primary PWN
+      if clg.category == 'REVERSE'
+        span.label.label-success REVERSE
+      if clg.category == 'WEB'
+        span.label.label-danger WEB
+      if clg.category == 'CRYPTO'
+        span.label.label-info CRYPTO
+      if clg.category == 'MISC'
+        span.label.label-warning MISC
     td.text-center= clg.score
     td.text-center= clg.solved
     if clg.status == 'on'
@@ -16,17 +26,19 @@ mixin challengeList(clg, url)
       td.text-center: input(type='checkbox', checked)
     if clg.status == 'toff'
       td.text-center: input(type='checkbox')
+    // td.text-center= clg.state
     if clg.state == 0
-      td.text-center(data-toggle='tooltip', data-placement='bottom', title='Attempted')
-        i.fa.fa-thumb-tack
+      td.text-center
+        i.fa.fa-lightbulb-o(data-pk=pk, data-toggle='tooltip', data-placement='bottom', title='Attempted Challenge Click to Drop')
     if clg.state == 1
-      td.text-center(data-toggle='tooltip', data-placement='bottom', title='Solved')
-        i.fa.fa-flag
+      td.text-center
+        i.fa.fa-flag(data-toggle='tooltip', data-placement='bottom', title='Solved')
     if clg.state == 2
-      td.text-center(data-toggle='tooltip', data-placement='bottom', title='Team-Solved')
-        i.fa.fa-flag-checkered
+      td.text-center
+        i.fa.fa-flag-checkered(data-toggle='tooltip', data-placement='bottom', title='Team-Solved')
     if clg.state == -1
       td.text-center &nbsp;
+
 
 block container
   .row
@@ -52,34 +64,18 @@ block container
               th.text-center Solved
               th.text-center Status
               th
-          tbody
+          tbody#cont(data-cate='ALL', data-page='0')
             for item in challenges
-              +challengeList(item, item.url)
+              +challengeList(item, item.pk, item.state, item.category)
       .btn-group.pull-right
-        button#pagerPrev.btn.btn-primary(data-page='0'): i.fa.fa-long-arrow-left
-        button#pagerNext.btn.btn-primary(data-cate='all'): i.fa.fa-long-arrow-right
+        button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
+        button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
 
 
 append script
   script(src='{% static "assets/bootflat/js/bootstrap-switch.min.js" %}')
   script(src='{% static "build/challenge.js" %}')
-  // script.
-  //   $.fn.bootstrapSwitch.defaults.size = 'mini';
-  //   $.fn.bootstrapSwitch.defaults.onColor = 'info';
 
-  //   $(function () {
-  //     $('[data-toggle="tooltip"]').tooltip();
-  //     $('input[type="checkbox"]').bootstrapSwitch({
-  //       // size: 'mini',
-
-  //       onSwitchChange: function(event, state) {
-  //         $(this).bootstrapSwitch('toggleIndeterminate');
-  //         $(this).bootstrapSwitch('toggleDisabled');
-  //       }
-  //     });
-
-  //     // alert($('#wtf').bootstrapSwitch('state'))
-  //   });
 
 append head
   link(rel='stylesheet' href='{% static "assets/bootflat/css/bootstrap-switch.min.css" %}')

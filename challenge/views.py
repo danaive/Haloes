@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Challenge
-from .forms import *
 from person.models import Person
 
 
@@ -14,7 +13,7 @@ def index(request):
         user = None
     username = user.username if user else None
     challenges = Challenge.objects.all()
-    attrs = ['url', 'title', 'source', 'score', 'solved', 'status']
+    attrs = ['pk', 'title', 'source', 'score', 'solved', 'status']
     cha_list = []
     for challenge in challenges:
         cha_item = {}
@@ -38,7 +37,19 @@ def index(request):
             cha_list[i]['state'] = state
     return render(request, 'challenge.jade', {
         'username': username,
-        'challenges': cha_list
+        'challenges': [{
+            'pk': 15,
+            'title': 'xorlist',
+            'source': '0ctf_2016',
+            'category': 'MISC',
+            'score': 4,
+            'solved': 0,
+            'status': 'toff',
+            'state': 0,
+        }] * 32
     })
 
-def switch(request): pass
+def switch(request):
+    import time
+    time.sleep(2)
+    return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')

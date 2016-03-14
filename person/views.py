@@ -86,7 +86,7 @@ def update_info(request):
             map(lambda attr: setattr(user, attr, uform.cleaned_data[attr]) if uform.cleaned_data[attr] else None, attrs)
             user.save()
             return HttpResponse(json.dumps({
-                'msg':'okay',
+                'msg': 'okay',
                 'major': user.major,
                 'school': user.school,
                 'email': user.email,
