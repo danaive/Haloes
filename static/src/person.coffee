@@ -1,6 +1,7 @@
 $ ->
 
   $('a[href$="person/"]').addClass 'current'
+  stickFooter()
 
   # sign out
   $('[href="#logout"]').on 'click', ->

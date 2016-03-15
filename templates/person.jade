@@ -48,7 +48,10 @@ block container
           form(enctype='multipart/form-data')
             input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
         .col-md-3(style='margin-left: -20px;')
-          h2#nickname(style='margin-bottom: 5px;')= username
+          // h2#nickname(style='margin-bottom: 5px;')= username
+          h2
+            span#nickname= username
+            small(style='margin-left: 10px;')= motto
           unless self
             a#updateBtn.btn.btn-link
               | update&nbsp;

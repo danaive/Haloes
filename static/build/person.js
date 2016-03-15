@@ -3,6 +3,7 @@
   $(function() {
     var score;
     $('a[href$="person/"]').addClass('current');
+    stickFooter();
     $('[href="#logout"]').on('click', function() {
       return $.ajax({
         url: 'sign-out/',

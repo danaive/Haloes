@@ -2,10 +2,10 @@ $ ->
   window.stickFooter = ->
     docHeight = $(window).height()
     footerTop = $('.footer').position().top + $('.footer').height() + 30
+    console.log docHeight
+    console.log footerTop
     if footerTop < docHeight
       $('.footer').css 'margin-top': (docHeight - footerTop) + 'px'
-
-  stickFooter()
 
   csrftoken = $.cookie('csrftoken')
   csrfSafeMethod = (method) ->

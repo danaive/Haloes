@@ -6,13 +6,14 @@
       var docHeight, footerTop;
       docHeight = $(window).height();
       footerTop = $('.footer').position().top + $('.footer').height() + 30;
+      console.log(docHeight);
+      console.log(footerTop);
       if (footerTop < docHeight) {
         return $('.footer').css({
           'margin-top': (docHeight - footerTop) + 'px'
         });
       }
     };
-    stickFooter();
     csrftoken = $.cookie('csrftoken');
     csrfSafeMethod = function(method) {
       return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
