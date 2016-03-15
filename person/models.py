@@ -5,8 +5,9 @@ def upload_to(instance, filename):
     return 'avatar/person/' + instance.username + '.' + filename.split('.')[-1]
 
 class Person(models.Model):
-    username = models.CharField(max_length=50, unique=True)
+    username = models.CharField(max_length=20, unique=True)
     password = models.CharField(max_length=100)
+    motto = models.CharField(max_length=30, blank=True)
     major = models.CharField(max_length=10, default='')
     score = models.PositiveIntegerField(default=0)
     school = models.CharField(max_length=50, blank=True)
@@ -24,7 +25,7 @@ class Person(models.Model):
 class Submit(models.Model):
     person = models.ForeignKey(Person)
     challenge = models.ForeignKey(Challenge)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now=True)
     status = models.BooleanField()
 
 

@@ -58,14 +58,20 @@ def switch(request):
     time.sleep(2)
     return okay
 
-class dropForm(forms.Form):
+class DropForm(forms.Form):
     pk = forms.IntegerField()
+
+
+class SubmitForm(forms.Form):
+    pk = forms.IntegerField()
+    flag = forms.CharField()
+
 
 def drop_attempt(request):
     if request.is_ajax:
-        df = dropForm(request.POST)
-        if df.is_valid():
-            pk = df.cleaned_data['pk']
+        cf = DropForm(request.POST)
+        if cf.is_valid():
+            pk = cf.cleaned_data['pk']
             try:
                 challenge = Challenge.objects.get(pk=pk)
             except:
@@ -74,4 +80,32 @@ def drop_attempt(request):
                 user = Person.objects.get(pk=request.session['uid'])
                 Submit.objects.filter(person=user, challenge=challenge).delete()
                 return okay
+    return error
+
+def submit(request):
+    if request.is_ajax:
+        cf = SubmitForm(request.POST)
+        if cf.is_valid():
+            pk = cf.cleaned_data['pk']
+            flag = cf.cleaned_data['flag']
+            try:
+                challenge = Challenge.objects.get(pk=pk)
+            except:
+                return error
+            else:
+                user = Person.objects.get(pk=request.session['uid'])
+                if flag == challenge.flag:
+                    Submit.objects.update_or_create(
+                        person = user,
+                        challenge = challenge,
+                        defaults = {'status': True}
+                    )
+                    return okay
+                else:
+                    Submit.objects.update_or_create(
+                        person = user,
+                        challenge = challenge,
+                        defaults = {'status': False}
+                    )
+                    return fail
     return error

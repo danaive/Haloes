@@ -127,6 +127,7 @@ def index(request, page_user=''):
         user = Person.objects.get(pk=request.session['uid'])
     data = {
         'username': user.username,
+        'motto': user.motto,
         'major': user.major,
         'score': user.score,
         'solve': user.challenges.filter(submit__status=True).count(),
