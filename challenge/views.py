@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from django import forms
 import json
 from .models import Challenge
-from person.models import Person
+from person.models import Person, Submit
 
+okay = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
+fail = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
+error = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
 
 def index(request):
     if request.session.get('uid', None):
@@ -28,9 +32,9 @@ def index(request):
         #   2: team-solved
         for i, challenge in enumerate(challenges):
             state = -1
-            if challenge in user.submits.filter(submit__status=False):
+            if challenge in user.challenges.filter(submit__status=False):
                 state = 0
-            elif challenge in user.submits.filter(submit__status=True):
+            elif challenge in user.challenges.filter(submit__status=True):
                 state = 1
             elif user.team and challenge in user.team.solved.all():
                 state = 2
@@ -52,4 +56,22 @@ def index(request):
 def switch(request):
     import time
     time.sleep(2)
-    return HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
+    return okay
+
+class dropForm(forms.Form):
+    pk = forms.IntegerField()
+
+def drop_attempt(request):
+    if request.is_ajax:
+        df = dropForm(request.POST)
+        if df.is_valid():
+            pk = df.cleaned_data['pk']
+            try:
+                challenge = Challenge.objects.get(pk=pk)
+            except:
+                return fail
+            else:
+                user = Person.objects.get(pk=request.session['uid'])
+                Submit.objects.filter(person=user, challenge=challenge).delete()
+                return okay
+    return error

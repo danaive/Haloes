@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
@@ -129,7 +129,7 @@ def index(request, page_user=''):
         'username': user.username,
         'major': user.major,
         'score': user.score,
-        'solve': user.submits.filter(submit__status=True).count(),
+        'solve': user.challenges.filter(submit__status=True).count(),
         'writeup': user.writeup_set.count(),
         'team': user.team.name if user.team else '',
         'school': user.school,
@@ -158,8 +158,8 @@ def score(request):
                     'capacity': []
                 }
                 cate = {'PWN': 0, 'REVERSE': 1, 'WEB': 2, 'CRYPTO': 3, 'MISC': 4}
-                for submit in user.submits.filter(submit__status=True):
-                    data['score'][cate[submit.challenge.category]] += submit.challenge.score
+                for challenge in user.challenges.filter(submit__status=True):
+                    data['score'][cate[challenge.category]] += challenge.score
                 data['capacity'].append({
                     'score': map(
                         lambda ct: 100 * data['score'][ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1),
@@ -169,8 +169,8 @@ def score(request):
                 visitor = Person.objects.get(pk=request.session['uid'])
                 if visitor.username != user.username:
                     tmp = [0] * 5
-                    for submit in visitor.submits.filter(submit__status=True):
-                        tmp[cate[submit.challenge.category]] += submit.challenge.score
+                    for challenge in visitor.challenges.filter(submit__status=True):
+                        tmp[cate[challenge.category]] += challenge.score
                     data['capacity'].append({
                         'score': map(
                             lambda ct: 100 * tmp[ct[1]] / MaxScore.objects.get(category=ct[0]),
