@@ -3,14 +3,14 @@ extends frame
 
 mixin personalInfo(key, value, icon)
   ul.list-inline
-    li(style='width: 20px;'): i.fa.fa-lg(class='fa-#{icon}')
+    li(style='width: 20px;'): i.fa.fa-lg.fa-fw(class='fa-#{icon}')
     li(style='width: 100px;'): h5 &nbsp;#{key}&nbsp;
     li(style='width: 100px;'): h5(id='info#{key}')= value
 
 mixin updateInfo(key, icon)
   .input-group(style='margin-bottom: 20px;')
     span.input-group-addon(style='width: 90px; text-align: left')
-      i.fa(class='fa-#{icon}')
+      i.fa.fa-fw(class='fa-#{icon}')
       | &nbsp;#{key}
     if key != 'Major'
       input.form-control(id='update#{key}', type='text', style='width: 205px;')
@@ -51,7 +51,7 @@ block container
           // h2#nickname(style='margin-bottom: 5px;')= username
           h2
             span#nickname= username
-            small(style='margin-left: 10px;')= motto
+            small(style='margin-left: 10px; color: #aaa')= motto
           unless self
             a#updateBtn.btn.btn-link
               | update&nbsp;
@@ -82,6 +82,7 @@ block container
         .col-md-5
           +updateInfo('Major', 'crosshairs')
           +updateInfo('School', 'university')
+          +updateInfo('Motto', 'fire')
           .alert.alert-success: strong Updating Succeeded
           .alert.alert-danger: strong Updating Failed
 

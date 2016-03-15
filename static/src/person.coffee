@@ -28,6 +28,7 @@ $ ->
         school: $('#updateSchool').val()
         email: $('#updateEmail').val()
         blog: $('#updateBlog').val()
+        motto: $('#updateMotto').val()
       success: (data) ->
         if data.msg == 'okay'
           $('.alert-success').fadeIn()

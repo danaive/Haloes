@@ -22,6 +22,7 @@ class UpdateForm(forms.Form):
     school = forms.CharField(max_length=50, required=False)
     email = forms.EmailField(required=False)
     blog = forms.URLField(required=False)
+    motto = forms.CharField(max_length=30, required=False)
 
 
 class FollowForm(forms.Form):

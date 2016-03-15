@@ -82,15 +82,18 @@ def update_info(request):
         uform = UpdateForm(request.POST)
         if uform.is_valid():
             user = Person.objects.get(pk=request.session['uid'])
-            attrs = ['major', 'school', 'email', 'blog']
-            map(lambda attr: setattr(user, attr, uform.cleaned_data[attr]) if uform.cleaned_data[attr] else None, attrs)
+            attrs = ['major', 'school', 'email', 'blog', 'motto']
+            for attr in attrs:
+                if uform.cleaned_data[attr]:
+                    setattr(user, attr, uform.cleaned_data[attr])
             user.save()
             return HttpResponse(json.dumps({
                 'msg': 'okay',
                 'major': user.major,
                 'school': user.school,
                 'email': user.email,
-                'blog': user.blog
+                'blog': user.blog,
+                'motto': user.motto,
             }), content_type='application/json')
     return error
 
