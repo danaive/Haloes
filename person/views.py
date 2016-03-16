@@ -8,9 +8,9 @@ from .forms import *
 from .models import Person, MaxScore
 import json
 
-okay = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
-fail = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
-error = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
+OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
+FAIL = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
+ERROR = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
 
 def sign_up(request):
     if request.is_ajax:
@@ -28,12 +28,12 @@ def sign_up(request):
                         email = email
                     )
                 except:
-                    return fail
+                    return FAIL
                 else:
                     request.session['uid'] = user.pk
-                    return okay
-            return fail
-    return error
+                    return OKAY
+            return FAIL
+    return ERROR
 
 def sign_in(request):
     if request.is_ajax:
@@ -49,9 +49,9 @@ def sign_in(request):
             from hashlib import sha256
             if user and sha256(user[0].password + salt).hexdigest() == password:
                 request.session['uid'] = user[0].pk
-                return okay
-            return fail
-    return error
+                return OKAY
+            return FAIL
+    return ERROR
 
 def sign_out(request):
     del request.session['uid']
@@ -73,8 +73,8 @@ def update_avatar(request):
                 'msg': 'okay',
                 'path': settings.MEDIA_URL + user.avatar.name,
             }), content_type='application/json')
-        return fail
-    return error
+        return FAIL
+    return ERROR
 
 def update_info(request):
     # email check to be added
@@ -95,7 +95,7 @@ def update_info(request):
                 'blog': user.blog,
                 'motto': user.motto,
             }), content_type='application/json')
-    return error
+    return ERROR
 
 def login(request):
     from os import urandom
@@ -117,8 +117,8 @@ def follow(request):
             else:
                 follower = Person.objects.get(pk=request.session['uid'])
                 follower.follow.add(user)
-                return okay
-    return error
+                return OKAY
+    return ERROR
 
 def index(request, page_user=''):
     if page_user:
@@ -184,7 +184,7 @@ def score(request):
                 if sum(data['score']) == 0:
                     data['score'][0] = 1
                 return HttpResponse(json.dumps(data), content_type='application/json')
-        return error
+        return ERROR
 
 
 

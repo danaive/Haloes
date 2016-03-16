@@ -6,9 +6,9 @@ import json
 from .models import Challenge
 from person.models import Person, Submit
 
-okay = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
-fail = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
-error = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
+OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
+FAIL = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
+ERROR = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
 
 def index(request):
     if request.session.get('uid', None):
@@ -56,7 +56,7 @@ def index(request):
 def switch(request):
     import time
     time.sleep(2)
-    return okay
+    return OKAY
 
 class DropForm(forms.Form):
     pk = forms.IntegerField()
@@ -75,12 +75,12 @@ def drop_attempt(request):
             try:
                 challenge = Challenge.objects.get(pk=pk)
             except:
-                return fail
+                return FAIL
             else:
                 user = Person.objects.get(pk=request.session['uid'])
                 Submit.objects.filter(person=user, challenge=challenge).delete()
-                return okay
-    return error
+                return OKAY
+    return ERROR
 
 def submit(request):
     if request.is_ajax:
@@ -91,7 +91,7 @@ def submit(request):
             try:
                 challenge = Challenge.objects.get(pk=pk)
             except:
-                return error
+                return ERROR
             else:
                 user = Person.objects.get(pk=request.session['uid'])
                 if flag == challenge.flag:
@@ -100,12 +100,12 @@ def submit(request):
                         challenge = challenge,
                         defaults = {'status': True}
                     )
-                    return okay
+                    return OKAY
                 else:
                     Submit.objects.update_or_create(
                         person = user,
                         challenge = challenge,
                         defaults = {'status': False}
                     )
-                    return fail
-    return error
+                    return FAIL
+    return ERROR
