@@ -6,8 +6,6 @@
       var docHeight, footerTop;
       docHeight = $(window).height();
       footerTop = $('.footer').position().top + $('.footer').height() + 30;
-      console.log(docHeight);
-      console.log(footerTop);
       if (footerTop < docHeight) {
         return $('.footer').css({
           'margin-top': (docHeight - footerTop) + 'px'

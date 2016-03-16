@@ -10,15 +10,21 @@ $ ->
     size: 'mini'
     onColor: 'info'
     onSwitchChange: (event, state) ->
-      console.log state
       $(this).bootstrapSwitch 'toggleIndeterminate'
       $this = $(this)
       $.ajax
         url: 'switch/'
         type: 'post'
         dataType: 'json'
+        data: {
+          state: state,
+          pk: $this.data 'pk'
+        }
         success: (data) ->
-          $this.bootstrapSwitch 'state', state, true
+          if data.msg == 'okay'
+            $this.bootstrapSwitch 'state', state, true
+          else
+            $this.bootstrapSwitch 'state', !state, true
 
   PAGE_ITEM_COUNT = 15
 

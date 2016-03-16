@@ -9,15 +9,22 @@
       onColor: 'info',
       onSwitchChange: function(event, state) {
         var $this;
-        console.log(state);
         $(this).bootstrapSwitch('toggleIndeterminate');
         $this = $(this);
         return $.ajax({
           url: 'switch/',
           type: 'post',
           dataType: 'json',
+          data: {
+            state: state,
+            pk: $this.data('pk')
+          },
           success: function(data) {
-            return $this.bootstrapSwitch('state', state, true);
+            if (data.msg === 'okay') {
+              return $this.bootstrapSwitch('state', state, true);
+            } else {
+              return $this.bootstrapSwitch('state', !state, true);
+            }
           }
         });
       }

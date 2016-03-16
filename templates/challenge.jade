@@ -19,13 +19,13 @@ mixin challengeList(clg, pk, state, cate)
     td.text-center= clg.score
     td.text-center= clg.solved
     if clg.status == 'on'
-      td.text-center: input(type='checkbox', checked, disabled)
+      td.text-center: input(data-pk=pk, type='checkbox', checked, disabled)
     if clg.status == 'off'
-      td.text-center: input(type='checkbox', disabled)
+      td.text-center: input(data-pk=pk, type='checkbox', disabled)
     if clg.status == 'ton'
-      td.text-center: input(type='checkbox', checked)
+      td.text-center: input(data-pk=pk, type='checkbox', checked)
     if clg.status == 'toff'
-      td.text-center: input(type='checkbox')
+      td.text-center: input(data-pk=pk, type='checkbox')
     // td.text-center= clg.state
     if clg.state == 0
       td.text-center

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.http import HttpResponse
-from django import forms
 import json
+from .forms import *
 from .models import Challenge
 from person.models import Person, Submit
 
@@ -53,20 +53,6 @@ def index(request):
         }] * 32
     })
 
-def switch(request):
-    import time
-    time.sleep(2)
-    return OKAY
-
-class DropForm(forms.Form):
-    pk = forms.IntegerField()
-
-
-class SubmitForm(forms.Form):
-    pk = forms.IntegerField()
-    flag = forms.CharField()
-
-
 def drop_attempt(request):
     if request.is_ajax:
         cf = DropForm(request.POST)
@@ -108,4 +94,33 @@ def submit(request):
                         defaults = {'status': False}
                     )
                     return FAIL
+    return ERROR
+
+def switch(request):
+    """Switch Challenge State
+    Docker is used to employ challenges. We use Docker Python API
+    to turn on or off a particular challenge. Image name of a
+    challenge is i{challenge.pk}_{challenge.name}, and the Container
+    name is c{challenge.pk}_{challenge.name}.
+
+    Args:
+        request: Ajax-POST HTTPRequest, contains pk and state field
+            pk: the primary key of challenge
+            state: the state to be switched
+
+    Returns:
+        HTTPResponce: application/json data, two constants are used
+            OKAY: the challenge is switched successfully
+            ERROR: some error occured
+    """
+    if request.is_ajax:
+        sf = SwitchForm(request.POST)
+        if sf.is_valid():
+            try:
+                challenge = Challenge.objects.get(pk=sf.cleaned_data['pk'])
+            except:
+                return ERROR
+            else:
+                state = sf.cleaned_data['state']
+
     return ERROR
