@@ -5,10 +5,15 @@
     stickFooter();
     return $('input[type="checkbox"]').bootstrapSwitch({
       size: 'mini',
-      offColor: 'info',
-      handleWidth: 80,
+      onColor: 'info',
+      offColor: 'warning',
+      handleWidth: 50,
+      labelWidth: 30,
       onText: 'User',
       offText: 'Team',
+      onInit: function(event, state) {
+        return $(this).parent().parent().addClass('pull-right');
+      },
       onSwitchChange: function(event, state) {
         if (state) {
           $('#teamList').hide();

@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Person, MaxScore
+from team.models import Team
 import json
 
 OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
@@ -25,7 +26,8 @@ def sign_up(request):
                     user = Person.objects.create(
                         username = username,
                         password = password,
-                        email = email
+                        email = email,
+                        nickname = username
                     )
                 except:
                     return FAIL
@@ -186,10 +188,12 @@ def score(request):
                 return HttpResponse(json.dumps(data), content_type='application/json')
         return ERROR
 
-
-
-######################## DEBUG ########################
 def ranking(request):
+    user = Person.objects.get(pk=request.session['uid'])
+    users = Person.objects.order_by('-score')
+    teams = Team.objects.order_by('-score')
     return render(request, 'ranking.jade', {
-
+        'apply': False if user.team else True,
+        'users': users,
+        'teams': teams
     })

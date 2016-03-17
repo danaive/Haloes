@@ -2,7 +2,7 @@ extends frame
 {% load staticfiles %}
 
 mixin userlist(user, pk)
-  tr(style='display: none;')
+  tr(style='')
     td.text-center: a(href=pk)= user.nickname
     td.text-center
       if user.major == 'PWN'
@@ -21,18 +21,28 @@ mixin userlist(user, pk)
     td.text-center= user.writeup
     td.text-center
       if user.follow
-        button.btn.btn-default unfollow
-      // else
-      //   button.btn.btn-default follow
+        button.btn.btn-xs.btn-default Follow
+      if user.unfollow
+        button.btn.btn-xs.btn-default Unfollow
 
+mixin teamlist(team, pk, apply)
+  tr(style='')
+    td.text-center: a(href=pk)= team.name
+    td.text-center= team.members
+    td.text-center= team.score
+    td.text-center= team.solved
+    td.text-center= team.writeup
+    td.text-center
+      if apply
+        button.btn.btn-xs.btn-default Apply
 
 block container
   .row
-    .col-md-8
+    .col-md-12
       .panel.panel-default
         .panel-heading
-          | User List
-          input.pull-right(type='checkbox')
+          | Ranking List
+          input.pull-right(type='checkbox', checked)
         table#userList.table.table-hover
           thead
             tr
@@ -43,7 +53,7 @@ block container
               th.text-center Solved
               th.text-center WriteUp
               th
-          tbobd
+          tbody#userCont(data-page='0')
             for item in users
               +userlist(item, item.pk)
         table#teamList.table.table-hover(style='display: none;')
@@ -55,12 +65,12 @@ block container
               th.text-center Solved
               th.text-center WriteUp
               th
-          tbody
+          tbody#teamCont(data-page='0')
             for item in teams
-              +teamlist(item, item.pk)
+              +teamlist(item, item.pk, apply)
       .btn-group.pull-right
-        button#pagerPrev.btn.btn-primary: i.fa.fa-long-array-left
-        button#pagerNext.btn.btn-primary: i.fa.fa-long-array-right
+        button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
+        button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
 
 
 append script
