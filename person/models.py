@@ -17,7 +17,7 @@ class Person(models.Model):
     avatar = models.ImageField(upload_to=upload_to, default='avatar/person/default.gif')
     follow = models.ManyToManyField('self', symmetrical=False)
     team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)
-    challenges = models.ManyToManyField(Challenge, through='Submit')
+    challenges = models.ManyToManyField(Challenge, through='Submit', related_name='submitter')
 
     def __unicode__(self):
         return self.username + '_' + self.email

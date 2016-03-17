@@ -1,0 +1,42 @@
+[
+    {
+        "model": "person.MaxScore",
+        "pk": 1,
+        "fields": {
+            "category": "PWN",
+            "score": 0
+        }
+    },
+    {
+        "model": "person.MaxScore",
+        "pk": 2,
+        "fields": {
+            "category": "REVERSE",
+            "score": 0
+        }
+    },
+    {
+        "model": "person.MaxScore",
+        "pk": 3,
+        "fields": {
+            "category": "WEB",
+            "score": 0
+        }
+    },
+    {
+        "model": "person.MaxScore",
+        "pk": 4,
+        "fields": {
+            "category": "CRYPTO",
+            "score": 0
+        }
+    },
+    {
+        "model": "person.MaxScore",
+        "pk": 5,
+        "fields": {
+            "category": "MISC",
+            "score": 0
+        }
+    }
+]
