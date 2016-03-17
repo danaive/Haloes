@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
@@ -189,29 +189,7 @@ def score(request):
 
 
 ######################## DEBUG ########################
-def rank(request):
-    return render(request, 'signin.jade', {
-        'wtfs': [i for i in range(66)]
+def ranking(request):
+    return render(request, 'ranking.jade', {
+
     })
-
-
-# def score(request):
-#     return HttpResponse(json.dumps({
-#         'score': [123,65,83,25,233],
-#         # 'score': [0,0,0,0,0],
-#         'capacity': [
-#             # {
-#             #     'name': 'danlei',
-#             #     # 'score': [65, 59, 90, 81, 56]
-#             #     'score': [0,0,0,0,0],
-#             # },
-#             {
-#                 'name': 'xiami',
-#                 'score': [28, 48, 40, 19, 96]
-#             }
-#         ]
-#     }), content_type='application/json')
-
-
-def writeup(request):
-    return render(request, 'writeup.jade', {})

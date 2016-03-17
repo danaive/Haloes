@@ -3,7 +3,8 @@
   var ditor;
 
   $(function() {
-    return $('a[href$="challenge"]').addClass('current');
+    $('a[href$="writeup/"]').addClass('current');
+    return stickFooter();
   });
 
   ditor = new Simditor({
