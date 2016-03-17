@@ -16,12 +16,21 @@
     csrfSafeMethod = function(method) {
       return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
     };
-    return $.ajaxSetup({
+    $.ajaxSetup({
       beforeSend: function(xhr, settings) {
         if (!(csrfSafeMethod(settings.type) || this.crossDomain)) {
           return xhr.setRequestHeader('X-CSRFToken', csrftoken);
         }
       }
+    });
+    $('a[href="#signIn"]').on('click', function() {
+      return location.href = '/';
+    });
+    $('a[href="#signUp"]').on('click', function() {
+      return location.href = '/';
+    });
+    return $('a[href="#signOut"]').on('click', function() {
+      return $.post('/sign-out/');
     });
   });
 
