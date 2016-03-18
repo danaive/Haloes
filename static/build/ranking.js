@@ -17,11 +17,12 @@
       onSwitchChange: function(event, state) {
         if (state) {
           $('#teamList').hide();
-          return $('#userList').fadeIn();
+          $('#userList').fadeIn();
         } else {
           $('#userList').hide();
-          return $('#teamList').fadeIn();
+          $('#teamList').fadeIn();
         }
+        return stickFooter();
       }
     });
   });

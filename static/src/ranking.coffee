@@ -20,3 +20,4 @@ $ ->
       else
         $('#userList').hide()
         $('#teamList').fadeIn()
+      stickFooter()

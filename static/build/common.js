@@ -30,7 +30,8 @@
       return location.href = '/';
     });
     return $('a[href="#signOut"]').on('click', function() {
-      return $.post('/sign-out/');
+      $.post('/sign-out/');
+      return location.href = '/';
     });
   });
 

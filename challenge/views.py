@@ -101,7 +101,7 @@ def switch(request):
     Docker is used to employ challenges. We use Docker Python API
     to turn on or off a particular challenge. Image name of a
     challenge is i{challenge.pk}_{challenge.name}, and the Container
-    name is c{challenge.pk}_{challenge.name}.
+    name is {challenge.pk}_{challenge.name}.
 
     Args:
         request: Ajax-POST HTTPRequest, contains pk and state field

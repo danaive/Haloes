@@ -191,7 +191,18 @@ def score(request):
 def ranking(request):
     user = Person.objects.get(pk=request.session['uid'])
     users = Person.objects.order_by('-score')
+    for item in users:
+        item.writeup = item.writeup_set.count()
+        item.solved = item.challenges.filter(submit__status=True).count()
+        item.fstate = 0
+        if item in user.follow.all():
+            item.fstate = 1
+            if user in item.follow.all():
+                item.fstate = 2
     teams = Team.objects.order_by('-score')
+    for item in teams:
+        item.members = item.person_set.count()
+        item.writeup = item.person_set.writeup_set.count()
     return render(request, 'ranking.jade', {
         'apply': False if user.team else True,
         'users': users,

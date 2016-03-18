@@ -20,10 +20,10 @@ mixin userlist(user, pk)
     td.text-center= user.solved
     td.text-center= user.writeup
     td.text-center
-      if user.follow
-        button.btn.btn-xs.btn-default Follow
-      if user.unfollow
-        button.btn.btn-xs.btn-default Unfollow
+      if user.fstate == 1
+        i.fa.fa-exchange
+      if user.fstate == 2
+        i.fa.fa-star
 
 mixin teamlist(team, pk, apply)
   tr(style='')
