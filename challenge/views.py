@@ -5,6 +5,7 @@ import json
 from .forms import *
 from .models import Challenge
 from person.models import Person, Submit
+from django.conf import settings
 
 OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
 FAIL = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
@@ -99,9 +100,8 @@ def submit(request):
 def switch(request):
     """Switch Challenge State
     Docker is used to employ challenges. We use Docker Python API
-    to turn on or off a particular challenge. Image name of a
-    challenge is i{challenge.pk}_{challenge.name}, and the Container
-    name is c{challenge.pk}_{challenge.name}.
+    to turn on or off a particular challenge. the Container
+    name is {challenge.pk}_{challenge.name}.
 
     Args:
         request: Ajax-POST HTTPRequest, contains pk and state field
@@ -121,6 +121,21 @@ def switch(request):
             except:
                 return ERROR
             else:
+                # true is on, false is off
                 state = sf.cleaned_data['state']
-
+                from docker import Client
+                url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP, port=settings.DOCKER_PORT)
+                version = settings.DOCKER_VERSION
+                cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
+                client = Client(base_url=url, version=version)
+                try:
+                    if state:
+                        client.start(container_name)
+                    else:
+                        client.stop(container_name)
+                except:
+                    return ERROR
+                else:
+                    return OKAY                 
+                    
     return ERROR
