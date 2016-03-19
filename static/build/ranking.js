@@ -3,7 +3,7 @@
   $(function() {
     $('a[href$="ranking/"]').addClass('current');
     stickFooter();
-    return $('input[type="checkbox"]').bootstrapSwitch({
+    $('input[type="checkbox"]').bootstrapSwitch({
       size: 'mini',
       onColor: 'info',
       offColor: 'warning',
@@ -25,6 +25,11 @@
         return stickFooter();
       }
     });
+    $('a[href^="#user"]').on('click', function() {
+      var pk;
+      return pk = ($(this).attr('href')).substr(5);
+    });
+    return $('a[href^="#team"]').on('click', function() {});
   });
 
 }).call(this);

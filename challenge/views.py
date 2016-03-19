@@ -41,16 +41,7 @@ def index(request):
             cha_list[i]['state'] = state
     return render(request, 'challenge.jade', {
         'username': username,
-        'challenges': [{
-            'pk': 15,
-            'title': 'xorlist',
-            'source': '0ctf_2016',
-            'category': 'MISC',
-            'score': 4,
-            'solved': 0,
-            'status': 'toff',
-            'state': 0,
-        }] * 32
+        'challenges': cha_list
     })
 
 def drop_attempt(request):

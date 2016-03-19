@@ -21,3 +21,8 @@ $ ->
         $('#userList').hide()
         $('#teamList').fadeIn()
       stickFooter()
+
+  $('a[href^="#user"]').on 'click', ->
+    pk = ($(this).attr 'href').substr 5
+
+  $('a[href^="#team"]').on 'click', ->
