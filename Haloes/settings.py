@@ -129,6 +129,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
 
+DOCKER_IP = '127.0.0.1'
+
+DOCKER_PORT = 2375
+
+# server version need to be ensure
+DOCKER_VERSION = 'xxx'
+
 FIXTURE_DIRS = [
     os.path.join(BASE_DIR, 'fixture/'),
 ]
