@@ -1,0 +1,81 @@
+extends frame
+{% load staticfiles %}
+
+mixin userlist(user, pk)
+  tr(style='')
+    td.text-center: a(href='#user#{pk}')= user.nickname
+    td.text-center
+      if user.major == 'PWN'
+        span.label.label-primary PWN
+      if user.major == 'REVERSE'
+        span.label.label-success REVERSE
+      if user.major == 'WEB'
+        span.label.label-danger WEB
+      if user.major == 'CRYPTO'
+        span.label.label-info CRYPTO
+      if user.major == 'MISC'
+        span.label.label-warning MISC
+    td.text-center= user.team
+    td.text-center= user.score
+    td.text-center= user.solved
+    td.text-center= user.writeup
+    td.text-center
+      if user.fstate == 1
+        i.fa.fa-exchange
+      if user.fstate == 2
+        i.fa.fa-star
+
+mixin teamlist(team, pk, apply)
+  tr(style='')
+    td.text-center: a(href='#team#{pk}')= team.name
+    td.text-center= team.members
+    td.text-center= team.score
+    td.text-center= team.solved
+    td.text-center= team.writeup
+    td.text-center
+      if apply
+        button.btn.btn-xs.btn-default Apply
+
+block container
+  .row
+    .col-md-12
+      .panel.panel-default
+        .panel-heading
+          | Ranking List
+          input.pull-right(type='checkbox', checked)
+        table#userList.table.table-hover
+          thead
+            tr
+              th.text-center NickName
+              th.text-center Major
+              th.text-center Team
+              th.text-center Score
+              th.text-center Solved
+              th.text-center WriteUp
+              th
+          tbody#userCont(data-page='0')
+            for item in users
+              +userlist(item, item.pk)
+        table#teamList.table.table-hover(style='display: none;')
+          thead
+            tr
+              th.text-center TeamName
+              th.text-center Members
+              th.text-center Score
+              th.text-center Solved
+              th.text-center WriteUp
+              th
+          tbody#teamCont(data-page='0')
+            for item in teams
+              +teamlist(item, item.pk, apply)
+      .btn-group.pull-right
+        button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
+        button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
+
+
+append script
+  script(src='{% static "assets/bootflat/js/bootstrap-switch.min.js" %}')
+  script(src='{% static "build/ranking.js" %}')
+
+append head
+  link(rel='stylesheet', href='{% static "assets/bootflat/css/bootstrap-switch.min.css" %}')

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Person, MaxScore
+from team.models import Team
 import json
 
 OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
@@ -25,7 +26,8 @@ def sign_up(request):
                     user = Person.objects.create(
                         username = username,
                         password = password,
-                        email = email
+                        email = email,
+                        nickname = username
                     )
                 except:
                     return FAIL
@@ -186,32 +188,23 @@ def score(request):
                 return HttpResponse(json.dumps(data), content_type='application/json')
         return ERROR
 
-
-
-######################## DEBUG ########################
-def rank(request):
-    return render(request, 'signin.jade', {
-        'wtfs': [i for i in range(66)]
+def ranking(request):
+    user = Person.objects.get(pk=request.session['uid'])
+    users = Person.objects.order_by('-score')
+    for item in users:
+        item.writeup = item.writeup_set.count()
+        item.solved = item.challenges.filter(submit__status=True).count()
+        item.fstate = 0
+        if item in user.follow.all():
+            item.fstate = 1
+            if user in item.follow.all():
+                item.fstate = 2
+    teams = Team.objects.order_by('-score')
+    for item in teams:
+        item.members = item.person_set.count()
+        item.writeup = item.person_set.writeup_set.count()
+    return render(request, 'ranking.jade', {
+        'apply': False if user.team else True,
+        'users': users,
+        'teams': teams
     })
-
-
-# def score(request):
-#     return HttpResponse(json.dumps({
-#         'score': [123,65,83,25,233],
-#         # 'score': [0,0,0,0,0],
-#         'capacity': [
-#             # {
-#             #     'name': 'danlei',
-#             #     # 'score': [65, 59, 90, 81, 56]
-#             #     'score': [0,0,0,0,0],
-#             # },
-#             {
-#                 'name': 'xiami',
-#                 'score': [28, 48, 40, 19, 96]
-#             }
-#         ]
-#     }), content_type='application/json')
-
-
-def writeup(request):
-    return render(request, 'writeup.jade', {})

@@ -1,8 +1,8 @@
 $ ->
 
-  $('a[href$="challenge"]').addClass 'current'
+  $('a[href$="writeup/"]').addClass 'current'
 
-
+  stickFooter()
 
 
 

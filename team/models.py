@@ -19,8 +19,12 @@ class Team(models.Model):
     misc_list = models.ManyToManyField(Challenge, related_name='+')
     ranks = models.ManyToManyField(Contest, through='Ranking')
 
+    def __unicode__(self):
+        return self.name
+
 
 class Ranking(models.Model):
+    # team rankings in contests
     team = models.ForeignKey(Team)
     contest = models.ForeignKey(Contest)
     ranking = models.PositiveIntegerField()
