@@ -2,7 +2,8 @@ from django.db import models
 from challenge.models import Challenge
 
 def upload_to(instance, filename):
-    return 'avatar/person/' + instance.username + '.' + filename.split('.')[-1]
+    from os import urandom
+    return 'avatar/person/' + '.'.join((instance.username, urandom(4).encode('hex'), filename.split('.')[-1]))
 
 class Person(models.Model):
     username = models.CharField(max_length=20, unique=True)
@@ -13,7 +14,7 @@ class Person(models.Model):
     score = models.PositiveIntegerField(default=0)
     school = models.CharField(max_length=50, blank=True)
     email = models.EmailField(unique=True)
-    blog = models.URLField()
+    blog = models.URLField(blank=True)
     avatar = models.ImageField(upload_to=upload_to, default='avatar/person/default.gif')
     follow = models.ManyToManyField('self', symmetrical=False)
     team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)

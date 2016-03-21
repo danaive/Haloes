@@ -31,9 +31,8 @@ def sign_up(request):
                     )
                 except:
                     return FAIL
-                else:
-                    request.session['uid'] = user.pk
-                    return OKAY
+                request.session['uid'] = user.pk
+                return OKAY
             return FAIL
     return ERROR
 
@@ -67,7 +66,6 @@ def update_avatar(request):
             img = request.FILES['img']
             if img.size > 5 * 1024 * 1024:
                 return HttpResponse(json.dumps({'msg':'Image No Larger Than 5M is Accepted.'}), content_type='application/json')
-            print img.content_type
             user = Person.objects.get(pk=request.session['uid'])
             user.avatar = img
             user.save()
@@ -116,10 +114,9 @@ def follow(request):
                 user = Person.objects.get(username=fform.cleaned_data['username'])
             except:
                 return render(request, '404.jade')
-            else:
-                follower = Person.objects.get(pk=request.session['uid'])
-                follower.follow.add(user)
-                return OKAY
+            follower = Person.objects.get(pk=request.session['uid'])
+            follower.follow.add(user)
+            return OKAY
     return ERROR
 
 def index(request, page_user=''):
@@ -158,35 +155,34 @@ def score(request):
                 user = Person.objects.get(username=sform.cleaned_data['username'])
             except:
                 return render(request, '404.jade')
-            else:
-                data = {
-                    'score': [0] * 5,
-                    'capacity': []
-                }
-                cate = {'PWN': 0, 'REVERSE': 1, 'WEB': 2, 'CRYPTO': 3, 'MISC': 4}
-                for challenge in user.challenges.filter(submit__status=True):
-                    data['score'][cate[challenge.category]] += challenge.score
+            data = {
+                'score': [0] * 5,
+                'capacity': []
+            }
+            cate = {'PWN': 0, 'REVERSE': 1, 'WEB': 2, 'CRYPTO': 3, 'MISC': 4}
+            for challenge in user.challenges.filter(submit__status=True):
+                data['score'][cate[challenge.category]] += challenge.score
+            data['capacity'].append({
+                'score': map(
+                    lambda ct: 100 * data['score'][ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1),
+                    cate.iteritems()),
+                'name': user.username
+            })
+            visitor = Person.objects.get(pk=request.session['uid'])
+            if visitor.username != user.username:
+                tmp = [0] * 5
+                for challenge in visitor.challenges.filter(submit__status=True):
+                    tmp[cate[challenge.category]] += challenge.score
                 data['capacity'].append({
                     'score': map(
-                        lambda ct: 100 * data['score'][ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1),
+                        lambda ct: 100 * tmp[ct[1]] / MaxScore.objects.get(category=ct[0]),
                         cate.iteritems()),
-                    'name': user.username
+                    'name': visitor.username
                 })
-                visitor = Person.objects.get(pk=request.session['uid'])
-                if visitor.username != user.username:
-                    tmp = [0] * 5
-                    for challenge in visitor.challenges.filter(submit__status=True):
-                        tmp[cate[challenge.category]] += challenge.score
-                    data['capacity'].append({
-                        'score': map(
-                            lambda ct: 100 * tmp[ct[1]] / MaxScore.objects.get(category=ct[0]),
-                            cate.iteritems()),
-                        'name': visitor.username
-                    })
-                if sum(data['score']) == 0:
-                    data['score'][0] = 1
-                return HttpResponse(json.dumps(data), content_type='application/json')
-        return ERROR
+            if sum(data['score']) == 0:
+                data['score'][0] = 1
+            return HttpResponse(json.dumps(data), content_type='application/json')
+    return ERROR
 
 def ranking(request):
     user = Person.objects.get(pk=request.session['uid'])
