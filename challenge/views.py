@@ -166,8 +166,8 @@ def upload(request):
                     score = config['score'],
                     flag = config['flag'],
                     zipfile = filepath,
-                    description = pat.sub(r'%(\1)s', config['content']) % para
-                    status = 'toff' is config['dockerfile'] else 'on',
+                    description = pat.sub(r'%(\1)s', config['content']) % para,
+                    status = 'toff' if config['dockerfile'] else 'on',
                     defaults = opt
                 )
                 return OKAY
