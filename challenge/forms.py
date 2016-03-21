@@ -12,3 +12,7 @@ class SubmitForm(forms.Form):
 class SwitchForm(forms.Form):
     pk = forms.IntegerField()
     state = forms.BooleanField()
+
+
+class ZipForm(forms.Form):
+    source = forms.FileField()

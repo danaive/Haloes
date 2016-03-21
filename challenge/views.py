@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.http import HttpResponse
-import json
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Challenge
 from person.models import Person, Submit
-from django.conf import settings
+import json, zipfile, re
 
 OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
 FAIL = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
@@ -54,10 +55,9 @@ def drop_attempt(request):
                 challenge = Challenge.objects.get(pk=pk)
             except:
                 return FAIL
-            else:
-                user = Person.objects.get(pk=request.session['uid'])
-                Submit.objects.filter(person=user, challenge=challenge).delete()
-                return OKAY
+            user = Person.objects.get(pk=request.session['uid'])
+            Submit.objects.filter(person=user, challenge=challenge).delete()
+            return OKAY
     return ERROR
 
 def submit(request):
@@ -70,22 +70,21 @@ def submit(request):
                 challenge = Challenge.objects.get(pk=pk)
             except:
                 return ERROR
+            user = Person.objects.get(pk=request.session['uid'])
+            if flag == challenge.flag:
+                Submit.objects.update_or_create(
+                    person = user,
+                    challenge = challenge,
+                    defaults = {'status': True}
+                )
+                return OKAY
             else:
-                user = Person.objects.get(pk=request.session['uid'])
-                if flag == challenge.flag:
-                    Submit.objects.update_or_create(
-                        person = user,
-                        challenge = challenge,
-                        defaults = {'status': True}
-                    )
-                    return OKAY
-                else:
-                    Submit.objects.update_or_create(
-                        person = user,
-                        challenge = challenge,
-                        defaults = {'status': False}
-                    )
-                    return FAIL
+                Submit.objects.update_or_create(
+                    person = user,
+                    challenge = challenge,
+                    defaults = {'status': False}
+                )
+                return FAIL
     return ERROR
 
 def switch(request):
@@ -111,22 +110,69 @@ def switch(request):
                 challenge = Challenge.objects.get(pk=sf.cleaned_data['pk'])
             except:
                 return ERROR
-            else:
-                # true is on, false is off
-                state = sf.cleaned_data['state']
-                from docker import Client
-                url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP, port=settings.DOCKER_PORT)
-                version = settings.DOCKER_VERSION
-                cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
-                client = Client(base_url=url, version=version)
-                try:
-                    if state:
-                        client.start(container_name)
-                    else:
-                        client.stop(container_name)
-                except:
-                    return ERROR
+            # true is on, false is off
+            state = sf.cleaned_data['state']
+            from docker import Client
+            url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP, port=settings.DOCKER_PORT)
+            version = settings.DOCKER_VERSION
+            cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
+            client = Client(base_url=url, version=version)
+            try:
+                if state:
+                    client.start(container_name)
                 else:
-                    return OKAY
-
+                    client.stop(container_name)
+            except:
+                return ERROR
+            return OKAY
     return ERROR
+
+@csrf_exempt
+def upload(request):
+    if request.is_ajax:
+        zf = ZipForm(request.POST, request.FILES)
+        if zf.is_valid():
+            from os import urandom
+            zipname = urandom(8).encode('hex')
+            filepath = settings.MEDIA_ROOT + 'source/' + zipname + '.zip'
+            with open(filepath, 'wb+') as fw:
+                for chunk in request.FILES['source']:
+                    fw.write(chunk)
+            try:
+                zip = zipfile.ZipFile(filepath)
+                config = json.loads(zip.read('config.json'))
+                title = config['title']
+                dlpath = config['category'] + '/' + config['title']
+                para = {}
+                for item in config['statics']:
+                    zip.extract(item, settings.MEDIA_ROOT + dlpath)
+                    para[item] = settings.MEDIA_URL + dlpath + '/' + item
+                if config['dockerfile']:
+                    # docker deployment begin
+
+                    para['port'] = 'some port'
+
+                    # end
+
+                pat = re.compile(r'#{\s*(\S+)\s*}')
+                opt = {}
+                if 'source' in config:
+                    opt['source'] = config['source']
+                if 'contest' in config:
+                    opt['contest'] = config['contest']
+                Challenge.objects.update_or_create(
+                    title = config['title'],
+                    category = config['category'],
+                    score = config['score'],
+                    flag = config['flag'],
+                    zipfile = filepath,
+                    description = pat.sub(r'%(\1)s', config['content']) % para
+                    status = 'toff' is config['dockerfile'] else 'on',
+                    defaults = opt
+                )
+                return OKAY
+            except:
+                return ERROR
+
+
+
