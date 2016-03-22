@@ -59,7 +59,7 @@ target/
 # Database
 db*
 *.db
-00*
+00*.py
 
 # Media Files
 media/
