@@ -86,4 +86,25 @@ $ ->
       success: (data) ->
         $this.hide()
 
+  $('a[href^="#mod-"]').on 'click', ->
+    $('#modalTitle').text $(this).text()
+    $('#submit').data 'pk', ($(this).attr 'href').substr 5
+    $('#flagHolder').show()
+    $('.alert').hide()
+    $('#burnmodal').click()
 
+  $('#submit').on 'click', ->
+    pk = $(this).data 'pk'
+    $.ajax
+      url: 'submit/'
+      type: 'post'
+      dataType: 'json'
+      data:
+        flag: $('#flagHolder').val()
+        pk: pk
+      success: (data) ->
+        $('flagHolder').hide()
+        if data.msg == 'okay'
+          $('.alert-success').fadeIn()
+        else data.msg == 'fail'
+          $('.alert-danger').fadeIn()

@@ -109,6 +109,9 @@ def switch(request):
         if sf.is_valid():
             try:
                 challenge = Challenge.objects.get(pk=sf.cleaned_data['pk'])
+                user = Person.objects.get(pk=request.session['uid'])
+                if user.privilege > challenge.privilege:
+                    return FAIL
             except:
                 return ERROR
             # true is on, false is off
@@ -119,14 +122,10 @@ def switch(request):
             cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
             client = Client(base_url=url, version=version)
             try:
-                user = Person.objects.get(pk=request.session['uid'])
-                if user.privilege <= challenge.privilege:
-                    if state:
-                        client.start(container_name)
-                    else:
-                        client.stop(container_name)
+                if state:
+                    client.start(container_name)
                 else:
-                    return FAIL
+                    client.stop(container_name)
             except:
                 return ERROR
             return OKAY

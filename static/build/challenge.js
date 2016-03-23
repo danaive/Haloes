@@ -83,7 +83,7 @@
       });
       return stickFooter();
     });
-    return $('i[titil^="Attempted"]').on('click', function() {
+    $('i[titil^="Attempted"]').on('click', function() {
       var $this, pk;
       pk = $(this).data('pk');
       $this = $(this);
@@ -98,6 +98,11 @@
           return $this.hide();
         }
       });
+    });
+    return $('a[href^="#mod-"]').on('click', function() {
+      $('#modalTitle').text($(this).text());
+      $('#submit').data('pk', ($(this).attr('href')).substr(5));
+      return $('#burnmodal').click();
     });
   });
 

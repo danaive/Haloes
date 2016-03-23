@@ -3,7 +3,7 @@ extends frame
 
 mixin challengeList(clg, pk, state, cate, priv)
   tr.ALL(class=cate, data-state=state, style='display: none;')
-    td.text-center: a(href=pk)= clg.title
+    td.text-center: a(data-pk=pk, data-toggle='modal', href='#modal-container')= clg.title
     td.text-center= clg.source
     td.text-center
       if clg.category == 'PWN'
@@ -70,6 +70,22 @@ block container
       .btn-group.pull-right
         button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
         button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
+      a#burnmodal.btn(data-toggle='modal', href='#modal-container') modal
+      a#testmodal.btn(href='#mod-123') DAWN
+      #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
+        .modal-dialog: .modal-content
+          .modal-header
+            button.close(aria-hidden='true', data-dismiss='modal') ×
+            h4#modalTitle.modal-title Test
+          .modal-body
+            p test test
+          .modal-footer.row
+            .col-xs-9
+              input#flagHolder.form-control(type='text', placeholder='Input the Flag')
+              .alert.alert-success.pull-left(style='margin-bottom: 0; padding: 7px 15px; display: none;') You Got the FLAG Congratulations!!!
+              .alert.alert-danger.pull-left(style='margin-bottom: 0; padding: 7px 15px; display: none;') Incorrect FLAG
+            .col-xs-3
+              button#submit.btn.btn-info(data-pk) Submit
 
 
 append script
