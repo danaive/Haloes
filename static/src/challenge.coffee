@@ -74,7 +74,7 @@ $ ->
         $(this).show()
     stickFooter()
 
-  $('i[titil^="Attempted"]').on 'click', ->
+  $('i[title^="Attempted"]').on 'click', ->
     pk = $(this).data 'pk'
     $this = $(this)
     $.ajax
