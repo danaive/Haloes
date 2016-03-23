@@ -49,7 +49,7 @@ def index(request):
 
 def drop_attempt(request):
     if request.is_ajax:
-        cf = DropForm(request.POST)
+        cf = ChallengeForm(request.POST)
         if cf.is_valid():
             pk = cf.cleaned_data['pk']
             try:
@@ -87,6 +87,21 @@ def submit(request):
                 )
                 return FAIL
     return ERROR
+
+def get_challenge(request):
+    if request.is_ajax:
+        cf = ChallengeForm(request.POST)
+        if cf.is_valid():
+            pk = cf.cleaned_data['pk']
+            try:
+                challenge = Challenge.objects.get(pk=pk)
+            except:
+                return ERROR
+            return HttpResponse(json.dumps({
+                'msg': 'okay',
+                'content': challenge.description
+            }), content_type='application/json')
+
 
 def switch(request):
     """Switch Challenge State
@@ -179,6 +194,3 @@ def upload(request):
                 return OKAY
             except:
                 return ERROR
-
-
-

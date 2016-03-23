@@ -87,10 +87,22 @@ $ ->
         $this.hide()
 
   $('a[href^="#mod-"]').on 'click', ->
+    pk = ($(this).attr 'href').substr 5
     $('#modalTitle').text $(this).text()
-    $('#submit').data 'pk', ($(this).attr 'href').substr 5
+    $('#submit').data 'pk', pk
     $('#flagHolder').show()
     $('.alert').hide()
+    $.ajax
+      url: 'get-challenge'
+      type: 'post'
+      dataType: 'json'
+      data:
+        pk: pk
+      success: (data) ->
+        if data.msg == 'okay'
+          $('.modal-body').html data.content
+        else
+          return false
     $('#burnmodal').click()
 
   $('#submit').on 'click', ->

@@ -1,6 +1,6 @@
 from django import forms
 
-class DropForm(forms.Form):
+class ChallengeForm(forms.Form):
     pk = forms.IntegerField()
 
 
