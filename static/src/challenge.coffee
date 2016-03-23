@@ -104,7 +104,7 @@ $ ->
           $('.modal-body').html data.content
         else
           return false
-    $('#burnmodal').click()
+    $('#toggleModal').click()
 
   $('#submit').on 'click', ->
     pk = $(this).data 'pk'

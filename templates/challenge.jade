@@ -70,8 +70,7 @@ block container
       .btn-group.pull-right
         button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
         button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
-      a#burnmodal.btn(data-toggle='modal', href='#modal-container') modal
-      a#testmodal.btn(href='#mod-123') DAWN
+      a#toggleModal.btn(data-toggle='modal', href='#modal-container', style='display: none;') modal
       #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
         .modal-dialog: .modal-content
           .modal-header
