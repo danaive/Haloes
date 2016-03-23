@@ -45,7 +45,7 @@
       var cate, cnt;
       $('tr.ALL').hide();
       $('#cont').data('page', 0);
-      cate = $(this).attr('id').substr(3);
+      cate = ($(this).attr('id')).substr(3);
       $('#cont').data('cate', $(this).attr('cate', cate));
       cnt = 0;
       $("tr.ALL." + cate).each(function() {
@@ -61,7 +61,7 @@
       total = $('tr.ALL').length;
       page = $('#cont').data('page');
       cate = $('#cont').data('cate');
-      if ('Next' === $(this).attr('id').substr(5)) {
+      if ('Next' === ($(this).attr('id')).substr(5)) {
         if (page + PAGE_ITEM_COUNT >= total) {
           return;
         }
@@ -83,7 +83,7 @@
       });
       return stickFooter();
     });
-    $('i[titil^="Attempted"]').on('click', function() {
+    $('i[title^="Attempted"]').on('click', function() {
       var $this, pk;
       pk = $(this).data('pk');
       $this = $(this);
@@ -95,14 +95,56 @@
           pk: pk
         },
         success: function(data) {
-          return $this.hide();
+          if (data.msg === 'okay') {
+            return $this.hide();
+          }
         }
       });
     });
-    return $('a[href^="#mod-"]').on('click', function() {
+    $('a[href^="#mod-"]').on('click', function() {
+      var pk;
+      pk = ($(this).attr('href')).substr(5);
       $('#modalTitle').text($(this).text());
-      $('#submit').data('pk', ($(this).attr('href')).substr(5));
-      return $('#burnmodal').click();
+      $('#submit').data('pk', pk);
+      $('#flagHolder').show();
+      $('.alert').hide();
+      $.ajax({
+        url: 'get-challenge',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          pk: pk
+        },
+        success: function(data) {
+          if (data.msg === 'okay') {
+            return $('.modal-body').html(data.content);
+          } else {
+            return false;
+          }
+        }
+      });
+      return $('#toggleModal').click();
+    });
+    return $('#submit').on('click', function() {
+      var pk;
+      pk = $(this).data('pk');
+      return $.ajax({
+        url: 'submit/',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          flag: $('#flagHolder').val(),
+          pk: pk
+        },
+        success: function(data) {
+          $('flagHolder').hide();
+          if (data.msg === 'okay') {
+            return $('.alert-success').fadeIn();
+          } else if (data.msg === 'fail') {
+            return $('.alert-danger').fadeIn();
+          }
+        }
+      });
     });
   });
 

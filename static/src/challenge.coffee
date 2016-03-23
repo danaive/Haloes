@@ -31,7 +31,7 @@ $ ->
   total = 0
   $('tr.ALL').each ->
     if ($(this).data 'state') == '0'
-      $(this).addClass('Attempted')
+      $(this).addClass 'Attempted'
     total += 1
     if total <= PAGE_ITEM_COUNT
       $(this).show()
@@ -41,7 +41,7 @@ $ ->
   $('[id^="btn"]').on 'click', ->
     $('tr.ALL').hide()
     $('#cont').data 'page', 0
-    cate = $(this).attr('id').substr 3
+    cate = ($(this).attr 'id').substr 3
     $('#cont').data(
       'cate'
       $(this).attr 'cate', cate
@@ -57,7 +57,7 @@ $ ->
     total = $('tr.ALL').length
     page = $('#cont').data 'page'
     cate = $('#cont').data 'cate'
-    if 'Next' == $(this).attr('id').substr 5
+    if 'Next' == ($(this).attr 'id').substr 5
       if page + PAGE_ITEM_COUNT >= total
         return
       page += PAGE_ITEM_COUNT
@@ -119,5 +119,5 @@ $ ->
         $('flagHolder').hide()
         if data.msg == 'okay'
           $('.alert-success').fadeIn()
-        else data.msg == 'fail'
+        else if data.msg == 'fail'
           $('.alert-danger').fadeIn()

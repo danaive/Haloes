@@ -11,7 +11,7 @@ $ ->
   $.ajaxSetup
     beforeSend: (xhr, settings) ->
       unless csrfSafeMethod(settings.type) or this.crossDomain
-        xhr.setRequestHeader('X-CSRFToken', csrftoken)
+        xhr.setRequestHeader 'X-CSRFToken', csrftoken
 
   $('a[href="#signIn"]').on 'click', ->
     location.href = '/'
