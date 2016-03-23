@@ -84,7 +84,8 @@ $ ->
       data:
         pk: pk
       success: (data) ->
-        $this.hide()
+        if data.msg == 'okay'
+          $this.hide()
 
   $('a[href^="#mod-"]').on 'click', ->
     pk = ($(this).attr 'href').substr 5
