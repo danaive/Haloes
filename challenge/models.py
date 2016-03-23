@@ -17,6 +17,7 @@ class Challenge(models.Model):
     url = models.URLField(blank=True)
     description = models.TextField()
     zipfile = models.FileField()
+    privilege = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.title + str(self.score)

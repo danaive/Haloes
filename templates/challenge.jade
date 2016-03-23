@@ -1,7 +1,7 @@
 extends frame
 {% load staticfiles %}
 
-mixin challengeList(clg, pk, state, cate)
+mixin challengeList(clg, pk, state, cate, priv)
   tr.ALL(class=cate, data-state=state, style='display: none;')
     td.text-center: a(href=pk)= clg.title
     td.text-center= clg.source
@@ -18,13 +18,13 @@ mixin challengeList(clg, pk, state, cate)
         span.label.label-warning MISC
     td.text-center= clg.score
     td.text-center= clg.solved
-    if clg.status == 'on'
+    if clg.status == 'on' and clg.privilege > priv
       td.text-center: input(data-pk=pk, type='checkbox', checked, disabled)
-    if clg.status == 'off'
+    if clg.status == 'off' and clg.privilege > priv
       td.text-center: input(data-pk=pk, type='checkbox', disabled)
-    if clg.status == 'ton'
+    if clg.status == 'on' and clg.privilege <= priv
       td.text-center: input(data-pk=pk, type='checkbox', checked)
-    if clg.status == 'toff'
+    if clg.status == 'off' and clg.privilege <= priv
       td.text-center: input(data-pk=pk, type='checkbox')
     // td.text-center= clg.state
     if clg.state == 0
@@ -66,7 +66,7 @@ block container
               th
           tbody#cont(data-cate='ALL', data-page='0')
             for item in challenges
-              +challengeList(item, item.pk, item.state, item.category)
+              +challengeList(item, item.pk, item.state, item.category, privilege)
       .btn-group.pull-right
         button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
         button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right

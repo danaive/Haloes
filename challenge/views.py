@@ -19,7 +19,7 @@ def index(request):
         user = None
     username = user.username if user else None
     challenges = Challenge.objects.all()
-    attrs = ['pk', 'title', 'source', 'score', 'solved', 'status']
+    attrs = ['pk', 'title', 'source', 'score', 'solved', 'status', 'privilege']
     cha_list = []
     for challenge in challenges:
         cha_item = {}
@@ -43,7 +43,8 @@ def index(request):
             cha_list[i]['state'] = state
     return render(request, 'challenge.jade', {
         'username': username,
-        'challenges': cha_list
+        'challenges': cha_list,
+        'privilege': user.privilege
     })
 
 def drop_attempt(request):
@@ -118,10 +119,14 @@ def switch(request):
             cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
             client = Client(base_url=url, version=version)
             try:
-                if state:
-                    client.start(container_name)
+                user = Person.objects.get(pk=request.session['uid'])
+                if user.privilege <= challenge.privilege:
+                    if state:
+                        client.start(container_name)
+                    else:
+                        client.stop(container_name)
                 else:
-                    client.stop(container_name)
+                    return FAIL
             except:
                 return ERROR
             return OKAY
@@ -160,6 +165,8 @@ def upload(request):
                     opt['source'] = config['source']
                 if 'contest' in config:
                     opt['contest'] = config['contest']
+                if 'privilege' in config:
+                    opt['privilege'] = config['privilege']
                 Challenge.objects.update_or_create(
                     title = config['title'],
                     category = config['category'],
@@ -167,7 +174,7 @@ def upload(request):
                     flag = config['flag'],
                     zipfile = filepath,
                     description = pat.sub(r'%(\1)s', config['content']) % para,
-                    status = 'toff' if config['dockerfile'] else 'on',
+                    status = 'off' if config['dockerfile'] else 'on',
                     defaults = opt
                 )
                 return OKAY
