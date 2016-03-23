@@ -224,7 +224,7 @@ input{
 }
 
 h1{
-  color: #888;
+  color: #999;
   position: relative;
   left: 40px;
   font-family: Helvetica;
@@ -235,9 +235,9 @@ button{
   width: 70px;
   height: 30px;
   background-color: transparent;
-  border: 1px solid #888;
+  border: 1px solid #999;
   border-radius: 3px;
-  color: #888;
+  color: #999;
   margin-top: 20px;
   position: relative;
   left: 250px;
