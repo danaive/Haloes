@@ -10,7 +10,7 @@ img.logo{
   left: calc(50% - 440px);
   width: 880px;
   height: 268px;
-  opacity:0.2;
+  opacity:0.5;
 }
 
 .wrapper{
@@ -224,7 +224,7 @@ input{
 }
 
 h1{
-  color: #666;
+  color: #888;
   position: relative;
   left: 40px;
   font-family: Helvetica;
@@ -235,9 +235,9 @@ button{
   width: 70px;
   height: 30px;
   background-color: transparent;
-  border: 1px solid #666;
+  border: 1px solid #888;
   border-radius: 3px;
-  color: #666;
+  color: #888;
   margin-top: 20px;
   position: relative;
   left: 250px;
@@ -250,7 +250,7 @@ button:hover{
 }
 
 body ::-webkit-input-placeholder{
-  color: #444;
+  color: #555;
 }
 
 body input:focus{
