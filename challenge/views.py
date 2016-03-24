@@ -160,7 +160,7 @@ def upload(request):
             with open(filepath, 'wb') as fw:
                 for chunk in request.FILES['source']:
                     fw.write(chunk)
-            while 1:
+            try:
                 zip = zipfile.ZipFile(filepath)
                 config = json.loads(zip.read('config.json'))
                 title = config['title']
@@ -194,6 +194,6 @@ def upload(request):
                     defaults = opt
                 )
                 return OKAY
-            # except:
-            #     return ERROR
+            except:
+                return ERROR
     return ERROR
