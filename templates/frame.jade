@@ -29,7 +29,12 @@ html(lang='en')
               input.form-control.search-query(type='text')
 
           ul.nav.navbar-nav.navbar-right
-            if username
+            if self
+              li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
+                b= self
+                span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
+              li: a.nav-link(href='#signOut') Sign out
+            elif username
               li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
                 b= username
                 span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
