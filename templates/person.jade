@@ -13,7 +13,7 @@ mixin updateInfo(key, icon)
       i.fa.fa-fw(class='fa-#{icon}')
       | &nbsp;#{key}
     if key != 'Major'
-      input.form-control(id='update#{key}', type='text', style='width: 205px;')
+      input.form-control(id='update#{key}', type='text', style='width: 205px;', maxlength='30')
     else
       select.form-control(id='update#{key}', style='width: 205px;')
         option(value='PWN') PWN

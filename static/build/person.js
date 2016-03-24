@@ -138,7 +138,6 @@
     });
     $('[data-toggle="tooltip"]').tooltip();
     return $('#avatar').on('click', function() {
-      console.log($('#avatarHolder').val());
       return $('#avatarHolder').click();
     });
   });

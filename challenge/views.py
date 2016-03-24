@@ -157,10 +157,10 @@ def upload(request):
             from os import urandom
             zipname = urandom(8).encode('hex')
             filepath = settings.MEDIA_ROOT + 'source/' + zipname + '.zip'
-            with open(filepath, 'wb+') as fw:
+            with open(filepath, 'wb') as fw:
                 for chunk in request.FILES['source']:
                     fw.write(chunk)
-            try:
+            while 1:
                 zip = zipfile.ZipFile(filepath)
                 config = json.loads(zip.read('config.json'))
                 title = config['title']
@@ -169,13 +169,12 @@ def upload(request):
                 for item in config['statics']:
                     zip.extract(item, settings.MEDIA_ROOT + dlpath)
                     para[item] = settings.MEDIA_URL + dlpath + '/' + item
-                if config['dockerfile']:
+                if 'dockerfile' in config:
                     # docker deployment begin
 
                     para['port'] = 'some port'
 
                     # end
-
                 pat = re.compile(r'#{\s*(\S+)\s*}')
                 opt = {}
                 if 'source' in config:
@@ -191,10 +190,10 @@ def upload(request):
                     flag = config['flag'],
                     zipfile = filepath,
                     description = pat.sub(r'%(\1)s', config['content']) % para,
-                    status = 'off' if config['dockerfile'] else 'on',
+                    status = 'off' if 'dockerfile' in config else 'on',
                     defaults = opt
                 )
                 return OKAY
-            except:
-                return ERROR
+            # except:
+            #     return ERROR
     return ERROR

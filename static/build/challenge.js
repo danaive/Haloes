@@ -109,7 +109,7 @@
       $('#flagHolder').show();
       $('.alert').hide();
       return $.ajax({
-        url: 'get-challenge',
+        url: 'get-challenge/',
         type: 'post',
         dataType: 'json',
         data: {
@@ -117,6 +117,7 @@
         },
         success: function(data) {
           if (data.msg === 'okay') {
+            console.log(data.content);
             $('.modal-body').html(data.content);
             return $('#toggleModal').click();
           } else {
@@ -125,7 +126,7 @@
         }
       });
     });
-    return $('#submit').on('click', function() {
+    $('#submit').on('click', function() {
       var pk;
       pk = $(this).data('pk');
       return $.ajax({
@@ -143,6 +144,17 @@
           } else if (data.msg === 'fail') {
             return $('.alert-danger').fadeIn();
           }
+        }
+      });
+    });
+    return $('#uploadBtn').on('click', function() {
+      return $.ajaxFileUpload({
+        url: '/challenge/upload/',
+        secureurl: false,
+        fileElementId: 'zipHolder',
+        dataType: 'json',
+        success: function(data) {
+          return console.log(data.msg);
         }
       });
     });

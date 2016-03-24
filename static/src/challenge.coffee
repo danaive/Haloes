@@ -94,13 +94,14 @@ $ ->
     $('#flagHolder').show()
     $('.alert').hide()
     $.ajax
-      url: 'get-challenge'
+      url: 'get-challenge/'
       type: 'post'
       dataType: 'json'
       data:
         pk: pk
       success: (data) ->
         if data.msg == 'okay'
+          console.log data.content
           $('.modal-body').html data.content
           $('#toggleModal').click()
         else
@@ -121,3 +122,13 @@ $ ->
           $('.alert-success').fadeIn()
         else if data.msg == 'fail'
           $('.alert-danger').fadeIn()
+
+  $('#uploadBtn').on 'click', ->
+    $.ajaxFileUpload
+      url: '/challenge/upload/'
+      secureurl: false
+      fileElementId: 'zipHolder'
+      dataType: 'json'
+      success: (data) ->
+        console.log data.msg
+

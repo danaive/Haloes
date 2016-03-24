@@ -3,7 +3,7 @@ extends frame
 
 mixin challengeList(clg, pk, state, cate, priv)
   tr.ALL(class=cate, data-state=state, style='display: none;')
-    td.text-center: a(data-pk=pk, data-toggle='modal', href='#modal-container')= clg.title
+    td.text-center: a(href='#mod-#{pk}')= clg.title
     td.text-center= clg.source
     td.text-center
       if clg.category == 'PWN'
@@ -71,7 +71,8 @@ block container
         button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
         button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
 
-
+      button#uploadBtn.btn.btn-info: i.fa.fa-cloud-upload
+      input#zipHolder(type='file', name='source')
       a#toggleModal.btn(data-toggle='modal', href='#modal-container', style='display: none;') modal
 
       #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
@@ -92,6 +93,7 @@ block container
 
 append script
   script(src='{% static "assets/bootflat/js/bootstrap-switch.min.js" %}')
+  script(src='{% static "assets/plugins/ajax-file-upload.js" %}')
   script(src='{% static "build/challenge.js" %}')
 
 

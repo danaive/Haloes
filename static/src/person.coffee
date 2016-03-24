@@ -111,7 +111,6 @@ $ ->
   # avatar
   $('[data-toggle="tooltip"]').tooltip()
   $('#avatar').on 'click', ->
-    console.log $('#avatarHolder').val()
     $('#avatarHolder').click()
 
 window.uploadAvatar = ->

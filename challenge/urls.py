@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^switch/$', views.switch, name='switch'),
     url(r'^submit/$', views.submit, name='submit'),
     url(r'^upload/$', views.upload, name='upload'),
+    url(r'^get-challenge/$', views.get_challenge, name='getdesc')
 ]
