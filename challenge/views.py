@@ -197,3 +197,4 @@ def upload(request):
                 return OKAY
             except:
                 return ERROR
+    return ERROR

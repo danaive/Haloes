@@ -102,9 +102,9 @@ $ ->
       success: (data) ->
         if data.msg == 'okay'
           $('.modal-body').html data.content
+          $('#toggleModal').click()
         else
           return false
-    $('#toggleModal').click()
 
   $('#submit').on 'click', ->
     pk = $(this).data 'pk'

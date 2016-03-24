@@ -108,7 +108,7 @@
       $('#submit').data('pk', pk);
       $('#flagHolder').show();
       $('.alert').hide();
-      $.ajax({
+      return $.ajax({
         url: 'get-challenge',
         type: 'post',
         dataType: 'json',
@@ -117,13 +117,13 @@
         },
         success: function(data) {
           if (data.msg === 'okay') {
-            return $('.modal-body').html(data.content);
+            $('.modal-body').html(data.content);
+            return $('#toggleModal').click();
           } else {
             return false;
           }
         }
       });
-      return $('#toggleModal').click();
     });
     return $('#submit').on('click', function() {
       var pk;
