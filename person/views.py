@@ -113,38 +113,42 @@ def follow(request):
             try:
                 user = Person.objects.get(username=fform.cleaned_data['username'])
             except:
-                return render(request, '404.jade')
+                return ERROR
             follower = Person.objects.get(pk=request.session['uid'])
-            follower.follow.add(user)
+            if follower.follow.filter(pk=user.pk):
+                follower.follow.remove(user)
+            else:
+                follower.follow.add(user)
             return OKAY
     return ERROR
 
-def index(request, page_user=''):
-    if page_user:
+def index(request, pk='-1'):
+    pk = int(pk)
+    data = {}
+    if pk != -1 and pk != request.session['uid']:
         try:
-            user = Person.objects.get(username=page_user)
+            owner = Person.objects.get(pk=pk)
+            visitor = Person.objects.get(pk=request.session['uid'])
+            data['self'] = visitor.username
+            if visitor.follow.filter(pk=pk):
+                data['follow'] = True
         except:
             return render(request, '404.jade')
     else:
-        user = Person.objects.get(pk=request.session['uid'])
-    data = {
-        'username': user.username,
-        'motto': user.motto,
-        'major': user.major,
-        'score': user.score,
-        'solve': user.challenges.filter(submit__status=True).count(),
-        'writeup': user.writeup_set.count(),
-        'team': user.team.name if user.team else '',
-        'school': user.school,
-        'email': user.email,
-        'blog': user.blog,
-        'avatar': user.avatar,
-    }
-    if page_user:
-        visitor = Person.objects.get(pk=request.session['uid'])
-        data['self'] = visitor.username
-        if visitor.follow.filter(username=page_user):
-            data['follow'] = True
+        owner = Person.objects.get(pk=request.session['uid'])
+    data.update({
+        'username': owner.username,
+        'motto': owner.motto,
+        'major': owner.major,
+        'score': owner.score,
+        'solve': owner.challenges.filter(submit__status=True).count(),
+        'writeup': owner.writeup_set.count(),
+        'team': owner.team.name if owner.team else '',
+        'school': owner.school,
+        'email': owner.email,
+        'blog': owner.blog,
+        'avatar': owner.avatar,
+    })
     return render(request, 'person.jade', data)
 
 def score(request):
@@ -154,7 +158,7 @@ def score(request):
             try:
                 user = Person.objects.get(username=sform.cleaned_data['username'])
             except:
-                return render(request, '404.jade')
+                return ERROR
             data = {
                 'score': [0] * 5,
                 'capacity': []
@@ -175,7 +179,7 @@ def score(request):
                     tmp[cate[challenge.category]] += challenge.score
                 data['capacity'].append({
                     'score': map(
-                        lambda ct: 100 * tmp[ct[1]] / MaxScore.objects.get(category=ct[0]),
+                        lambda ct: 100 * tmp[ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1),
                         cate.iteritems()),
                     'name': visitor.username
                 })
@@ -191,9 +195,9 @@ def ranking(request):
         item.writeup = item.writeup_set.count()
         item.solved = item.challenges.filter(submit__status=True).count()
         item.fstate = 0
-        if item in user.follow.all():
+        if user.follow.filter(pk=item.pk):
             item.fstate = 1
-            if user in item.follow.all():
+            if item.follow.filter(pk=user.pk):
                 item.fstate = 2
     teams = Team.objects.order_by('-score')
     for item in teams:

@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    url(r'^$', 'person.views.login', name='login'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^person/', include('person.urls', namespace='person')),
     url(r'^challenge/', include('challenge.urls', namespace='challenge')),
@@ -26,6 +27,5 @@ urlpatterns = [
     url(r'^team/', include('team.urls', namespace='team')),
     url(r'^contest/', include('contest.urls', namespace='contest')),
     url(r'^ranking/', 'person.views.ranking', name='ranking'),
-    url(r'^$', 'person.views.login', name='login'),
     url(r'^sign-out/', 'person.views.sign_out', name='sign_out')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

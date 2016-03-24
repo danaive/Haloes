@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^update-info/$', views.update_info, name='update_info'),
     url(r'^get-score/$', views.score, name='score'),
     url(r'^follow/$', views.follow, name='follow'),
+    url(r'^(?P<pk>\d+)/$', views.index, name='index'),
 ]

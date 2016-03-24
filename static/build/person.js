@@ -40,19 +40,22 @@
             $('#infoMajor').text(data.major);
             $('#infoSchool').text(data.school);
             $('#infoEmail').text(data.email);
-            return $('#infoBlog').text(data.blog);
+            $('#infoBlog').text(data.blog);
+            return $('#infoMotto').text(data.motto);
           }
         }
       });
     });
-    if ($('#followBtn').data('follow') === true) {
-      $(this).hide();
+    if ($('#followBtn').data('follow')) {
+      $('#followBtn').hide();
     } else {
       $('#unfollowBtn').hide();
     }
-    $('#followBtn').on('click', function() {
+    $('[id$="followBtn"]').on('click', function() {
+      var $this;
+      $this = $(this);
       return $.ajax({
-        url: 'follow/',
+        url: '/person/follow/',
         type: 'post',
         dataType: 'json',
         data: {
@@ -60,15 +63,19 @@
         },
         success: function(data) {
           if (data.msg === 'okay') {
-            $('#followAlert').fadeIn();
-            return window.setTimeout("$('#followAlert').fadeOut()", 2000);
+            $this.hide();
+            if ($this.attr('id').length === 9) {
+              return $('#unfollowBtn').fadeIn();
+            } else {
+              return $('#followBtn').fadeIn();
+            }
           }
         }
       });
     });
     score = [];
     $.ajax({
-      url: 'get-score/',
+      url: '/person/get-score/',
       type: 'post',
       dataType: 'json',
       data: {

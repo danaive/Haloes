@@ -22,7 +22,10 @@ $ ->
         $('#teamList').fadeIn()
       stickFooter()
 
-  $('a[href^="#user"]').on 'click', ->
-    pk = ($(this).attr 'href').substr 5
+  $('a[href^="#user-"]').on 'click', ->
+    pk = ($(this).attr 'href').substr 6
+    location.href = '/person/' + pk
 
-  $('a[href^="#team"]').on 'click', ->
+  $('a[href^="#team-"]').on 'click', ->
+    pk = ($(this).attr 'href').substr 6
+    location.href = '/team/' + pk

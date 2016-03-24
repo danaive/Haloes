@@ -25,11 +25,16 @@
         return stickFooter();
       }
     });
-    $('a[href^="#user"]').on('click', function() {
+    $('a[href^="#user-"]').on('click', function() {
       var pk;
-      return pk = ($(this).attr('href')).substr(5);
+      pk = ($(this).attr('href')).substr(6);
+      return location.href = '/person/' + pk;
     });
-    return $('a[href^="#team"]').on('click', function() {});
+    return $('a[href^="#team-"]').on('click', function() {
+      var pk;
+      pk = ($(this).attr('href')).substr(6);
+      return location.href = '/team/' + pk;
+    });
   });
 
 }).call(this);

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Challenge
-from person.models import Person, Submit
+from person.models import *
 import json, zipfile, re
 
 OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
@@ -38,7 +38,7 @@ def index(request):
                 state = 0
             elif challenge in user.challenges.filter(submit__status=True):
                 state = 1
-            elif user.team and challenge in user.team.solved.all():
+            elif user.team and user.team.solved.filter(pk=challenge.pk):
                 state = 2
             cha_list[i]['state'] = state
     return render(request, 'challenge.jade', {
@@ -78,6 +78,9 @@ def submit(request):
                     challenge = challenge,
                     defaults = {'status': True}
                 )
+                maxsc = user.challenges.filter(submit__status=True, category=challenge.category)
+                if maxsc > MaxScore.objects.get(category=challenge.category).score:
+                    MaxScore.objects.filter(category=challenge.category).update(score=maxsc)
                 return OKAY
             else:
                 Submit.objects.update_or_create(

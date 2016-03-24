@@ -47,23 +47,21 @@ block container
             i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
           form(enctype='multipart/form-data')
             input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
-        .col-md-3(style='margin-left: -20px;')
+        .col-md-9(style='margin-left: -20px;')
           // h2#nickname(style='margin-bottom: 5px;')= username
           h2
             span#nickname= username
-            small(style='margin-left: 10px; color: #aaa')= motto
+            small#infoMotto(style='margin-left: 10px; color: #aaa')= motto
           unless self
             a#updateBtn.btn.btn-link
               | update&nbsp;
               i.fa.fa-chevron-down
-
           else
-            a#unfollowBtn.btn.btn-info
+            a#followBtn.btn.btn-info(data-follow=follow)
               i.fa.fa-mars-double
               | &nbsp;Follow
-            a#followBtn.btn(data-follow=follow)
+            a#unfollowBtn.btn
               | Unfollow
-            #followAlert.alert.alert-success: strong Success
 
       .row
         .col-md-5
