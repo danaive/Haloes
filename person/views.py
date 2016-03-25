@@ -21,6 +21,7 @@ ERROR = HttpResponse(
     json.dumps({'msg': 'error'}),
     content_type='application/json')
 
+
 def sign_up(request):
     if request.is_ajax:
         rform = RegForm(request.POST)
@@ -34,11 +35,11 @@ def sign_up(request):
                     from django.core.mail import send_mail
                     key = urandom(16).encode('hex')
                     user = Person.objects.create(
-                        username = username,
-                        password = password,
-                        email = email,
-                        nickname = username,
-                        email_check = key
+                        username=username,
+                        password=password,
+                        email=email,
+                        nickname=username,
+                        email_check=key
                     )
                     send_mail('Email Confirm', key, 'noreply@whuctf.org',
                               [email])
@@ -48,6 +49,7 @@ def sign_up(request):
                 return OKAY
             return FAIL
     return ERROR
+
 
 def sign_in(request):
     if request.is_ajax:
@@ -67,9 +69,11 @@ def sign_in(request):
             return FAIL
     return ERROR
 
+
 def sign_out(request):
     del request.session['uid']
     return OKAY
+
 
 @csrf_exempt
 def update_avatar(request):
@@ -79,7 +83,8 @@ def update_avatar(request):
             img = request.FILES['img']
             if img.size > 5 * 1024 * 1024:
                 return HttpResponse(
-                    json.dumps({'msg':'Image No Larger Than 5M is Accepted.'}),
+                    json.dumps(
+                        {'msg': 'Image No Larger Than 5M is Accepted.'}),
                     content_type='application/json'
                 )
             user = Person.objects.get(pk=request.session['uid'])
@@ -91,6 +96,7 @@ def update_avatar(request):
             }), content_type='application/json')
         return FAIL
     return ERROR
+
 
 def update_info(request):
     # email check to be added
@@ -113,6 +119,7 @@ def update_info(request):
             }), content_type='application/json')
     return ERROR
 
+
 def login(request):
     salt = urandom(8).encode('hex')
     request.session['salt'] = salt
@@ -121,12 +128,14 @@ def login(request):
         'salt': salt
     })
 
+
 def follow(request):
     if request.is_ajax:
         fform = FollowForm(request.POST)
         if fform.is_valid():
             try:
-                user = Person.objects.get(username=fform.cleaned_data['username'])
+                user = Person.objects.get(
+                    username=fform.cleaned_data['username'])
             except:
                 return ERROR
             follower = Person.objects.get(pk=request.session['uid'])
@@ -136,6 +145,7 @@ def follow(request):
                 follower.follow.add(user)
             return OKAY
     return ERROR
+
 
 def index(request, pk='-1'):
     pk = int(pk)
@@ -166,12 +176,14 @@ def index(request, pk='-1'):
     })
     return render(request, 'person.jade', data)
 
+
 def score(request):
     if request.is_ajax:
         sform = FollowForm(request.POST)
         if sform.is_valid():
             try:
-                user = Person.objects.get(username=sform.cleaned_data['username'])
+                user = Person.objects.get(
+                    username=sform.cleaned_data['username'])
             except:
                 return ERROR
             data = {
@@ -192,7 +204,8 @@ def score(request):
             visitor = Person.objects.get(pk=request.session['uid'])
             if visitor.username != user.username:
                 tmp = [0] * 5
-                for challenge in visitor.challenges.filter(submit__status=True):
+                for challenge in visitor.challenges.filter(
+                    submit__status=True):
                     tmp[cate[challenge.category]] += challenge.score
                 data['capacity'].append({
                     'score': map(
@@ -204,8 +217,10 @@ def score(request):
                 })
             if sum(data['score']) == 0:
                 data['score'][0] = 1
-            return HttpResponse(json.dumps(data), content_type='application/json')
+            return HttpResponse(json.dumps(data),
+                                content_type='application/json')
     return ERROR
+
 
 def ranking(request):
     user = Person.objects.get(pk=request.session['uid'])

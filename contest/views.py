@@ -45,5 +45,5 @@ def index(request):
             'status': 'ended',
             'register': -1,
             'url': 16
-        },]
+        }, ]
     })

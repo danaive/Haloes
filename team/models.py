@@ -3,8 +3,10 @@ from person.models import Person
 from challenge.models import Challenge
 from contest.models import Contest
 
+
 def upload_to(instance, filename):
     return 'avatar/team/' + instance.name + filename.split('.')[-1]
+
 
 class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)

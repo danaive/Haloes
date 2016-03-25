@@ -1,9 +1,11 @@
 from django.db import models
 from challenge.models import Challenge
 
+
 def upload_to(instance, filename):
     from os import urandom
     return 'avatar/person/' + '.'.join((instance.username, urandom(4).encode('hex'), filename.split('.')[-1]))
+
 
 class Person(models.Model):
     username = models.CharField(max_length=20, unique=True)
@@ -21,7 +23,6 @@ class Person(models.Model):
     challenges = models.ManyToManyField(Challenge, through='Submit', related_name='submitter')
     privilege = models.IntegerField(default=0)
     email_check = models.CharField(max_length=100)
-
 
     def __unicode__(self):
         return self.username + '_' + self.email

@@ -1,5 +1,6 @@
 from django import forms
 
+
 class ChallengeForm(forms.Form):
     pk = forms.IntegerField()
 

@@ -7,11 +7,22 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Challenge
 from person.models import *
-import json, zipfile, re
+import json
+import zipfile
+import re
 
-OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
-FAIL = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
-ERROR = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
+OKAY = HttpResponse(
+    json.dumps({'msg': 'okay'}),
+    content_type='application/json')
+
+FAIL = HttpResponse(
+    json.dumps({'msg': 'fail'}),
+    content_type='application/json')
+
+ERROR = HttpResponse(
+    json.dumps({'msg': 'error'}),
+    content_type='application/json')
+
 
 def index(request):
     if request.session.get('uid', None):
@@ -20,7 +31,8 @@ def index(request):
         user = None
     username = user.username if user else None
     challenges = Challenge.objects.all()
-    attrs = ['pk', 'title', 'source', 'score', 'solved', 'status', 'privilege']
+    attrs = ['pk', 'title', 'source', 'score', 'solved', 'status',
+             'privilege']
     cha_list = []
     for challenge in challenges:
         cha_item = {}
@@ -48,6 +60,7 @@ def index(request):
         'privilege': user.privilege
     })
 
+
 def drop_attempt(request):
     if request.is_ajax:
         cf = ChallengeForm(request.POST)
@@ -62,6 +75,7 @@ def drop_attempt(request):
             return OKAY
     return ERROR
 
+
 def submit(request):
     if request.is_ajax:
         cf = SubmitForm(request.POST)
@@ -75,25 +89,28 @@ def submit(request):
             user = Person.objects.get(pk=request.session['uid'])
             if flag == challenge.flag:
                 Submit.objects.update_or_create(
-                    person = user,
-                    challenge = challenge,
-                    defaults = {'status': True}
+                    person=user,
+                    challenge=challenge,
+                    defaults={'status': True}
                 )
                 maxsc = user.challenges.filter(
                     submit__status=True,
                     category=challenge.category
                 ).aggregate(Sum('score'))['score__sum']
-                if maxsc > MaxScore.objects.get(category=challenge.category).score:
-                    MaxScore.objects.filter(category=challenge.category).update(score=maxsc)
+                if maxsc > MaxScore.objects.get(
+                    category=challenge.category).score:
+                    MaxScore.objects.filter(
+                        category=challenge.category).update(score=maxsc)
                 return OKAY
             else:
                 Submit.objects.update_or_create(
-                    person = user,
-                    challenge = challenge,
-                    defaults = {'status': False}
+                    person=user,
+                    challenge=challenge,
+                    defaults={'status': False}
                 )
                 return FAIL
     return ERROR
+
 
 def get_challenge(request):
     if request.is_ajax:
@@ -139,9 +156,11 @@ def switch(request):
             # true is on, false is off
             state = sf.cleaned_data['state']
             from docker import Client
-            url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP, port=settings.DOCKER_PORT)
+            url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP,
+                                             port=settings.DOCKER_PORT)
             version = settings.DOCKER_VERSION
-            cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
+            cotainer_name = "{pk}_{name}".format(pk=challenge.pk,
+                                                 name=challenge.title)
             client = Client(base_url=url, version=version)
             try:
                 if state:
@@ -152,6 +171,7 @@ def switch(request):
                 return ERROR
             return OKAY
     return ERROR
+
 
 @csrf_exempt
 def upload(request):
@@ -188,14 +208,14 @@ def upload(request):
                 if 'privilege' in config:
                     opt['privilege'] = config['privilege']
                 Challenge.objects.update_or_create(
-                    title = config['title'],
-                    category = config['category'],
-                    score = config['score'],
-                    flag = config['flag'],
-                    zipfile = filepath,
-                    description = pat.sub(r'%(\1)s', config['content']) % para,
-                    status = 'off' if 'dockerfile' in config else 'on',
-                    defaults = opt
+                    title=config['title'],
+                    category=config['category'],
+                    score=config['score'],
+                    flag=config['flag'],
+                    zipfile=filepath,
+                    description=pat.sub(r'%(\1)s', config['content']) % para,
+                    status='off' if 'dockerfile' in config else 'on',
+                    defaults=opt
                 )
                 return OKAY
             except:

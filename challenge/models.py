@@ -1,9 +1,11 @@
 from django.db import models
 from contest.models import Contest
 
+
 def upload_to(instance, filename):
     from os import urandom
     return 'challenge/source/' + '.'.join((instance.title, urandom(4).encode('hex'), 'zip'))
+
 
 class Challenge(models.Model):
     title = models.CharField(max_length=50, unique=True)

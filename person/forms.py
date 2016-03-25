@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 
+
 class RegForm(forms.Form):
     email = forms.EmailField()
     username = forms.CharField(max_length=50)
