@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
+from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Challenge
@@ -78,7 +79,10 @@ def submit(request):
                     challenge = challenge,
                     defaults = {'status': True}
                 )
-                maxsc = user.challenges.filter(submit__status=True, category=challenge.category)
+                maxsc = user.challenges.filter(
+                    submit__status=True,
+                    category=challenge.category
+                ).aggregate(Sum('score'))['score__sum']
                 if maxsc > MaxScore.objects.get(category=challenge.category).score:
                     MaxScore.objects.filter(category=challenge.category).update(score=maxsc)
                 return OKAY

@@ -19,7 +19,9 @@ class Person(models.Model):
     follow = models.ManyToManyField('self', symmetrical=False)
     team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)
     challenges = models.ManyToManyField(Challenge, through='Submit', related_name='submitter')
-    privilege = models.IntegerField(default=3)
+    privilege = models.IntegerField(default=0)
+    email_check = models.CharField(max_length=100)
+
 
     def __unicode__(self):
         return self.username + '_' + self.email

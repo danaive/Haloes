@@ -2,16 +2,24 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Person, MaxScore
 from team.models import Team
+from os import urandom
 import json
 
-OKAY = HttpResponse(json.dumps({'msg': 'okay'}), content_type='application/json')
-FAIL = HttpResponse(json.dumps({'msg': 'fail'}), content_type='application/json')
-ERROR = HttpResponse(json.dumps({'msg': 'error'}), content_type='application/json')
+OKAY = HttpResponse(
+    json.dumps({'msg': 'okay'}),
+    content_type='application/json')
+
+FAIL = HttpResponse(
+    json.dumps({'msg': 'fail'}),
+    content_type='application/json')
+
+ERROR = HttpResponse(
+    json.dumps({'msg': 'error'}),
+    content_type='application/json')
 
 def sign_up(request):
     if request.is_ajax:
@@ -23,12 +31,17 @@ def sign_up(request):
             msg = 'fail'
             if '@' not in username and len(username) <= 16:
                 try:
+                    from django.core.mail import send_mail
+                    key = urandom(16).encode('hex')
                     user = Person.objects.create(
                         username = username,
                         password = password,
                         email = email,
-                        nickname = username
+                        nickname = username,
+                        email_check = key
                     )
+                    send_mail('Email Confirm', key, 'noreply@whuctf.org',
+                              [email])
                 except:
                     return FAIL
                 request.session['uid'] = user.pk
@@ -56,7 +69,7 @@ def sign_in(request):
 
 def sign_out(request):
     del request.session['uid']
-    return HttpResponseRedirect(reverse('login'))
+    return OKAY
 
 @csrf_exempt
 def update_avatar(request):
@@ -65,7 +78,10 @@ def update_avatar(request):
         if iform.is_valid():
             img = request.FILES['img']
             if img.size > 5 * 1024 * 1024:
-                return HttpResponse(json.dumps({'msg':'Image No Larger Than 5M is Accepted.'}), content_type='application/json')
+                return HttpResponse(
+                    json.dumps({'msg':'Image No Larger Than 5M is Accepted.'}),
+                    content_type='application/json'
+                )
             user = Person.objects.get(pk=request.session['uid'])
             user.avatar = img
             user.save()
@@ -98,7 +114,6 @@ def update_info(request):
     return ERROR
 
 def login(request):
-    from os import urandom
     salt = urandom(8).encode('hex')
     request.session['salt'] = salt
     return render(request, 'login.jade', {
@@ -168,8 +183,10 @@ def score(request):
                 data['score'][cate[challenge.category]] += challenge.score
             data['capacity'].append({
                 'score': map(
-                    lambda ct: 100 * data['score'][ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1),
-                    cate.iteritems()),
+                    lambda ct: 100 * data['score'][ct[1]] /
+                        max(MaxScore.objects.get(category=ct[0]).score, 1),
+                    sorted(cate.iteritems(), key=lambda x: x[1])
+                ),
                 'name': user.username
             })
             visitor = Person.objects.get(pk=request.session['uid'])
@@ -179,8 +196,10 @@ def score(request):
                     tmp[cate[challenge.category]] += challenge.score
                 data['capacity'].append({
                     'score': map(
-                        lambda ct: 100 * tmp[ct[1]] / max(MaxScore.objects.get(category=ct[0]).score, 1),
-                        cate.iteritems()),
+                        lambda ct: 100 * tmp[ct[1]] /
+                            max(MaxScore.objects.get(category=ct[0]).score, 1),
+                        sorted(cate.iteritems(), key=lambda x: x[1])
+                    ),
                     'name': visitor.username
                 })
             if sum(data['score']) == 0:
