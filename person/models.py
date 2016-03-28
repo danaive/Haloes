@@ -21,7 +21,8 @@ class Person(models.Model):
     blog = models.URLField(blank=True)
     avatar = models.ImageField(upload_to=upload_to,
                                default='avatar/person/default.gif')
-    follow = models.ManyToManyField('self', symmetrical=False)
+    following = models.ManyToManyField('self', symmetrical=False,
+                                       related_name='followers')
     team = models.ForeignKey('team.Team', null=True, blank=True,
                              on_delete=models.SET_NULL)
     challenges = models.ManyToManyField(Challenge, through='Submit',

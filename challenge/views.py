@@ -93,6 +93,9 @@ def submit(request):
                     challenge=challenge,
                     defaults={'status': True}
                 )
+                user.update(score=user.challenges.filter(
+                    submit__status=True
+                ).aggregate(Sum('score')['score__sum']))
                 maxsc = user.challenges.filter(
                     submit__status=True,
                     category=challenge.category

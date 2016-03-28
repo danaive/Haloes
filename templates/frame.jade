@@ -20,7 +20,7 @@ html(lang='en')
             li: a.nav-link(href='{% url "challenge:index" %}') Challenge
             li: a.nav-link(href='{% url "contest:index" %}') Contest
             li: a.nav-link(href='{% url "writeup:index" %}') WriteUp
-            li: a.nav-link(href='{% url "team:index" %}') Team
+            li(style='display: none;'): a.nav-link(href='{% url "team:index" %}') Team
             li: a.nav-link(href='{% url "ranking" %}') Ranking
 
           form.navbar-form.navbar-left(role='search' style='margin-left: 20px;')

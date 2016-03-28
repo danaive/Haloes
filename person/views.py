@@ -139,10 +139,10 @@ def follow(request):
             except:
                 return ERROR
             follower = Person.objects.get(pk=request.session['uid'])
-            if follower.follow.filter(pk=user.pk):
-                follower.follow.remove(user)
+            if follower.following.filter(pk=user.pk):
+                follower.following.remove(user)
             else:
-                follower.follow.add(user)
+                follower.following.add(user)
             return OKAY
     return ERROR
 
@@ -155,12 +155,14 @@ def index(request, pk='-1'):
             owner = Person.objects.get(pk=pk)
             visitor = Person.objects.get(pk=request.session['uid'])
             data['self'] = visitor.username
-            if visitor.follow.filter(pk=pk):
+            if visitor.following.filter(pk=pk):
                 data['follow'] = True
         except:
             return render(request, '404.jade')
     else:
         owner = Person.objects.get(pk=request.session['uid'])
+    followings = owner.following.all()
+    followers = owner.followers.all()
     data.update({
         'username': owner.username,
         'motto': owner.motto,
@@ -173,6 +175,10 @@ def index(request, pk='-1'):
         'email': owner.email,
         'blog': owner.blog,
         'avatar': owner.avatar,
+        'followings': followings,
+        'followers': followers,
+        'followingNum': len(followings),
+        'followersNum': len(followers)
     })
     return render(request, 'person.jade', data)
 
@@ -229,9 +235,9 @@ def ranking(request):
         item.writeup = item.writeup_set.count()
         item.solved = item.challenges.filter(submit__status=True).count()
         item.fstate = 0
-        if user.follow.filter(pk=item.pk):
+        if user.following.filter(pk=item.pk):
             item.fstate = 1
-            if item.follow.filter(pk=user.pk):
+            if item.following.filter(pk=user.pk):
                 item.fstate = 2
     teams = Team.objects.order_by('-score')
     for item in teams:

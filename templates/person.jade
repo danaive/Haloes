@@ -35,6 +35,18 @@ mixin newsList(title, url, logo, time, content)
       p= time
       p!= content
 
+mixin followList(mb, url, avatar)
+  li.media
+    a.pull-left(href='user-#{pk}'): img.media-object.img-rounded(height='64', src='#{MEDIA_URL}#{avatar}')
+    .media-body
+      h4.media-heading= mb.username
+      p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
+      p
+        if mb.school
+          | #[i.fa.fa-university]&nbsp;#{mb.univ}&nbsp;&nbsp;&nbsp;
+        if mb.team
+          | #[i.fa.fa-star]&nbsp;#{mb.team}
+
 block container
   .row
     .col-md-8
@@ -128,13 +140,29 @@ block container
             | Focus&nbsp;
             b.caret
           ul.dropdown-menu
-            li: a(href='#following') Following
-            li: a(href='#followers') Followers
+            li: a(href='#following', data-toggle='pill')
+              | Following&nbsp;
+              if followingNum
+                span.badge.badge-info= followingNum
+            li: a(href='#followers', data-toggle='pill')
+              | Followers
+              if followersNum
+                span.badge.badge-info= followersNum
 
-      ul#newsList.media-list(style='margin-top: 30px;')
-        +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
-        +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'submitted writeup actf2015 of Dice Game.')
-        +newsList('danlei', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
+      .tab-content(style='margin-top: 15px;')
+        #news.tab-pane.fade.in.active
+          ul.media-list
+            +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
+            +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'submitted writeup actf2015 of Dice Game.')
+            +newsList('danlei', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
+        #following.tab-pane.fade
+          ul.media-list
+            for item in followings
+              +followList(item, item.pk, item.avatar)
+        #followers.tab-pane.fade
+          ul.media-list
+            for item in followers
+              +followList(item, item.pk, item.avatar)
 
 append script
   script(src='{% static "assets/charts/chart.min.js" %}')
