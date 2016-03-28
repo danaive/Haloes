@@ -4,7 +4,9 @@ from challenge.models import Challenge
 
 def upload_to(instance, filename):
     from os import urandom
-    return 'avatar/person/' + '.'.join((instance.username, urandom(4).encode('hex'), filename.split('.')[-1]))
+    return 'avatar/person/' + '.'.join(
+        (instance.username, urandom(4).encode('hex'),
+        filename.split('.')[-1]))
 
 
 class Person(models.Model):
@@ -17,10 +19,13 @@ class Person(models.Model):
     school = models.CharField(max_length=50, blank=True)
     email = models.EmailField(unique=True)
     blog = models.URLField(blank=True)
-    avatar = models.ImageField(upload_to=upload_to, default='avatar/person/default.gif')
+    avatar = models.ImageField(upload_to=upload_to,
+                               default='avatar/person/default.gif')
     follow = models.ManyToManyField('self', symmetrical=False)
-    team = models.ForeignKey('team.Team', null=True, blank=True, on_delete=models.SET_NULL)
-    challenges = models.ManyToManyField(Challenge, through='Submit', related_name='submitter')
+    team = models.ForeignKey('team.Team', null=True, blank=True,
+                             on_delete=models.SET_NULL)
+    challenges = models.ManyToManyField(Challenge, through='Submit',
+                                        related_name='submitter')
     privilege = models.IntegerField(default=0)
     email_check = models.CharField(max_length=100)
 
