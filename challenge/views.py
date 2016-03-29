@@ -31,7 +31,7 @@ def index(request):
         user = None
     username = user.username if user else None
     challenges = Challenge.objects.all()
-    attrs = ['pk', 'title', 'source', 'score', 'solved', 'status',
+    attrs = ['pk', 'title', 'source', 'score', 'status',
              'privilege']
     cha_list = []
     for challenge in challenges:
@@ -55,6 +55,8 @@ def index(request):
                 state = 2
             cha_list[i]['state'] = state
             cha_list[i]['category'] = str(challenge.category)
+            cha_list[i]['solved'] = challenge.submit_set.filter(
+                status=True).count()
     return render(request, 'challenge.jade', {
         'username': username,
         'challenges': cha_list,
@@ -94,9 +96,10 @@ def submit(request):
                     challenge=challenge,
                     defaults={'status': True}
                 )
-                user.update(score=user.challenges.filter(
+                user.score = user.challenges.filter(
                     submit__status=True
-                ).aggregate(Sum('score')['score__sum']))
+                ).aggregate(Sum('score')['score__sum'])
+                user.save()
                 maxsc = user.challenges.filter(
                     submit__status=True,
                     category=challenge.category
@@ -105,7 +108,6 @@ def submit(request):
                     category=challenge.category).score:
                     MaxScore.objects.filter(
                         category=challenge.category).update(score=maxsc)
-                challenge.update(solved=challenge.solved+1)
                 return OKAY
             else:
                 Submit.objects.update_or_create(
