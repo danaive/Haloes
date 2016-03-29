@@ -1,8 +1,14 @@
 from django.shortcuts import render
-
+from person.models import Person
 
 def index(request):
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
     return render(request, 'writeup.jade', {
+        'username': username,
         'writeups': [{
             'title': 'hehehehe',
             'url': 16,

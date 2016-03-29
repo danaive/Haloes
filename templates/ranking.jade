@@ -21,9 +21,9 @@ mixin userlist(user, pk)
     td.text-center= user.writeup
     td.text-center
       if user.fstate == 1
-        i.fa.fa-exchange
-      if user.fstate == 2
         i.fa.fa-star
+      if user.fstate == 2
+        i.fa.fa-star-o
 
 mixin teamlist(team, pk, apply)
   tr(style='')
