@@ -47,13 +47,14 @@
       });
     });
     if ($('#followBtn').data('follow')) {
-      $('#followBtn').hide();
+      $('#unfollowBtn').show();
     } else {
-      $('#unfollowBtn').hide();
+      $('#followBtn').show();
     }
     $('[id$="followBtn"]').on('click', function() {
       var $this;
       $this = $(this);
+      $this.hide();
       return $.ajax({
         url: '/person/follow/',
         type: 'post',
@@ -63,7 +64,6 @@
         },
         success: function(data) {
           if (data.msg === 'okay') {
-            $this.hide();
             if ($this.attr('id').length === 9) {
               return $('#unfollowBtn').fadeIn();
             } else {
@@ -72,6 +72,11 @@
           }
         }
       });
+    });
+    $('a[href^="#user-"]').on('click', function() {
+      var pk;
+      pk = $(this).attr('href').substr(6);
+      return location.href = '/person/' + pk;
     });
     score = [];
     $.ajax({

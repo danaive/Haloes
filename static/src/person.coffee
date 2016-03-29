@@ -41,11 +41,12 @@ $ ->
 
   # follow
   if $('#followBtn').data('follow')
-    $('#followBtn').hide()
+    $('#unfollowBtn').show()
   else
-    $('#unfollowBtn').hide()
+    $('#followBtn').show()
   $('[id$="followBtn"]').on 'click', ->
     $this = $(this)
+    $this.hide()
     $.ajax
       url: '/person/follow/'
       type: 'post'
@@ -54,11 +55,14 @@ $ ->
         username: $('#nickname').text()
       success: (data) ->
         if data.msg == 'okay'
-          $this.hide()
           if $this.attr('id').length == 9
             $('#unfollowBtn').fadeIn()
           else
             $('#followBtn').fadeIn()
+
+  $('a[href^="#user-"]').on 'click', ->
+    pk = $(this).attr('href').substr 6
+    location.href = '/person/' + pk
 
   # charts
   score = []

@@ -54,6 +54,7 @@ def index(request):
             elif user.team and user.team.solved.filter(pk=challenge.pk):
                 state = 2
             cha_list[i]['state'] = state
+            cha_list[i]['category'] = str(challenge.category)
     return render(request, 'challenge.jade', {
         'username': username,
         'challenges': cha_list,
@@ -104,6 +105,7 @@ def submit(request):
                     category=challenge.category).score:
                     MaxScore.objects.filter(
                         category=challenge.category).update(score=maxsc)
+                challenge.update(solved=challenge.solved+1)
                 return OKAY
             else:
                 Submit.objects.update_or_create(

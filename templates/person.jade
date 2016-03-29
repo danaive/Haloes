@@ -37,9 +37,9 @@ mixin newsList(title, url, logo, time, content)
 
 mixin followList(mb, url, avatar)
   li.media
-    a.pull-left(href='user-#{pk}'): img.media-object.img-rounded(height='64', src='#{MEDIA_URL}#{avatar}')
+    a.pull-left(href='#user-#{mb.pk}'): img.media-object.img-rounded(height='64', src='#{MEDIA_URL}#{avatar}')
     .media-body
-      h4.media-heading= mb.username
+      h4.media-heading: a(href='#user-#{mb.pk}')= mb.username
       p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
       p
         if mb.school
@@ -68,10 +68,10 @@ block container
               | update&nbsp;
               i.fa.fa-chevron-down
           else
-            a#followBtn.btn.btn-info(data-follow=follow)
+            a#followBtn.btn.btn-info(data-follow=follow, style='display: none;')
               i.fa.fa-mars-double
               | &nbsp;Follow
-            a#unfollowBtn.btn
+            a#unfollowBtn.btn(style='display: none;')
               | Unfollow
 
       .row
@@ -127,14 +127,8 @@ block container
     .col-md-4
       ul.nav.nav-pills
         li.dropdown.active
-          a.dropdown-toggle(href='#', data-toggle='dropdown')
-            | News&nbsp;
-            b.caret
-          ul.dropdown-menu
-            li: a(href='#all') All
-            li: a(href='#team') Team
-            li: a(href='#follow') Follow
-            li: a(href='#others') Others
+          a.dropdown-toggle(href='#news', data-toggle='pill')
+            | News
         li.dropdown
           a.dropdown-toggle(href='#', data-toggle='dropdown')
             | Focus&nbsp;
