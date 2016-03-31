@@ -2,11 +2,14 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Person, MaxScore
 from team.models import Team
 from os import urandom
+from hashlib import sha256
+from base64 import b64encode
 import json
 
 OKAY = HttpResponse(
@@ -22,6 +25,19 @@ ERROR = HttpResponse(
     content_type='application/json')
 
 
+@csrf_exempt
+def check_email(request, token):
+    try:
+        key = token[:16]
+        user = Person.objects.get(email_check=token)
+        if b64encode(sha256(user.name + key).digest()) == token[16:]:
+            user.email_check = 'done'
+            user.save()
+            return HttpResponseRedirect(reverse('person:index'))
+    except:
+        return ERROR
+
+
 def sign_up(request):
     if request.is_ajax:
         rform = RegForm(request.POST)
@@ -33,7 +49,11 @@ def sign_up(request):
             if '@' not in username and len(username) <= 16:
                 try:
                     from django.core.mail import send_mail
-                    key = urandom(16).encode('hex')
+                    key = b64encode(urandom(12))
+                    url = 'http://{domain}/check-in/?&token={token}'.format(
+                        domain=settings.DOMAIN_NAME,
+                        token=key + b64encode(sha256(username + key).digest())
+                    )
                     user = Person.objects.create(
                         username=username,
                         password=password,
@@ -41,7 +61,7 @@ def sign_up(request):
                         nickname=username,
                         email_check=key
                     )
-                    send_mail('Email Confirm', key, 'noreply@whuctf.org',
+                    send_mail('Email Confirm', url, 'noreply@whuctf.org',
                               [email])
                 except:
                     return FAIL

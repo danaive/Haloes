@@ -131,3 +131,5 @@ DOCKER_VERSION = 'xxx'
 FIXTURE_DIRS = [
     os.path.join(BASE_DIR, 'fixture/'),
 ]
+
+DOMAIN_NAME = 'whuctf.org'

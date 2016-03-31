@@ -48,3 +48,11 @@ class MaxScore(models.Model):
 
     def __unicode__(self):
         return self.category + ': ' + str(self.score)
+
+
+class News(models.Models):
+    title = models.CharField(max_length=30)
+    avatar = models.ImageField()
+    link = models.CharField(max_length=30)
+    time = models.DateTimeField(auto_now_add=True)
+    content = models.CharField(max_length=100)
