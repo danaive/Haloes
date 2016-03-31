@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Person, MaxScore
 from team.models import Team
+from news.models import News
 from os import urandom
 from hashlib import sha256
 from base64 import b64encode
@@ -125,6 +126,9 @@ def update_info(request):
         if uform.is_valid():
             user = Person.objects.get(pk=request.session['uid'])
             attrs = ['major', 'school', 'email', 'blog', 'motto']
+            if uform.cleaned_data['motto'] and
+                uform.cleaned_data['motto'] != user.motto:
+                _motto_news(user)
             for attr in attrs:
                 if uform.cleaned_data[attr]:
                     setattr(user, attr, uform.cleaned_data[attr])
@@ -273,3 +277,7 @@ def ranking(request):
         'users': users,
         'teams': teams
     })
+
+
+def _motto_news(user):
+    pass

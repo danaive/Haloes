@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'writeup',
     'team',
     'contest',
+    'news',
 )
 
 MIDDLEWARE_CLASSES = (

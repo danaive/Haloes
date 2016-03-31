@@ -108,6 +108,7 @@ def submit(request):
                     category=challenge.category).score:
                     MaxScore.objects.filter(
                         category=challenge.category).update(score=maxsc)
+                _solve_news(user, challenge)
                 return OKAY
             else:
                 Submit.objects.update_or_create(
@@ -228,3 +229,7 @@ def upload(request):
             except:
                 return ERROR
     return ERROR
+
+
+def _solve_news(user, challenge):
+    pass
