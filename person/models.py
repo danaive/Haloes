@@ -23,7 +23,7 @@ class Person(models.Model):
                                default='avatar/person/default.gif')
     following = models.ManyToManyField('self', symmetrical=False,
                                        related_name='followers')
-    team = models.ForeignKey('team.Team', null=True, blank=True,
+    team = models.ForeignKey('team.Team', null=True,
                              on_delete=models.SET_NULL)
     challenges = models.ManyToManyField(Challenge, through='Submit',
                                         related_name='submitter')

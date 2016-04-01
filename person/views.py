@@ -28,6 +28,7 @@ ERROR = HttpResponse(
 
 @csrf_exempt
 def check_email(request, token):
+    print token
     try:
         key = token[:16]
         user = Person.objects.get(email_check=token)
@@ -126,8 +127,8 @@ def update_info(request):
         if uform.is_valid():
             user = Person.objects.get(pk=request.session['uid'])
             attrs = ['major', 'school', 'email', 'blog', 'motto']
-            if uform.cleaned_data['motto'] and
-                uform.cleaned_data['motto'] != user.motto:
+            if (uform.cleaned_data['motto'] and
+                uform.cleaned_data['motto'] != user.motto):
                 _motto_news(user)
             for attr in attrs:
                 if uform.cleaned_data[attr]:
@@ -202,7 +203,7 @@ def index(request, pk='-1'):
         'followings': followings,
         'followers': followers,
         'followingNum': len(followings),
-        'followersNum': len(followers)
+        'followersNum': len(followers),
     })
     return render(request, 'person.jade', data)
 
@@ -280,4 +281,30 @@ def ranking(request):
 
 
 def _motto_news(user):
-    pass
+    News.objects.create(
+        title=user.username,
+        avatar=user.avatar,
+        link='#user-' + user.pk,
+        content='updated motto: ' + user.motto,
+        person=user,
+        team=user.team
+    )
+
+
+def get_news(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        try:
+            page = int(request.GET.get('page', 0))
+        except:
+            return ERROR
+        from django.db.models import Q
+        if user.team:
+            news = News.objects.filter(
+                Q(person__in=user.following) |
+                Q(team=user.team)).order_by('-time')[page:page+10]
+        else:
+            news = News.objects.filter(
+                person__in=user.following)[page:page+10]
+        return HttpResponse(json.dumps(news), content_type='application/json')
+    return ERROR
