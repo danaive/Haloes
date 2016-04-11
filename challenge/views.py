@@ -91,11 +91,9 @@ def submit(request):
                 return ERROR
             user = Person.objects.get(pk=request.session['uid'])
             if flag == challenge.flag:
-                Submit.objects.update_or_create(
-                    person=user,
-                    challenge=challenge,
-                    defaults={'status': True}
-                )
+                Submit.objects.update_or_create(person=user,
+                                                challenge=challenge,
+                                                defaults={'status': True})
                 user.score = user.challenges.filter(
                     submit__status=True
                 ).aggregate(Sum('score')['score__sum'])
@@ -216,14 +214,11 @@ def upload(request):
                 if 'privilege' in config:
                     opt['privilege'] = config['privilege']
                 Challenge.objects.update_or_create(
-                    title=config['title'],
-                    category=config['category'],
-                    score=config['score'],
-                    flag=config['flag'],
-                    zipfile=filepath,
+                    title=config['title'], category=config['category'],
+                    score=config['score'], flag=config['flag'],
+                    zipfile=filepath, defaults=opt,
                     description=pat.sub(r'%(\1)s', config['content']) % para,
-                    status='off' if 'dockerfile' in config else 'on',
-                    defaults=opt
+                    status='off' if 'dockerfile' in config else 'on'
                 )
                 return OKAY
             except:
@@ -232,4 +227,11 @@ def upload(request):
 
 
 def _solve_news(user, challenge):
-    pass
+    News.objects.create(
+        title=user.username, avatar=user.avatar,
+        link='#user-' + user.pk,
+        content='solved challenge {title} of {cate} {score}.'.format(
+            title=challenge.title, cate=challenge.category,
+            score=challenge.score),
+        person=user, team=user.team
+    )

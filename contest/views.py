@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .models import Contest
 from person.models import Person
+from news.models import News
+
 
 def index(request):
     if request.session.get('uid', None):
@@ -53,3 +56,15 @@ def index(request):
             'url': 16
         }, ]
     })
+
+
+def _contest_news(user, contest):
+    News.objects.create(
+        title=user.username, avatar=user.avatar,
+        link='#user-' + user.pk,
+        content='added a practice contest {contest}, \
+                 start at {time}.'.format(
+                     contest=contest.title,
+                     time=contest.time),
+        person=user, team=user.team
+    )

@@ -282,12 +282,10 @@ def ranking(request):
 
 def _motto_news(user):
     News.objects.create(
-        title=user.username,
-        avatar=user.avatar,
+        title=user.username, avatar=user.avatar,
         link='#user-' + user.pk,
         content='updated motto: ' + user.motto,
-        person=user,
-        team=user.team
+        person=user, team=user.team
     )
 
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from .models import *
 import json
 
 
@@ -132,3 +133,15 @@ def index(request):
             'univ': 'WHU',
         }],
     })
+
+
+def _team_contest_news(team, contest):
+    News.objects.create(
+        title=team.name, avatar=team.avatar,
+        link='#team-' + team.pk,
+        content='registered for the contest {contest}, \
+                 start at {time}.'.format(
+                     contest=contest.title,
+                     time=contest.time),
+        person=team.leader, team=team
+    )
