@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from person.models import Person
+from news.views import submit_news
+
 
 def index(request):
     if request.session.get('uid', None):
@@ -162,15 +164,3 @@ def index(request):
         'minelen': 14,
         'starredlen': 20
     })
-
-
-def _submit_news(user, challenge, writeup):
-    News.objects.create(
-        title=user.username, avatar=user.avatar,
-        link='#user-' + user.pk,
-        content='submitted writeup {writeup} \
-                 of {title}({cate} {score}).'.format(
-                     writeup=writeup.title, title=challenge.title,
-                     cate=challenge.category, score=challenge.score),
-        person=user, team=user.team
-    )

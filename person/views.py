@@ -8,6 +8,7 @@ from .forms import *
 from .models import Person, MaxScore
 from team.models import Team
 from news.models import News
+from news.views import motto_news
 from os import urandom
 from hashlib import sha256
 from base64 import b64encode
@@ -129,7 +130,7 @@ def update_info(request):
             attrs = ['major', 'school', 'email', 'blog', 'motto']
             if (uform.cleaned_data['motto'] and
                 uform.cleaned_data['motto'] != user.motto):
-                _motto_news(user)
+                motto_news(user)
             for attr in attrs:
                 if uform.cleaned_data[attr]:
                     setattr(user, attr, uform.cleaned_data[attr])
@@ -278,15 +279,6 @@ def ranking(request):
         'users': users,
         'teams': teams
     })
-
-
-def _motto_news(user):
-    News.objects.create(
-        title=user.username, avatar=user.avatar,
-        link='#user-' + user.pk,
-        content='updated motto: ' + user.motto,
-        person=user, team=user.team
-    )
 
 
 def get_news(request):

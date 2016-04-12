@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Contest
 from person.models import Person
-from news.models import News
+from news.views import contest_news
 
 
 def index(request):
@@ -56,15 +56,3 @@ def index(request):
             'url': 16
         }, ]
     })
-
-
-def _contest_news(user, contest):
-    News.objects.create(
-        title=user.username, avatar=user.avatar,
-        link='#user-' + user.pk,
-        content='added a practice contest {contest}, \
-                 start at {time}.'.format(
-                     contest=contest.title,
-                     time=contest.time),
-        person=user, team=user.team
-    )

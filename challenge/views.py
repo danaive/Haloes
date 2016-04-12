@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Challenge
 from person.models import *
+from news.views import solve_news
 import json
 import zipfile
 import re
@@ -106,7 +107,7 @@ def submit(request):
                     category=challenge.category).score:
                     MaxScore.objects.filter(
                         category=challenge.category).update(score=maxsc)
-                _solve_news(user, challenge)
+                solve_news(user, challenge)
                 return OKAY
             else:
                 Submit.objects.update_or_create(
@@ -224,14 +225,3 @@ def upload(request):
             except:
                 return ERROR
     return ERROR
-
-
-def _solve_news(user, challenge):
-    News.objects.create(
-        title=user.username, avatar=user.avatar,
-        link='#user-' + user.pk,
-        content='solved challenge {title} of {cate} {score}.'.format(
-            title=challenge.title, cate=challenge.category,
-            score=challenge.score),
-        person=user, team=user.team
-    )
