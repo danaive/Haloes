@@ -1,1 +1,65 @@
-p dctf<2016>
+extends frame
+{% load staticfiles %}
+
+append head
+  style.
+    .pricing .price-danger .price-title {
+      background-color: #ed5565;
+    }
+
+    .pricing .price-danger .price-body {
+      background-color: #ffdfd4;
+    }
+
+    .pricing .price-info .price-title {
+      background-color: #48cfad;
+    }
+
+    .pricing .price-info .price-body {
+      background-color: #edffef;
+    }
+
+    .pricing .unit {
+        margin: 15px;
+        min-width: 200px;
+    }
+
+mixin challengeList(item, cls, pk)
+  li.unit(class='price-#{cls}')
+    .price-title
+      h3 #{item.score} Pts
+      p #{item.solved} solved
+    .price-body
+      h4= item.title
+      p(style='margin: 10px;')= item.category
+      if item.done
+        a.btn.btn-block(class='btn-#{cls}', href='#mod-#{pk}', disabled) Done
+      else
+        a.btn.btn-block(class='btn-#{cls}', href='#mod-#{pk}') Try
+
+block container
+  .row
+    .col-md-12
+      .pricing: ul
+        for item in challenges
+          +challengeList(item, item.cls, item.pk)
+
+    a#toggleModal.btn(data-toggle='modal', href='#modal-container', style='display: none;') modal
+
+    #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
+      .modal-dialog: .modal-content
+        .modal-header
+          button.close(aria-hidden='true', data-dismiss='modal') ×
+          h4#modalTitle.modal-title Test
+        .modal-body
+          p test test
+        .modal-footer.row
+          .col-xs-9
+            input#flagHolder.form-control(type='text', placeholder='Input the Flag')
+            .alert.alert-success.pull-left(style='margin-bottom: 0; padding: 7px 15px; display: none;') You Got the FLAG Congratulations!!!
+            .alert.alert-danger.pull-left(style='margin-bottom: 0; padding: 7px 15px; display: none;') Incorrect FLAG
+          .col-xs-3
+            button#submit.btn.btn-info(data-pk) Submit
+
+append script
+  script(src='{% static "build/dctf-challenge.js" %}')

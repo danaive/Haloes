@@ -14,7 +14,7 @@ class Person(models.Model):
     password = models.CharField(max_length=100)
     nickname = models.CharField(max_length=20, blank=True)
     motto = models.CharField(max_length=30, blank=True)
-    major = models.CharField(max_length=10, default='MISC')
+    major = models.CharField(max_length=10, default='UNDIFINED')
     score = models.PositiveIntegerField(default=0)
     school = models.CharField(max_length=50, blank=True)
     email = models.EmailField(unique=True)

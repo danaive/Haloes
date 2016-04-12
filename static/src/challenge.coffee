@@ -101,7 +101,6 @@ $ ->
         pk: pk
       success: (data) ->
         if data.msg == 'okay'
-          console.log data.content
           $('.modal-body').html data.content
           $('#toggleModal').click()
         else

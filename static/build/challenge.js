@@ -117,7 +117,6 @@
         },
         success: function(data) {
           if (data.msg === 'okay') {
-            console.log(data.content);
             $('.modal-body').html(data.content);
             return $('#toggleModal').click();
           } else {

@@ -29,4 +29,5 @@ class Ranking(models.Model):
     # team rankings in contests
     team = models.ForeignKey(Team)
     contest = models.ForeignKey(Contest)
-    ranking = models.PositiveIntegerField()
+    ranking = models.PositiveIntegerField(default=0)
+    solved = models.ManyToManyField(Challenge)

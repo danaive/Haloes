@@ -23,6 +23,7 @@ class Challenge(models.Model):
     description = models.TextField()
     zipfile = models.FileField()
     privilege = models.IntegerField(default=0)
+    public = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.title + str(self.score)
