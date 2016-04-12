@@ -14,13 +14,13 @@ html(lang='en')
     nav.navbar.navbar-default.navbar-custom(role='navigation', style='background-color: #434A54;')
       .container
         .navbar-header
-          a.navbar-brand(href='#'): img(src='{% static "img/logo-lg.png" %}', height='40')
+          a.navbar-brand(href='#'): img(src='{% static "img/logo-text.png" %}', height='40')
         .collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-left
             li: a.nav-link(href='{% url "challenge:index" %}') Challenge
             li: a.nav-link(href='{% url "contest:index" %}') Contest
             li: a.nav-link(href='{% url "writeup:index" %}') WriteUp
-            li(style='display: none;'): a.nav-link(href='{% url "team:index" %}') Team
+            li: a.nav-link(href='#') Team
             li: a.nav-link(href='{% url "ranking" %}') Ranking
 
           form.navbar-form.navbar-left(role='search' style='margin-left: 20px;')
@@ -32,12 +32,12 @@ html(lang='en')
             if self
               li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
                 b= self
-                span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
+                // span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
               li: a.nav-link(href='#signOut') Sign out
             elif username
               li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
                 b= username
-                span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
+                // span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
               li: a.nav-link(href='#signOut') Sign out
             else
               li: a.nav-link(href='#signUp') Sign up

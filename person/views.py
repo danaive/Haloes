@@ -272,7 +272,12 @@ def ranking(request):
     teams = Team.objects.order_by('-score')
     for item in teams:
         item.members = item.person_set.count()
-        item.writeup = item.person_set.writeup_set.count()
+        item.solvedn = item.solved.count()
+        item.writeup = reduce(
+            lambda x, y: x + y,
+            map(lambda x: x.writeup_set.count(), item.person_set.all())
+        )
+        # item.person_set.all().writeup_set.count()
     return render(request, 'ranking.jade', {
         'username': username,
         'apply': False if user.team else True,
