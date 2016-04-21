@@ -15,7 +15,7 @@ mixin userlist(user, pk)
         span.label.label-info CRYPTO
       if user.major == 'MISC'
         span.label.label-warning MISC
-      if user.major == 'UNDIFINED'
+      if user.major == ''
         span.label.label-reverse UNDIFINED
     td.text-center= user.team
     td.text-center= user.score

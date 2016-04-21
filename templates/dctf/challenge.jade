@@ -40,6 +40,14 @@ mixin challengeList(item, cls, pk)
 block container
   .row
     .col-md-12
+      ul.nav.nav-pills.pull-right
+        li: a(href='../') Overview
+        li.active: a(href='../challenge/') Challenges
+        li: a(href='../ranking/') Ranking
+        li: a(href='../team/') Team
+      p(style='font-size: 30px;')= contest
+    .col-md-12
+      hr(style='margin-top: 10px;')
       .pricing: ul
         for item in challenges
           +challengeList(item, item.cls, item.pk)

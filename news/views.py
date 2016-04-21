@@ -1,7 +1,10 @@
+from .models import *
+
+
 def motto_news(user):
     News.objects.create(
         title=user.username, avatar=user.avatar,
-        link='#user-' + user.pk,
+        link='#user-' + str(user.pk),
         content='updated motto: ' + user.motto,
         person=user, team=user.team
     )

@@ -1,0 +1,59 @@
+extends frame
+{% load staticfiles %}
+
+mixin chalist(clg)
+  tr
+    td.text-center= clg.title
+    td.text-center
+      if clg.cate == 'PWN'
+        span.label.label-primary PWN
+      if clg.cate == 'REVERSE'
+        span.label.label-success REVERSE
+      if clg.cate == 'WEB'
+        span.label.label-danger WEB
+      if clg.cate == 'CRYPTO'
+        span.label.label-info CRYPTO
+      if clg.cate == 'MISC'
+        span.label.label-warning MISC
+      if clg.cate == ''
+        span.label.label-reverse UNDIFINED
+    td.text-center= clg.score
+    td.text-center= clg.solver
+    td.text-center= clg.time
+
+block container
+  .row
+    .col-md-12
+      ul.nav.nav-pills.pull-right
+        li: a(href='../') Overview
+        li: a(href='../challenge/') Challenges
+        li: a(href='../ranking/') Ranking
+        li.active: a(href='../team/') Team
+      p(style='font-size: 30px;')= contest
+
+    .col-md-12
+      hr
+      .row(style='margin: 20px 0px;')
+        .col-md-2(style='margin-right: -20px;')
+          img#avatar.img-thumbnail(src='#{MEDIA_URL}#{avatar}', width='120', height='120')
+        .col-md-10(style='margin-left: -20px;')
+          h2(style='margin: 15px 0px;')= teamname
+          h4 Score: #{score}&nbsp;&nbsp;&nbsp;&nbsp;Ranking: #{ranking}
+    .col-md-12
+      .panel.panel-default
+        .panel-heading
+          | Solved Challenges
+        table#chaList.table.table-hover
+          thead
+            tr
+              th.text-center Challenge
+              th.text-center Category
+              th.text-center Score
+              th.text-center Solver
+              th.text-center Time
+          tbody
+            for item in challenges
+              +chalist(item)
+
+append script
+  script(src='{% static "build/dctf-team.js" %}')

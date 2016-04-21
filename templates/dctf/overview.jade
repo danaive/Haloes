@@ -1,0 +1,13 @@
+extends frame
+{% load staticfiles %}
+
+
+block container
+  .row
+    .col-md-12
+      ul.nav.nav-pills.pull-right
+        li.active: a(href='#') Overview
+        li: a(href='challenge/') Challenges
+        li: a(href='ranking/') Ranking
+        li: a(href='team/') Team
+      p(style='font-size: 30px;')= contest

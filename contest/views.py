@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
+from django.db.models import Sum
 from .models import *
 from .forms import *
 from person.models import Person
 from challenge.models import Challenge
-from team.models import Ranking
+from team.models import *
 from news.views import contest_news
 from datetime import datetime, timedelta, tzinfo
 import json
@@ -46,7 +47,11 @@ def index(request, pk='-1'):
     username = user.username if user else None
     try:
         contest = Contest.objects.get(pk=int(pk))
-        return render(request, 'dctf/challenge.jade')
+        return render(request, 'dctf/overview.jade', {
+            'contest': contest.title,
+            'username': username,
+            'introduce': None
+        })
     except:
         contests = Contest.objects.order_by('-time')
         for item in contests:
@@ -69,26 +74,99 @@ def index(request, pk='-1'):
 
 
 def challenge(request, pk):
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
     pk = int(pk)
-    challenges = Challenge.objects.filter(contest__pk=pk, public=True)
-    team = Person.objects.get(pk=request.session['uid']).team
-    solved = Ranking.objects.get(team=team, contest__pk=pk).solved.all()
+    try:
+        challenges = Challenge.objects.filter(contest__pk=pk, public=True)
+        team = Person.objects.get(pk=request.session['uid']).team
+        solved = Ranking.objects.get(team=team, contest__pk=pk).solved.all()
+    except:
+        return render(request, '404.jade')
     for item in challenges:
         item.done = True if item in solved else False
         dic = {'PWN': 'primary', 'REVERSE': 'success', 'WEB': 'danger',
             'CRYPTO': 'info', 'MISC': 'warning'}
         item.cls = dic[item.category]
     return render(request, 'dctf/challenge.jade', {
-        'challenges': challenges
+        'username': username,
+        'challenges': challenges,
+        'contest': Contest.objects.get(pk=pk).title
     })
 
 
 def team(request, pk):
-    return render(request, 'dctf/team.jade')
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
+    return render(request, 'dctf/team.jade', {
+        'avatar': 'avatar/person/default.gif',
+        'teamname': 'DAWN',
+        'score': 1400,
+        'ranking': '1 / 700',
+        'username': username,
+        'contest': Contest.objects.get(pk=pk).title,
+        'challenges': [{
+            'title': 'test1',
+            'cate': 'PWN',
+            'score': 200,
+            'solver': 'danlei',
+            'time': '2016-5-22 18:30:44'
+        },
+        {
+            'title': 'test1',
+            'cate': 'MISC',
+            'score': 200,
+            'solver': 'danlei',
+            'time': '2016-5-22 18:30:44'
+        },
+        {
+            'title': 'test1',
+            'cate': 'CRYPTO',
+            'score': 200,
+            'solver': 'danlei',
+            'time': '2016-5-22 18:30:44'
+        },]
+    })
 
 
 def ranking(request, pk):
-    return render(request, 'dctf/ranking.jade')
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
+    users = Person.objects.filter(team__ranks__pk=pk).order_by('-score')
+    for index, item in enumerate(users):
+        item.index = index + 1
+        challenge = item.challenges.filter(submit__status=True,
+                                           contest__pk=pk)
+        item.solved = challenge.count()
+        item.score = challenge.aggregate(Sum('score'))['score__sum']
+        item.fstate = 0
+        if user.following.filter(pk=item.pk):
+            item.fstate = 1
+            if item.following.filter(pk=user.pk):
+                item.fstate = 2
+    teams = Team.objects.filter(ranks__pk=pk).order_by('-score')
+    for index, item in enumerate(teams):
+        item.index = index + 1
+        item.members = item.person_set.count()
+        item.solvedn = Ranking.objects.get(
+            team=item, contest__pk=pk).solved.count()
+        # item.person_set.all().writeup_set.count()
+    return render(request, 'dctf/ranking.jade', {
+        'username': username,
+        'apply': False if user.team else True,
+        'users': users,
+        'teams': teams,
+        'contest': Contest.objects.get(pk=pk).title
+    })
 
 
 def submit(request):
