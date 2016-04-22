@@ -83,7 +83,10 @@ def challenge(request, pk):
     try:
         challenges = Challenge.objects.filter(contest__pk=pk, public=True)
         team = Person.objects.get(pk=request.session['uid']).team
-        solved = Ranking.objects.get(team=team, contest__pk=pk).solved.all()
+        solved = map(
+            lambda x: x.challenge,
+            Ranking.objects.get(team=team, contest__pk=pk).solved.all()
+        )
     except:
         return render(request, '404.jade')
     for item in challenges:
@@ -99,39 +102,30 @@ def challenge(request, pk):
 
 
 def team(request, pk):
+    pk = int(pk)
     if request.session.get('uid', None):
         user = Person.objects.get(pk=request.session['uid'])
     else:
         user = None
     username = user.username if user else None
+    team = user.team
+    contest = Contest.objects.get(pk=pk)
+    rank = Ranking.objects.get(team=team, contest=contest)
+    submits = rank.solved.all()
+    for item in submits:
+        item.time = item.date
+        item.title = item.challenge.title
+        item.score = item.challenge.score
+        item.cate = item.challenge.category
+        item.solver = item.person.username
     return render(request, 'dctf/team.jade', {
-        'avatar': 'avatar/person/default.gif',
-        'teamname': 'DAWN',
-        'score': 1400,
-        'ranking': '1 / 700',
+        'avatar': team.avatar,
+        'teamname': team.name,
+        'score': rank.score,
+        'ranking': 123,  #### update here
         'username': username,
-        'contest': Contest.objects.get(pk=pk).title,
-        'challenges': [{
-            'title': 'test1',
-            'cate': 'PWN',
-            'score': 200,
-            'solver': 'danlei',
-            'time': '2016-5-22 18:30:44'
-        },
-        {
-            'title': 'test1',
-            'cate': 'MISC',
-            'score': 200,
-            'solver': 'danlei',
-            'time': '2016-5-22 18:30:44'
-        },
-        {
-            'title': 'test1',
-            'cate': 'CRYPTO',
-            'score': 200,
-            'solver': 'danlei',
-            'time': '2016-5-22 18:30:44'
-        },]
+        'contest': contest.title,
+        'challenges': submits
     })
 
 
@@ -183,9 +177,8 @@ def submit(request):
                 return ERROR
             user = Person.objects.get(pk=request.session['uid'])
             if flag == challenge.flag:
-                Submit.objects.update_or_create(person=user,
-                                                challenge=challenge,
-                                                defaults={'status': True})
+                _, submit = Submit.objects.update_or_create(person=user,
+                    challenge=challenge, defaults={'status': True})
                 user.score = user.challenges.filter(
                     submit__status=True
                 ).aggregate(Sum('score')['score__sum'])
@@ -200,7 +193,9 @@ def submit(request):
                         category=challenge.category).update(score=maxsc)
                 rank = Ranking.objects.get(team=user.team, contest__pk=contest)
                 if challenge not in rank.solved.all():
-                    rank.solved.add(challenge)
+                    rank.solved.add(submit)
+                    rank.score += challenge.score
+                    rank.save()
                 return OKAY
             else:
                 Submit.objects.update_or_create(
