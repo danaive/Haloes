@@ -11,3 +11,10 @@ block container
         li: a(href='ranking/') Ranking
         li: a(href='team/') Team
       p(style='font-size: 30px;')= contest
+
+    .col-md-12
+      hr
+
+
+append script
+  script(src='{% static "build/dctf-overview.js" %}')

@@ -1,8 +1,7 @@
 # Haloes
 
-Waiting for DAWN!
+Waiting for DAWN !
 
 ### todo
 
-* guest view
-* challenge deployment
+* split group from team

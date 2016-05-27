@@ -1,5 +1,5 @@
 $ ->
-  $('a[href$="ranking/"]').addClass 'current'
+  $('a[href$="contest/"]').addClass 'current'
 
   stickFooter()
 
