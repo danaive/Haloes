@@ -4,4 +4,5 @@ Waiting for DAWN !
 
 ### todo
 
-* split group from team
+* group view
+* details of writeup view

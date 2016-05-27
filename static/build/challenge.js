@@ -32,7 +32,7 @@
     PAGE_ITEM_COUNT = 15;
     total = 0;
     $('tr.ALL').each(function() {
-      if (($(this).data('state')) === '0') {
+      if (($(this).data('state')) === 0) {
         $(this).addClass('Attempted');
       }
       total += 1;
@@ -44,9 +44,9 @@
     $('[id^="btn"]').on('click', function() {
       var cate, cnt;
       $('tr.ALL').hide();
-      $('#cont').data('page', 0);
+      $('#cont').attr('data-page', 0);
       cate = ($(this).attr('id')).substr(3);
-      $('#cont').data('cate', $(this).attr('cate', cate));
+      $('#cont').attr('data-cate', cate);
       cnt = 0;
       $("tr.ALL." + cate).each(function() {
         cnt += 1;
@@ -73,7 +73,7 @@
         page -= PAGE_ITEM_COUNT;
       }
       $('tr.ALL').hide();
-      $('#cont').data('page', page);
+      $('#cont').attr('data-page', page);
       cnt = 0;
       $("tr.ALL." + cate).each(function() {
         cnt += 1;

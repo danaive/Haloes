@@ -31,9 +31,6 @@ mixin writeupList(wu, url)
       p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
       p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
 
-mixin rankingList(rk, url)
-  p.pull-right #{rk.rank} / #{rk.total}
-  p: a(href=url)= rk.name
 
 block container
   .row
@@ -113,8 +110,6 @@ block container
               #collapseMisc.panel-collapse.collapse MISC
 
           h4 Contest Ranking
-          for item in rankings
-            +rankingList(item, item.url)
         #writeup.tab-pane.fade
           ul.media-list
             for item in writeups
@@ -127,3 +122,7 @@ block container
           ul.media-list
             for item in members
               +memberList(item, item.url, item.avatar)
+
+
+append script
+  script(src='{% static "build/group.js" %}')

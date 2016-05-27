@@ -30,7 +30,7 @@ $ ->
 
   total = 0
   $('tr.ALL').each ->
-    if ($(this).data 'state') == '0'
+    if ($(this).data 'state') == 0
       $(this).addClass 'Attempted'
     total += 1
     if total <= PAGE_ITEM_COUNT
@@ -40,12 +40,9 @@ $ ->
 
   $('[id^="btn"]').on 'click', ->
     $('tr.ALL').hide()
-    $('#cont').data 'page', 0
+    $('#cont').attr 'data-page', 0
     cate = ($(this).attr 'id').substr 3
-    $('#cont').data(
-      'cate'
-      $(this).attr 'cate', cate
-    )
+    $('#cont').attr 'data-cate', cate
     cnt = 0
     $("tr.ALL.#{cate}").each ->
       cnt += 1
@@ -66,7 +63,7 @@ $ ->
         return
       page -= PAGE_ITEM_COUNT
     $('tr.ALL').hide()
-    $('#cont').data 'page', page
+    $('#cont').attr 'data-page', page
     cnt = 0
     $("tr.ALL.#{cate}").each ->
       cnt += 1

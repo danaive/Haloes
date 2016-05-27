@@ -2,19 +2,20 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
+from person.models import Person
 from news.views import group_contest_news
 import json
 
 
 def index(request):
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
     return render(request, 'group.jade', {
+        'username': username,
         'newmember': 1,
-        'rankings': [{
-            'name': 'BCTF 2015',
-            'rank': 3,
-            'total': 700,
-            'url': 16
-        }],
         'writeups': [{
             'url': 15,
             'title': 'DAWN',
