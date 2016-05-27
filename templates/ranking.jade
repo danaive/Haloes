@@ -50,7 +50,7 @@ block container
             tr
               th.text-center NickName
               th.text-center Major
-              th.text-center Team
+              th.text-center Group
               th.text-center Score
               th.text-center Solved
               th.text-center WriteUp
@@ -68,7 +68,7 @@ block container
               th.text-center WriteUp
               th
           tbody#teamCont(data-page='0')
-            for item in teams
+            for item in groups
               +teamlist(item, item.pk, apply)
       .btn-group.pull-right
         button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left

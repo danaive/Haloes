@@ -1,6 +1,6 @@
 from django.db import models
 from person.models import Person
-from team.models import Team
+from team.models import Group
 
 
 class News(models.Model):
@@ -10,4 +10,4 @@ class News(models.Model):
     time = models.DateTimeField(auto_now=True)
     content = models.CharField(max_length=100)
     person = models.ForeignKey(Person, null=True)
-    team = models.ForeignKey(Team, null=True)
+    group = models.ForeignKey(Group, null=True)

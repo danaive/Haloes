@@ -2,12 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
-from news.views import team_contest_news
+from news.views import group_contest_news
 import json
 
 
 def index(request):
-    return render(request, 'team.jade', {
+    return render(request, 'group.jade', {
         'newmember': 1,
         'rankings': [{
             'name': 'BCTF 2015',

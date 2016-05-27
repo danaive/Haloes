@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import Person, MaxScore
-from team.models import Team
+from team.models import Group
 from news.models import News
 from news.views import motto_news
 from os import urandom
@@ -196,7 +196,7 @@ def index(request, pk='-1'):
         'score': owner.score,
         'solve': owner.challenges.filter(submit__status=True).count(),
         'writeup': owner.writeup_set.count(),
-        'team': owner.team.name if owner.team else '',
+        'group': owner.group.name if owner.group else '',
         'school': owner.school,
         'email': owner.email,
         'blog': owner.blog,
@@ -269,8 +269,8 @@ def ranking(request):
             item.fstate = 1
             if item.following.filter(pk=user.pk):
                 item.fstate = 2
-    teams = Team.objects.order_by('-score')
-    for item in teams:
+    groups = Group.objects.order_by('-score')
+    for item in groups:
         item.members = item.person_set.count()
         item.solvedn = item.solved.count()
         item.writeup = reduce(
@@ -280,9 +280,9 @@ def ranking(request):
         # item.person_set.all().writeup_set.count()
     return render(request, 'ranking.jade', {
         'username': username,
-        'apply': False if user.team else True,
+        'apply': False if user.group else True,
         'users': users,
-        'teams': teams
+        'groups': groups
     })
 
 
@@ -294,10 +294,10 @@ def get_news(request):
         except:
             return ERROR
         from django.db.models import Q
-        if user.team:
+        if user.group:
             news = News.objects.filter(
                 Q(person__in=user.following) |
-                Q(team=user.team)).order_by('-time')[page:page+10]
+                Q(group=user.group)).order_by('-time')[page:page+10]
         else:
             news = News.objects.filter(
                 person__in=user.following)[page:page+10]

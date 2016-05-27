@@ -6,7 +6,7 @@ def motto_news(user):
         title=user.username, avatar=user.avatar,
         link='#user-' + str(user.pk),
         content='updated motto: ' + user.motto,
-        person=user, team=user.team
+        person=user, group=user.group
     )
 
 
@@ -18,7 +18,7 @@ def submit_news(user, challenge, writeup):
                  of {title}({cate} {score}).'.format(
                      writeup=writeup.title, title=challenge.title,
                      cate=challenge.category, score=challenge.score),
-        person=user, team=user.team
+        person=user, group=user.group
     )
 
 
@@ -29,19 +29,19 @@ def solve_news(user, challenge):
         content='solved challenge {title} of {cate} {score}.'.format(
             title=challenge.title, cate=challenge.category,
             score=challenge.score),
-        person=user, team=user.team
+        person=user, group=user.group
     )
 
 
-def team_contest_news(team, contest):
+def group_contest_news(group, contest):
     News.objects.create(
-        title=team.name, avatar=team.avatar,
-        link='#team-' + team.pk,
+        title=group.name, avatar=group.avatar,
+        link='#group-' + group.pk,
         content='registered for the contest {contest}, \
                  start at {time}.'.format(
                      contest=contest.title,
                      time=contest.time),
-        person=team.leader, team=team
+        person=group.leader, group=group
     )
 
 
@@ -53,5 +53,5 @@ def contest_news(user, contest):
                  start at {time}.'.format(
                      contest=contest.title,
                      time=contest.time),
-        person=user, team=user.team
+        person=user, group=user.group
     )
