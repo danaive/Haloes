@@ -52,7 +52,7 @@ def index(request):
                 state = 0
             elif challenge in user.challenges.filter(submit__status=True):
                 state = 1
-            elif user.team and user.team.solved.filter(pk=challenge.pk):
+            elif user.group and user.group.solved.filter(pk=challenge.pk):
                 state = 2
             cha_list[i]['state'] = state
             cha_list[i]['category'] = str(challenge.category)
@@ -92,9 +92,11 @@ def submit(request):
                 return ERROR
             user = Person.objects.get(pk=request.session['uid'])
             if flag == challenge.flag:
-                Submit.objects.update_or_create(person=user,
-                                                challenge=challenge,
-                                                defaults={'status': True})
+                Submit.objects.update_or_create(
+                    person=user,
+                    challenge=challenge,
+                    defaults={'status': True}
+                )
                 user.score = user.challenges.filter(
                     submit__status=True
                 ).aggregate(Sum('score')['score__sum'])
@@ -103,10 +105,10 @@ def submit(request):
                     submit__status=True,
                     category=challenge.category
                 ).aggregate(Sum('score'))['score__sum']
-                if maxsc > MaxScore.objects.get(
-                    category=challenge.category).score:
+                if maxsc > MaxScore.objects.get(category=challenge.category).score:
                     MaxScore.objects.filter(
-                        category=challenge.category).update(score=maxsc)
+                        category=challenge.category
+                    ).update(score=maxsc)
                 solve_news(user, challenge)
                 return OKAY
             else:
@@ -163,11 +165,9 @@ def switch(request):
             # true is on, false is off
             state = sf.cleaned_data['state']
             from docker import Client
-            url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP,
-                                             port=settings.DOCKER_PORT)
+            url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP, port=settings.DOCKER_PORT)
             version = settings.DOCKER_VERSION
-            cotainer_name = "{pk}_{name}".format(pk=challenge.pk,
-                                                 name=challenge.title)
+            cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
             client = Client(base_url=url, version=version)
             try:
                 if state:

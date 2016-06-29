@@ -83,7 +83,7 @@
       });
       return stickFooter();
     });
-    $('i[title^="Attempted"]').on('click', function() {
+    $('i.fa-lightbulb-o').on('click', function() {
       var $this, pk;
       pk = $(this).data('pk');
       $this = $(this);

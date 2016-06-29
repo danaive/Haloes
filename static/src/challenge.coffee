@@ -71,7 +71,7 @@ $ ->
         $(this).show()
     stickFooter()
 
-  $('i[title^="Attempted"]').on 'click', ->
+  $('i.fa-lightbulb-o').on 'click', ->
     pk = $(this).data 'pk'
     $this = $(this)
     $.ajax

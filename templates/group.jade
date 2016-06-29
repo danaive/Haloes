@@ -31,46 +31,91 @@ mixin writeupList(wu, url)
       p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
       p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
 
+mixin chartLabel(label, color)
+  li: ul.list-inline
+    li(style='width: 10px; height: 10px; background-color: #{color}')
+    li= label
 
 block container
   .row
     .col-md-8
-      .btn-group.pull-right
-        button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
-          | Add&nbsp;
-          span.caret
-        ul.dropdown-menu
-          li: a(href='#addst') Single Task
-          li: a(href='#addtl') Task List
-      h3(style='margin-top: 0px;') Tasks
-
+      .row(style='margin-bottom: 20px;')
+        .col-md-3(style='margin-right: -20px;')
+          img#avatar.img-thumbnail(src='#{MEDIA_URL}#{avatar}',
+            width='120', height='120', style='cursor: pointer;',
+            data-toggle='tooltip', data-placement='bottom', title='Update Group Avatar')
+          #iconHolder.img-thumbnail(style='width: 120px; height: 120px; display: none;')
+            i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
+          form(enctype='multipart/form-data')
+            input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
+        .col-md-9(style='margin-left: -20px;')
+          h2(style='margin: 40px 0px;')= groupname
+      .row
+        .col-md-12
+          .btn-group.pull-right
+            button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
+              | Add&nbsp;
+              span.caret
+            ul.dropdown-menu
+              li: a(href='#addst') Single Task
+              li: a(href='#addtl') Task List
+          h3(style='margin-top: 0px;') Tasks
+          ul.list-inline
+            li: input.task(placeholder='New Task')
+            li: .btn-group
+              button#deadline.btn.btn-xs.btn-warning
+                i.fa.fa-calendar
+                | &nbsp;Deadline
+              .btn-group
+                button.btn.btn-xs.btn-primary.dropdown-toggle(data-toggle='dropdown')
+                  i.fa.fa-user
+                  | &nbsp;Unassigned&nbsp;
+                  span.caret
+                ul.dropdown-menu
+                  li: a(href='#') danlei
+                  li: a(href='#') hxer
+                  li.divider
+                  li: a(href='#') Unassigned
+            li: .btn-group
+              button.btn.btn-xs.btn-success: i.fa.fa-check
+              button.btn.btn-xs.btn-danger: i.fa.fa-times
       hr
-      button.btn.btn-info.pull-right New Discussion
-      h3(style='margin-top: 0px;') Discussions
-
+      .row
+        .col-md-12
+          button.btn.btn-info.pull-right New Discussion
+          h3(style='margin-top: 0px;') Discussions
       hr
-      h1 Main View is under building
+      .row
+        .col-md-4
+          canvas#pieChart(height='220', width='220', style='margin-left: 10px; margin-top: 30px;')
+        .col-md-2
+          ul.list-unstyled
+            +chartLabel('PWN', '#3BAFDA')
+            +chartLabel('REVERSE', '#8CC152')
+            +chartLabel('WEB', '#ED5565')
+            +chartLabel('CRYPTO', '#37BC9B')
+            +chartLabel('MISC', '#FFCE54')
+        .col-md-4
+          canvas#radarChart(height='300', width='300', style='margin-left: 30px;')
+        .col-md-2
+          ul.list-unstyled
+            +chartLabel('Your Group', '#89729E')
 
     .col-md-4
       ul.nav.nav-pills
         li.active
-          a(href='#overview', data-toggle='pill')
-            | Overview
-        li.dropdown
-          a.dropdown-toggle(href='#', data-toggle='dropdown')
+          a(href='#achievement', data-toggle='pill')
+            | Achievement
+        li
+          a(href='#membership', data-toggle='pill')
             | Membership&nbsp;
-            b.caret
-          ul.dropdown-menu
-            li: a(href='#applying', data-toggle='pill')
-              | Applying&nbsp;
-              if newmember
-                span.badge.badge-danger= newmember
-            li: a(href='#member', data-toggle='pill') Members
+            if newmember
+              span.badge.badge-danger= newmember
         li
           a(href='#writeup' data-toggle='pill')
             | WriteUp
       .tab-content(style='margin-top: 15px;')
-        #overview.tab-pane.fade.in.active
+        #achievement.tab-pane.fade.in.active
           h4 Challenge Solved
           #accordion.panel-group
             .panel
@@ -109,20 +154,37 @@ block container
                     span.badge.badge-info.pull-right 23
               #collapseMisc.panel-collapse.collapse MISC
 
-          h4 Contest Ranking
         #writeup.tab-pane.fade
           ul.media-list
             for item in writeups
               +writeupList(item, item.url)
-        #applying.tab-pane.fade
+        #membership.tab-pane.fade
           ul.media-list
             for item in newmembers
               +newMemberList(item, item.url, item.avatar)
-        #member.tab-pane.fade
-          ul.media-list
             for item in members
               +memberList(item, item.url, item.avatar)
 
 
 append script
+  script(src='{% static "assets/charts/chart.min.js" %}')
+  script(src='{% static "assets/plugins/ajax-file-upload.js" %}')
+  script(src='{% static "assets/plugins/bootstrap-datetimepicker.min.js" %}')
   script(src='{% static "build/group.js" %}')
+  style.
+    input.task{
+      border: 0px solid #fff;
+      background: transparent;
+      font-size: 20px;
+      font-family: Helvetica;
+      font-weight: 100;
+      border-bottom: 1px dashed rgba(120, 120, 120, 0.5);
+      margin-bottom: 15px;
+    }
+    input.task:focus{
+      outline: none;
+      border-bottom: 1px dashed rgba(28, 171, 233, 0.5);
+    }
+
+append head
+  link(rel='stylesheet', href='{% static "assets/plugins/bootstrap-datetimepicker.min.css" %}')

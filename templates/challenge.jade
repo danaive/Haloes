@@ -29,7 +29,7 @@ mixin challengeList(clg, pk, state, cate, priv)
     // td.text-center= clg.state
     if clg.state == 0
       td.text-center
-        i.fa.fa-lightbulb-o(data-pk=pk, data-toggle='tooltip', data-placement='bottom', title='Attempted Challenge Click to Drop')
+        i.fa.fa-lightbulb-o(data-pk=pk, data-toggle='tooltip', data-placement='bottom', title='Attempted')
     if clg.state == 1
       td.text-center
         i.fa.fa-flag(data-toggle='tooltip', data-placement='bottom', title='Solved')
@@ -85,8 +85,8 @@ block container
           .modal-footer.row
             .col-xs-9
               input#flagHolder.form-control(type='text', placeholder='Input the Flag')
-              .alert.alert-success.pull-left(style='margin-bottom: 0; padding: 7px 15px; display: none;') You Got the FLAG Congratulations!!!
-              .alert.alert-danger.pull-left(style='margin-bottom: 0; padding: 7px 15px; display: none;') Incorrect FLAG
+              .alert.alert-success.pull-left(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') You Got the FLAG Congratulations !!!
+              .alert.alert-danger.pull-left(style='margin-bottom: 0; margin-top: 10px; padding: 7px 15px; display: none;') Incorrect FLAG
             .col-xs-3
               button#submit.btn.btn-info(data-pk) Submit
 
