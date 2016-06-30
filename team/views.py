@@ -7,7 +7,7 @@ from news.views import group_contest_news
 import json
 
 
-def index(request):
+def _index(request):
     if request.session.get('uid', None):
         user = Person.objects.get(pk=request.session['uid'])
     else:
@@ -135,3 +135,8 @@ def index(request):
             'univ': 'WHU',
         }],
     })
+
+
+def index(request):
+    groups = Group.objects.order_by('-score')
+    return render(request, 'group.jade', {'groups': groups})
