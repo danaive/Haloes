@@ -47,5 +47,10 @@ $ ->
         scaleStepWidth: 25
         scaleStartValue: -25
       )
-  $('#deadline').datetimepicker()
+  $('#deadline').datetimepicker(
+    format: 'yyyy-mm-dd'
+    autoclose: true
+    minView: 2
+  ).on 'changeDate', (ev) ->
+    console.log ev.date
   stickFooter()

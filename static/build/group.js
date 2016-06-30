@@ -66,7 +66,13 @@
         });
       }
     });
-    $('#deadline').datetimepicker();
+    $('#deadline').datetimepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true,
+      minView: 2
+    }).on('changeDate', function(ev) {
+      return console.log(ev.date);
+    });
     return stickFooter();
   });
 
