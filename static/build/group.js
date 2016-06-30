@@ -69,7 +69,8 @@
     $('#deadline').datetimepicker({
       format: 'yyyy-mm-dd',
       autoclose: true,
-      minView: 2
+      minView: 2,
+      maxView: 2
     }).on('changeDate', function(ev) {
       return console.log(ev.date);
     });

@@ -51,3 +51,12 @@ class Ranking(models.Model):
     ranking = models.IntegerField(default=0)
     solved = models.ManyToManyField(Submit)
     score = models.IntegerField(default=0)
+
+
+class Task(models.Model):
+    group = models.ForeignKey(Group, related_name='tasks')
+    datetime = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateField(blank=True)
+    content = models.CharField(max_length=100)
+    assign_to = models.ForeignKey(Person, related_name='assigned_tasks')
+    state = models.BooleanField(default=False)

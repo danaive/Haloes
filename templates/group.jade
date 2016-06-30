@@ -52,13 +52,7 @@ block container
           h2(style='margin: 40px 0px;')= groupname
       .row
         .col-md-12
-          .btn-group.pull-right
-            button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
-              | Add&nbsp;
-              span.caret
-            ul.dropdown-menu
-              li: a(href='#addst') Single Task
-              li: a(href='#addtl') Task List
+          button#newTaskBtn.btn.btn-info.pull-right New Task
           h3(style='margin-top: 0px;') Tasks
           ul.list-inline
             li: input.task(placeholder='New Task')
@@ -81,7 +75,7 @@ block container
       hr
       .row
         .col-md-12
-          button.btn.btn-info.pull-right New Discussion
+          button#newDiscBtn.btn.btn-info.pull-right New Discussion
           h3(style='margin-top: 0px;') Discussions
       hr
       .row

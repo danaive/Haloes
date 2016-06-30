@@ -51,6 +51,7 @@ $ ->
     format: 'yyyy-mm-dd'
     autoclose: true
     minView: 2
+    maxView: 2
   ).on 'changeDate', (ev) ->
     console.log ev.date
   stickFooter()
