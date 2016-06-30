@@ -29,7 +29,6 @@ ERROR = HttpResponse(
 
 @csrf_exempt
 def check_email(request, token):
-    print token
     try:
         key = token[:16]
         user = Person.objects.get(email_check=token)
@@ -53,7 +52,7 @@ def sign_up(request):
                 try:
                     from django.core.mail import send_mail
                     key = b64encode(urandom(12))
-                    url = 'http://{domain}/check-in/?&token={token}'.format(
+                    url = 'http://{domain}/check-in/?token={token}'.format(
                         domain=settings.DOMAIN_NAME,
                         token=key + b64encode(sha256(username + key).digest())
                     )
