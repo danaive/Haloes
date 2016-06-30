@@ -19,16 +19,13 @@ class Person(models.Model):
     school = models.CharField(max_length=50, blank=True)
     email = models.EmailField(unique=True)
     blog = models.URLField(blank=True)
-    avatar = models.ImageField(upload_to=upload_to,
-                               default='avatar/person/default.gif')
-    following = models.ManyToManyField('self', symmetrical=False,
-                                       related_name='followers')
-    group = models.ForeignKey('team.Group', null=True,
-                             on_delete=models.SET_NULL)
-    challenges = models.ManyToManyField(Challenge, through='Submit',
-                                        related_name='submitter')
+    avatar = models.ImageField(upload_to=upload_to, default='avatar/person/default.gif')
+    following = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    group = models.ForeignKey('team.Group', null=True, on_delete=models.SET_NULL)
+    challenges = models.ManyToManyField(Challenge, through='Submit', related_name='submitter')
     privilege = models.IntegerField(default=0)
     email_check = models.CharField(max_length=100)
+    apply_group = models.ForeignKey('team.Group', null=True, on_delete=models.SET_NULL, related_name='appliers')
 
     def __unicode__(self):
         return self.username + '_' + self.email

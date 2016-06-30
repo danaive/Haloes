@@ -23,6 +23,7 @@ class Team(models.Model):
     avatar = models.ImageField(upload_to=upload_to_team)
     solved = models.ManyToManyField(Challenge)
     ranks = models.ManyToManyField(Contest, through='Ranking')
+    code = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.name
@@ -39,6 +40,7 @@ class Group(models.Model):
     web_list = models.ManyToManyField(Challenge, related_name='+')
     crypto_list = models.ManyToManyField(Challenge, related_name='+')
     misc_list = models.ManyToManyField(Challenge, related_name='+')
+    code = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.name

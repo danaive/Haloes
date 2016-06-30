@@ -136,13 +136,13 @@ block container
             b.caret
           ul.dropdown-menu
             li: a(href='#following', data-toggle='pill')
-              | Following&nbsp;
               if followingNum
                 span.badge.badge-info.pull-right= followingNum
+              | Following&nbsp;
             li: a(href='#followers', data-toggle='pill')
-              | Followers
               if followersNum
                 span.badge.badge-info.pull-right= followersNum
+              | Followers
 
       .tab-content(style='margin-top: 15px;')
         #news.tab-pane.fade.in.active
