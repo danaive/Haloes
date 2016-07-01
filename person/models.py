@@ -5,8 +5,8 @@ from challenge.models import Challenge
 def upload_to(instance, filename):
     from os import urandom
     return 'avatar/person/' + '.'.join(
-        (instance.username, urandom(4).encode('hex'),
-        filename.split('.')[-1]))
+        instance.username, urandom(4).encode('hex'),
+        filename.split('.')[-1])
 
 
 class Person(models.Model):

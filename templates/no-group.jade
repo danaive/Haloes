@@ -1,0 +1,66 @@
+extends frame
+{% load staticfiles %}
+
+mixin teamlist(team, pk)
+  tr(style='')
+    td.text-center: a(href='#team-#{pk}')= team.name
+    td.text-center= team.members
+    td.text-center= team.score
+    td.text-center= team.solvedn
+    td.text-center= team.writeup
+    td.text-center
+      button.btn.btn-xs.btn-default(id='apply-#{pk}') Apply
+      button.btn.btn-xs.btn-danger.withdraw(style='display: none;') Withdraw
+
+block container
+  .row
+    h3 You are not in a group now
+    hr
+    .col-md-5
+      h4 If you have an invitation code
+      .input-group(style='margin: 20px 50px 50px 30px;')
+        input#invCode.form-control(placeholder='input invitation code here')
+        span.input-group-btn
+          button#joinBtn.btn.btn-info
+            | &nbsp;Join&nbsp;&nbsp;
+            i.fa.fa-check
+      h4 Or you can create a group
+      .input-group(style='margin: 20px 50px 50px 30px;')
+        input#grpName.form-control(placeholder='input a group name here')
+        span.input-group-btn
+          button#createBtn.btn.btn-primary
+            | Create&nbsp;
+            i.fa.fa-bookmark
+      br
+      br
+      #joinSuccess.alert.alert-success(style='display: none;')
+        | Welcome to
+        b#groupName
+      #joinFail.alert.alert-danger(style='display: none;') Invalid Invitaiton Code
+      #createSuccess.alert.alert-success(style='display: none;') Get Ready, Captain!
+      #createFail.alert.alert-danger(style='display: none;') Invalid Group Name
+
+    .col-md-7
+      h4 Or you can apply for one
+      br
+      .panel.panel-default
+        .panel-heading Group List
+        table#teamList.table.table-hover
+          thead
+            tr
+              th.text-center Group
+              th.text-center Members
+              th.text-center Score
+              th.text-center Solved
+              th.text-center WriteUp
+              th
+          tbody#teamCont(data-page='0')
+            for item in groups
+              +teamlist(item, item.pk)
+      br
+      br
+      #applySuccess.alert-success(style='display: none;') Application has been submitted
+      #applyFail.alert-danger(style='display: none;') Some Error Occured
+      #withdrawSuccess.alert-success(style='display: none;') Application has been withdrawn
+append script
+  script(src='{% static "build/no-group.js" %}')

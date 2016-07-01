@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
+from .forms import *
 from person.models import Person
 from news.views import group_contest_news
 import json
@@ -136,7 +137,99 @@ def _index(request):
         }],
     })
 
+OKAY = HttpResponse(
+    json.dumps({'msg': 'okay'}),
+    content_type='application/json')
+
+FAIL = HttpResponse(
+    json.dumps({'msg': 'fail'}),
+    content_type='application/json')
+
+ERROR = HttpResponse(
+    json.dumps({'msg': 'error'}),
+    content_type='application/json')
+
 
 def index(request):
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
     groups = Group.objects.order_by('-score')
-    return render(request, 'group.jade', {'groups': groups})
+    if not user.group:
+        return render(request, 'no-group.jade', {
+            'groups': groups,
+            'username': username,
+        })
+
+    return render(request, 'group.jade', {
+        'username': username,
+        'groupname': user.group.name,
+        'avatar': user.group.avatar,
+        'code': user.group.code,
+
+        'writeups': [],
+        'members': [],
+        'newmembers': []
+    })
+
+
+def join(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        cf = CodeForm(request.POST)
+        if cf.is_valid() and not user.group:
+            code = cf.cleaned_data['code']
+            try:
+                group = Group.objects.get(code=code)
+                user.group = group
+                user.save()
+                return HttpResponse(
+                    json.dumps({'name': group.name}),
+                    content_type='application/json')
+            except:
+                return HttpResponse(
+                    json.dumps({'name': '%%'}),
+                    content_type='application/json')
+    return ERROR
+
+
+def create(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        gf = GroupNameForm(request.POST)
+        if gf.is_valid() and not user.group:
+            from os import urandom
+            name = gf.cleaned_data['name']
+            try:
+                user.group = Group.objects.create(
+                    name=name,
+                    leader=user,
+                    code=urandom(12).encode('hex')
+                )
+                user.save()
+                return OKAY
+            except:
+                return FAIL
+    return ERROR
+
+
+def apply(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        gf = GroupForm(request.POST)
+        if gf.is_valid() and not user.group:
+            pk = gf.cleaned_data['pk']
+            user.apply_group = Group.objects.get(pk=pk)
+            user.save()
+            return OKAY
+    return ERROR
+
+def withdraw(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        user.apply_group = None
+        user.save()
+        return OKAY
+    return ERROR

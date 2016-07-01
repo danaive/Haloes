@@ -1,54 +1,190 @@
 extends frame
 {% load staticfiles %}
 
-mixin teamlist(team, pk)
-  tr(style='')
-    td.text-center: a(href='#team-#{pk}')= team.name
-    td.text-center= team.members
-    td.text-center= team.score
-    td.text-center= team.solvedn
-    td.text-center= team.writeup
-    td.text-center
-      button.btn.btn-xs.btn-default Apply
+mixin memberList(mb, url, avatar)
+  li.media
+    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
+    a.pull-right.btn.btn-link
+      i.fa.fa-user-times
+    .media-body
+      h4.media-heading= mb.name
+      p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
+      p #[i.fa.fa-university]&nbsp;#{mb.univ}
+
+mixin newMemberList(mb, url, avatar)
+  li.media
+    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
+    a.pull-right.btn.btn-info
+      | Approve&nbsp;
+      i.fa.fa-user-plus
+    .media-body
+      h4.media-heading= mb.name
+      p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
+      p #[i.fa.fa-university]&nbsp;#{mb.univ}
+
+mixin writeupList(wu, url)
+  li.media(style='margin-bottom: 25px;')
+    .media-body
+      h4.media-heading
+        a(href=url)= wu.title
+        span.text-muted &nbsp;&nbsp;#{wu.author}
+      p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
+      p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
+
+mixin chartLabel(label, color)
+  li: ul.list-inline
+    li(style='width: 10px; height: 10px; background-color: #{color}')
+    li= label
 
 block container
   .row
-    h3 You are not in a group now
-    hr
-    .col-md-5
-      h4 If you have an invitation code
-      .input-group(style='margin: 20px 50px 50px 30px;')
-        input.form-control(placeholder='input invitation code here')
-        span.input-group-btn
-          button#joinBtn.btn.btn-info
-            | &nbsp;Join&nbsp;&nbsp;
-            i.fa.fa-check
-      h4 Or you can create a group
-      .input-group(style='margin: 20px 50px 50px 30px;')
-        input.form-control(placeholder='input a group name here')
-        span.input-group-btn
-          button#createBtn.btn.btn-primary
-            | Create&nbsp;
-            i.fa.fa-bookmark
+    .col-md-8
+      .row(style='margin-bottom: 20px;')
+        .col-md-3(style='margin-right: -20px;')
+          img#avatar.img-thumbnail(src='#{MEDIA_URL}#{avatar}',
+            width='120', height='120', style='cursor: pointer;',
+            data-toggle='tooltip', data-placement='bottom', title='Update Group Avatar')
+          #iconHolder.img-thumbnail(style='width: 120px; height: 120px; display: none;')
+            i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
+          form(enctype='multipart/form-data')
+            input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
+        .col-md-9(style='margin-left: -20px;')
+          h2(style='margin: 40px 0px;')= groupname
+      .row
+        .col-md-12
+          button#newTaskBtn.btn.btn-info.pull-right New Task
+          h3(style='margin-top: 0px;') Tasks
+          ul.list-inline
+            li: input.task(placeholder='New Task')
+            li: .btn-group
+              button.btn.btn-xs.btn-warning: i.fa.fa-calendar
+              input#deadline.btn.btn-xs.btn-warning(placeholder='Deadline', style='width: 80px;')
+              .btn-group
+                button.btn.btn-xs.btn-primary.dropdown-toggle(data-toggle='dropdown')
+                  i.fa.fa-user
+                  | &nbsp;Unassigned&nbsp;
+                  span.caret
+                ul.dropdown-menu
+                  li: a(href='#') danlei
+                  li: a(href='#') hxer
+                  li.divider
+                  li: a(href='#') Unassigned
+            li: .btn-group
+              button.btn.btn-xs.btn-success: i.fa.fa-check
+              button.btn.btn-xs.btn-danger: i.fa.fa-times
+      hr
+      .row
+        .col-md-12
+          button#newDiscBtn.btn.btn-info.pull-right New Discussion
+          h3(style='margin-top: 0px;') Discussions
+      hr
+      .row
+        .col-md-4
+          canvas#pieChart(height='220', width='220', style='margin-left: 10px; margin-top: 30px;')
+        .col-md-2
+          ul.list-unstyled
+            +chartLabel('PWN', '#3BAFDA')
+            +chartLabel('REVERSE', '#8CC152')
+            +chartLabel('WEB', '#ED5565')
+            +chartLabel('CRYPTO', '#37BC9B')
+            +chartLabel('MISC', '#FFCE54')
+        .col-md-4
+          canvas#radarChart(height='300', width='300', style='margin-left: 30px;')
+        .col-md-2
+          ul.list-unstyled
+            +chartLabel('Your Group', '#89729E')
 
-    .col-md-7
-      h4 Or you can apply for one
-      br
-      .panel.panel-default
-        .panel-heading Group List
-        table#teamList.table.table-hover
-          thead
-            tr
-              th.text-center Group
-              th.text-center Members
-              th.text-center Score
-              th.text-center Solved
-              th.text-center WriteUp
-              th
-          tbody#teamCont(data-page='0')
-            for item in groups
-              +teamlist(item, item.pk)
+    .col-md-4
+      ul.nav.nav-pills
+        li.active
+          a(href='#achievement', data-toggle='pill')
+            | Achievement
+        li
+          a(href='#membership', data-toggle='pill')
+            | Membership&nbsp;
+            if newmember
+              span.badge.badge-danger= newmember
+        li
+          a(href='#writeup' data-toggle='pill')
+            | WriteUp
+      .tab-content(style='margin-top: 15px;')
+        #achievement.tab-pane.fade.in.active
+          h4 Challenge Solved
+          #accordion.panel-group
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapsePwn')
+                    | PWN
+                    span.badge.badge-info.pull-right 23
+              #collapsePwn.panel-collapse.collapse PWN
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseReverse')
+                    | REVERSE
+                    span.badge.badge-info.pull-right 23
+              #collapseReverse.panel-collapse.collapse: .panel-body REVERSE
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseWeb')
+                    | WEB
+                    span.badge.badge-info.pull-right 23
+              #collapseWeb.panel-collapse.collapse WEB
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseCrypto')
+                    | CRYPTO
+                    span.badge.badge-info.pull-right 23
+              #collapseCrypto.panel-collapse.collapse CRYPTO
+            .panel
+              .panel-heading
+                h4.panel-title
+                  a(data-toggle='collapse', data-parent='#accordion', href='#collapseMisc')
+                    | MISC
+                    span.badge.badge-info.pull-right 23
+              #collapseMisc.panel-collapse.collapse MISC
+
+        #writeup.tab-pane.fade
+          ul.media-list
+            for item in writeups
+              +writeupList(item, item.url)
+        #membership.tab-pane.fade
+          ul.media-list
+            for item in newmembers
+              +newMemberList(item, item.url, item.avatar)
+            for item in members
+              +memberList(item, item.url, item.avatar)
 
 
 append script
-  script(src='{% static "build/no-group.js" %}')
+  script(src='{% static "assets/charts/chart.min.js" %}')
+  script(src='{% static "assets/plugins/ajax-file-upload.js" %}')
+  script(src='{% static "assets/plugins/bootstrap-datetimepicker.min.js" %}')
+  script(src='{% static "build/group.js" %}')
+  style.
+    input.task{
+      border: 0px solid #fff;
+      background: transparent;
+      font-size: 20px;
+      font-family: Helvetica;
+      font-weight: 100;
+      border-bottom: 1px dashed rgba(120, 120, 120, 0.5);
+      margin-bottom: 15px;
+    }
+    input.task:focus{
+      outline: none;
+      border-bottom: 1px dashed rgba(28, 171, 233, 0.5);
+    }
+    .btn-group ::-webkit-input-placeholder{
+      color: #fff;
+    }
+    td.day, th.dow, th.prev i, th.next i, th.switch{
+      color: #ccc;
+    }
+
+
+append head
+  link(rel='stylesheet', href='{% static "assets/plugins/bootstrap-datetimepicker.min.css" %}')

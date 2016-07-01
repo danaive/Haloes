@@ -8,12 +8,17 @@ def upload_to():
 
 
 def upload_to_team(instance, filename):
-    return 'avatar/team/' + instance.name + filename.split('.')[-1]
+    from os import urandom
+    return 'avatar/team/' + '.'.join(
+        instance.name, urandom(4).encode('hex'),
+        filename.split('.')[-1])
 
 
 def upload_to_group(instance, filename):
-    return 'avatar/group/' + instance.name + filename.split('.')[-1]
-
+    from os import urandom
+    return 'avatar/group/' + '.'.join(
+        instance.name, urandom(4).encode('hex'),
+        filename.split('.')[-1])
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
@@ -33,7 +38,7 @@ class Group(models.Model):
     name = models.CharField(max_length=50, unique=True)
     leader = models.OneToOneField(Person, related_name='led_group')
     score = models.IntegerField(default=0)
-    avatar = models.ImageField(upload_to=upload_to_group)
+    avatar = models.ImageField(upload_to=upload_to_group, default='avatar/group/default.gif')
     solved = models.ManyToManyField(Challenge)
     pwn_list = models.ManyToManyField(Challenge, related_name='+')
     reverse_list = models.ManyToManyField(Challenge, related_name='+')
