@@ -3,13 +3,13 @@ extends frame
 
 mixin memberList(mb, url, avatar)
   li.media
-    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
+    a.pull-left(href=url): img.media-object.img-rounded(height='64', src='#{MEDIA_URL}#{avatar}')
     a.pull-right.btn.btn-link
       i.fa.fa-user-times
     .media-body
-      h4.media-heading= mb.name
-      p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
-      p #[i.fa.fa-university]&nbsp;#{mb.univ}
+      h4.media-heading= mb.username
+      p #[i.fa.fa-fw.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-fw.fa-star]&nbsp;#{mb.score}
+      p #[i.fa.fa-fw.fa-university]&nbsp;#{mb.univ}
 
 mixin newMemberList(mb, url, avatar)
   li.media
@@ -55,20 +55,21 @@ block container
           button#newTaskBtn.btn.btn-info.pull-right New Task
           h3(style='margin-top: 0px;') Tasks
           ul.list-inline
-            li: input.task(placeholder='New Task')
+            li: input#taskContent.task(placeholder='New Task')
             li: .btn-group
               button.btn.btn-xs.btn-warning: i.fa.fa-calendar
               input#deadline.btn.btn-xs.btn-warning(placeholder='Deadline', style='width: 80px;')
               .btn-group
+                button.btn.btn-xs.btn-primary: i.fa.fa-user
+                button#assign.btn.btn-xs.btn-primary(data-content='', style='width: 80px;')
+                  | Unassigned
                 button.btn.btn-xs.btn-primary.dropdown-toggle(data-toggle='dropdown')
-                  i.fa.fa-user
-                  | &nbsp;Unassigned&nbsp;
                   span.caret
                 ul.dropdown-menu
-                  li: a(href='#') danlei
-                  li: a(href='#') hxer
+                  for item in members
+                    li: a(href='#assign-#{item.pk}')= item.username
                   li.divider
-                  li: a(href='#') Unassigned
+                  li: a(href='#assign-0') Unassigned
             li: .btn-group
               button.btn.btn-xs.btn-success: i.fa.fa-check
               button.btn.btn-xs.btn-danger: i.fa.fa-times

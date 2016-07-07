@@ -21,7 +21,7 @@ class Person(models.Model):
     blog = models.URLField(blank=True)
     avatar = models.ImageField(upload_to=upload_to, default='avatar/person/default.gif')
     following = models.ManyToManyField('self', symmetrical=False, related_name='followers')
-    group = models.ForeignKey('team.Group', null=True, on_delete=models.SET_NULL)
+    group = models.ForeignKey('team.Group', null=True, on_delete=models.SET_NULL, related_name='members')
     challenges = models.ManyToManyField(Challenge, through='Submit', related_name='submitter')
     privilege = models.IntegerField(default=0)
     email_check = models.CharField(max_length=100)

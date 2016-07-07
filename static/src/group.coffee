@@ -47,6 +47,8 @@ $ ->
         scaleStepWidth: 25
         scaleStartValue: -25
       )
+
+
   $('#deadline').datetimepicker(
     format: 'yyyy-mm-dd'
     autoclose: true
@@ -54,4 +56,13 @@ $ ->
     maxView: 2
   ).on 'changeDate', (ev) ->
     console.log ev.date
+
+  $('a[href^="#assign-"]').on 'click', ->
+    pk = ($(this).attr 'href').substr 8
+    name = $(this).text()
+    $('#assign').attr 'data-content', pk
+    $('#assign').text name
+
   stickFooter()
+
+

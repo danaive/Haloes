@@ -12,3 +12,9 @@ class GroupNameForm(forms.Form):
 
 class GroupForm(forms.Form):
     pk = forms.IntegerField()
+
+
+class TaskForm(forms.Form):
+    content = forms.CharField(max_length=100)
+    deadline = forms.DateField(input_formats='%Y-%m-%d', required=False)
+    assigned_to = forms.IntegerField(required=False)

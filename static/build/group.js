@@ -74,6 +74,13 @@
     }).on('changeDate', function(ev) {
       return console.log(ev.date);
     });
+    $('a[href^="#assign-"]').on('click', function() {
+      var name, pk;
+      pk = ($(this).attr('href')).substr(8);
+      name = $(this).text();
+      $('#assign').attr('data-content', pk);
+      return $('#assign').text(name);
+    });
     return stickFooter();
   });
 

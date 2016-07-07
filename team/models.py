@@ -20,6 +20,7 @@ def upload_to_group(instance, filename):
         instance.name, urandom(4).encode('hex'),
         filename.split('.')[-1])
 
+
 class Team(models.Model):
     name = models.CharField(max_length=50)
     leader = models.OneToOneField(Person, related_name='led_team')
@@ -63,7 +64,7 @@ class Ranking(models.Model):
 class Task(models.Model):
     group = models.ForeignKey(Group, related_name='tasks')
     datetime = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateField(blank=True)
+    deadline = models.DateField(null=True)
     content = models.CharField(max_length=100)
-    assign_to = models.ForeignKey(Person, related_name='assigned_tasks')
+    assign_to = models.ForeignKey(Person, null=True, related_name='assigned_tasks')
     state = models.BooleanField(default=False)

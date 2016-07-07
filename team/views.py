@@ -162,15 +162,14 @@ def index(request):
             'groups': groups,
             'username': username,
         })
-
     return render(request, 'group.jade', {
         'username': username,
         'groupname': user.group.name,
         'avatar': user.group.avatar,
         'code': user.group.code,
-
+        'members': user.group.members.all(),
         'writeups': [],
-        'members': [],
+        # 'members': [],
         'newmembers': []
     })
 
@@ -186,12 +185,13 @@ def join(request):
                 user.group = group
                 user.save()
                 return HttpResponse(
-                    json.dumps({'name': group.name}),
+                    json.dumps({
+                        'name': group.name,
+                        'msg': 'OKAY'
+                    }),
                     content_type='application/json')
             except:
-                return HttpResponse(
-                    json.dumps({'name': '%%'}),
-                    content_type='application/json')
+                return FAIL
     return ERROR
 
 
@@ -226,10 +226,36 @@ def apply(request):
             return OKAY
     return ERROR
 
+
 def withdraw(request):
     if request.is_ajax:
         user = Person.objects.get(pk=request.session['uid'])
         user.apply_group = None
         user.save()
         return OKAY
+    return ERROR
+
+
+def new_task(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        group = user.group
+        tf = TaskForm(request.POST)
+        if tf.is_valid():
+            try:
+                pk = tf.cleaned_data['assigned_to']
+                assigned_to = Person.objects.get(pk=pk) if pk else None
+                deadline = tf.cleaned_data['deadline']
+                task = Task.objects.create(
+                    group=group,
+                    content=tf.cleaned_data['content'],
+                )
+                if assigned_to:
+                    task.assigned_to = assigned_to
+                if deadline:
+                    task.deadline = deadline
+                task.save()
+                return OKAY
+            except:
+                return FAIL
     return ERROR
