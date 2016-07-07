@@ -25,7 +25,7 @@ mixin writeupList(wu, url)
 
 mixin mineList(wu, url)
   li.media(style='margin-bottom: 25px;')
-    a.pull-right.btn.btn-info
+    a.pull-right.btn.btn-info(href='#{url}/edit/')
       i.fa.fa-pencil
       | &nbsp;Edit
     .media-body
@@ -35,7 +35,7 @@ mixin mineList(wu, url)
 
 mixin starredList(wu, url)
   li.media(style='margin-bottom: 25px;')
-    a.pull-right.btn.btn-default
+    a.pull-right.btn.btn-default(href='#{url}/unstar/')
       i.fa.fa-star-o
       | &nbsp;Unstar
     .media-body
@@ -72,6 +72,10 @@ block container
       .btn-group.pull-right
         button#prev.btn.btn-primary(data-page): i.fa.fa-long-arrow-left
         button#next.btn.btn-primary: i.fa.fa-long-arrow-right
+      a.btn.btn-success.pull-left(href='submit/')
+        i.fa.fa-cloud-upload
+        | &nbsp;Submit
+
 
     .col-md-4
       ul.nav.nav-pills

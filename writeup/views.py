@@ -164,3 +164,27 @@ def index(request):
         'minelen': 14,
         'starredlen': 20
     })
+
+
+def detail(request, pk): pass
+
+
+def submit(request): pass
+
+
+def edit(request, pk): pass
+
+
+def comment(request, pk): pass
+
+
+def like(request, pk): pass
+
+
+def unlike(request, pk): pass
+
+
+def star(request, pk): pass
+
+
+def unstar(request, pk): pass
