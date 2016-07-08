@@ -172,7 +172,7 @@ def follow(request):
     return ERROR
 
 
-def index(request, pk='-1'):
+def index(request, pk=u'-1'):
     pk = int(pk)
     data = {}
     if pk != -1 and pk != request.session['uid']:

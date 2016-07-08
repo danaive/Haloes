@@ -60,9 +60,6 @@ $ ->
           else
             $('#followBtn').fadeIn()
 
-  $('a[href^="#user-"]').on 'click', ->
-    pk = $(this).attr('href').substr 6
-    location.href = '/person/' + pk
 
   # charts
   score = []

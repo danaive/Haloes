@@ -10,5 +10,4 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/unlike/$', views.unlike, name='unlike'),
     url(r'^(?P<pk>\d+)/star/$', views.star, name='star'),
     url(r'^(?P<pk>\d+)/unstar/$', views.unstar, name='unstar'),
-    url(r'^submit/$', views.submit, name='submit'),
 ]

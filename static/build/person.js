@@ -73,11 +73,6 @@
         }
       });
     });
-    $('a[href^="#user-"]').on('click', function() {
-      var pk;
-      pk = $(this).attr('href').substr(6);
-      return location.href = '/person/' + pk;
-    });
     score = [];
     $.ajax({
       url: '/person/get-score/',

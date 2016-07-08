@@ -37,9 +37,9 @@ mixin newsList(title, url, logo, time, content)
 
 mixin followList(mb, url, avatar)
   li.media
-    a.pull-left(href='#user-#{mb.pk}'): img.media-object.img-rounded(height='64', src='#{MEDIA_URL}#{avatar}')
+    a.pull-left(href='/person/#{mb.pk}'): img.media-object.img-rounded(height='64', src='#{MEDIA_URL}#{avatar}')
     .media-body
-      h4.media-heading: a(href='#user-#{mb.pk}')= mb.username
+      h4.media-heading: a(href='/person/#{mb.pk}')= mb.username
       p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
       p
         if mb.school

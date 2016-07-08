@@ -169,10 +169,12 @@ def index(request):
 def detail(request, pk): pass
 
 
-def submit(request): pass
-
-
-def edit(request, pk): pass
+def edit(request, pk=u'-1'):
+    pk = int(pk)
+    if pk == -1:
+        return OKAY
+    else:
+        return OKAY
 
 
 def comment(request, pk): pass
