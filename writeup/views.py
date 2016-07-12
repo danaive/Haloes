@@ -166,15 +166,18 @@ def index(request):
     })
 
 
-def detail(request, pk): pass
-
-
 def edit(request, pk=u'-1'):
     pk = int(pk)
     if pk == -1:
         return OKAY
     else:
         return OKAY
+
+
+def detail(request, pk): pass
+
+
+def submit(request): pass
 
 
 def comment(request, pk): pass
@@ -190,3 +193,7 @@ def star(request, pk): pass
 
 
 def unstar(request, pk): pass
+
+
+def test(request):
+    return render(request, 'edit.jade')

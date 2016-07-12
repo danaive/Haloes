@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^(?P<pk>\d+)/$', views.detail, name='detail'),
+    url(r'^edit/$', views.test),
     url(r'^(?P<pk>\d+)/edit/$', views.edit, name='edit'),
     url(r'^(?P<pk>\d+)/comment/$', views.comment, name='comment'),
     url(r'^(?P<pk>\d+)/like/$', views.like, name='like'),

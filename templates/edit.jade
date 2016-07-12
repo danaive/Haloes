@@ -1,0 +1,26 @@
+extends frame
+{% load staticfiles %}
+
+block container
+  .row
+    .col-md-12
+      textarea#editor(autofocus)
+      button#getv.btn GETV
+      button#sync.btn SYNC
+
+block script
+  script(src='{% static "assets/simditor/scripts/jquery.min.js" %}')
+  script(src='{% static "assets/bootflat/js/site.min.js" %}')
+  script(src='{% static "assets/plugins/jquery.cookie.min.js" %}')
+  script(src='{% static "build/common.js" %}')
+  script(src='{% static "assets/simditor/scripts/module.min.js" %}')
+  script(src='{% static "assets/simditor/scripts/hotkeys.min.js" %}')
+  script(src='{% static "assets/simditor/scripts/simditor.min.js" %}')
+  script(src='{% static "assets/simditor/markdown/marked.js" %}')
+  script(src='{% static "assets/simditor/markdown/to-markdown.js" %}')
+  script(src='{% static "assets/simditor/markdown/simditor-markdown.js" %}')
+  script(src='{% static "build/edit.js" %}')
+
+append head
+  link(rel='stylesheet', href='{% static "assets/simditor/styles/simditor.css" %}')
+  link(rel='stylesheet', href='{% static "assets/simditor/markdown/simditor-markdown.css" %}')
