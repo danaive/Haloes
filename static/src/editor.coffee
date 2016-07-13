@@ -33,12 +33,10 @@ $ ->
       fileKey: 'upload_file'
       connectionCount: 3
       leaveConfirm: 'Uploading is in progress, are you sure to leave this page?'
-    markdown: true
 
-  $('#getv').on 'click', ->
-    console.log editor.getValue()
+  $('#upload').zclip
+    path: '/static/assets/plugins/ZeroClipboard.swf'
+    copy: $('#upload').text()
 
-  $('#sync').on 'click', ->
-    console.log editor.sync()
 
   stickFooter()

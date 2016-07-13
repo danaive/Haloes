@@ -196,4 +196,4 @@ def unstar(request, pk): pass
 
 
 def test(request):
-    return render(request, 'edit.jade')
+    return render(request, 'editor.jade')

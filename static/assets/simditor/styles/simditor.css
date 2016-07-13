@@ -160,7 +160,7 @@
   line-height: 1.6;
   border: none;
   padding: 22px 15px 40px;
-  min-height: 500px;
+  min-height: 450px;
   outline: none;
   background: transparent;
   resize: none;
@@ -201,7 +201,7 @@
 }
 .simditor .simditor-body {
   padding: 22px 15px 40px;
-  min-height: 500px;
+  min-height: 450px;
   outline: none;
   cursor: text;
   position: relative;

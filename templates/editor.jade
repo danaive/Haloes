@@ -4,9 +4,30 @@ extends frame
 block container
   .row
     .col-md-10
-      textarea#editor(autofocus, style='height: 500px;')
+      textarea#editor(autofocus)
+      button.btn.btn-success.pull-right(style='margin-top: 10px;') Submit
+      ul.list-inline
+        li: h4 Challenge
+        li(style='width: 150px;')
+          select.form-control
+            option 1
+            option 2
+        li: h4 /
+        li(style='width: 150px;')
+          select.form-control
+            option 1
+            option 2
+        li: h4 Title
+        li(style='width: 350px;')
+          input.form-control
     .col-md-2
-
+      .panel.panel-default
+        .panel-heading Uploaded Images
+        ul.list-group
+          li.list-group-item 123
+          li.list-group-item 02384902384
+        .panel-footer
+          button#upload.btn.btn-xs.btn-info Upload
 
 block script
   script(src='{% static "assets/simditor/scripts/jquery.min.js" %}')
@@ -19,7 +40,8 @@ block script
   script(src='{% static "assets/simditor/markdown/marked.js" %}')
   script(src='{% static "assets/simditor/markdown/to-markdown.js" %}')
   script(src='{% static "assets/simditor/markdown/simditor-markdown.js" %}')
-  script(src='{% static "build/edit.js" %}')
+  script(src='{% static "build/editor.js" %}')
+  script(src='{% static "assets/plugins/jquery.zclip.min.js" %}')
 
 append head
   link(rel='stylesheet', href='{% static "assets/simditor/styles/simditor.css" %}')

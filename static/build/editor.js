@@ -15,14 +15,11 @@
         fileKey: 'upload_file',
         connectionCount: 3,
         leaveConfirm: 'Uploading is in progress, are you sure to leave this page?'
-      },
-      markdown: true
+      }
     });
-    $('#getv').on('click', function() {
-      return console.log(editor.getValue());
-    });
-    $('#sync').on('click', function() {
-      return console.log(editor.sync());
+    $('#upload').zclip({
+      path: '/static/assets/plugins/ZeroClipboard.swf',
+      copy: $('#upload').text()
     });
     return stickFooter();
   });
