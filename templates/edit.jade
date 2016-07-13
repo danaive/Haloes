@@ -3,10 +3,10 @@ extends frame
 
 block container
   .row
-    .col-md-12
-      textarea#editor(autofocus)
-      button#getv.btn GETV
-      button#sync.btn SYNC
+    .col-md-10
+      textarea#editor(autofocus, style='height: 500px;')
+    .col-md-2
+
 
 block script
   script(src='{% static "assets/simditor/scripts/jquery.min.js" %}')

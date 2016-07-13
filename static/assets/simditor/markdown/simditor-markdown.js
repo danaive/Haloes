@@ -84,6 +84,8 @@ SimditorMarkdown = (function(superClass) {
 
   SimditorMarkdown.prototype.command = function() {
     var button, i, len, ref;
+    $(".simditor .markdown-editor textarea").css("min-height", "500px");
+    $('.simditor-body').toggle();
     this.editor.blur();
     this.editor.el.toggleClass('simditor-markdown');
     this.editor.markdownMode = this.editor.el.hasClass('simditor-markdown');

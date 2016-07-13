@@ -33,6 +33,7 @@ $ ->
       fileKey: 'upload_file'
       connectionCount: 3
       leaveConfirm: 'Uploading is in progress, are you sure to leave this page?'
+    markdown: true
 
   $('#getv').on 'click', ->
     console.log editor.getValue()
