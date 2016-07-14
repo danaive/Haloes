@@ -87,7 +87,7 @@ $ ->
   $('a[href^="#mod-"]').on 'click', ->
     pk = ($(this).attr 'href').substr 5
     $('#modalTitle').text $(this).text()
-    $('#submit').data 'pk', pk
+    $('#submit').attr 'data-pk', pk
     $('#flagHolder').show()
     $('.alert').hide()
     $.ajax

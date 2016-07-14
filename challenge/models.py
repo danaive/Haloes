@@ -24,3 +24,6 @@ class Challenge(models.Model):
 
     def __unicode__(self):
         return self.title + str(self.score)
+
+
+class Source(models.Model): pass

@@ -7,19 +7,40 @@
     editor = new Simditor({
       textarea: $('#editor'),
       toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown'],
-      toolbarFloatOffset: $('nav').height(),
-      imageButton: ['upload', 'external'],
-      upload: {
-        url: '',
-        params: null,
-        fileKey: 'upload_file',
-        connectionCount: 3,
-        leaveConfirm: 'Uploading is in progress, are you sure to leave this page?'
-      }
+      toolbarFloatOffset: $('nav').height()
     });
-    $('#upload').zclip({
-      path: '/static/assets/plugins/ZeroClipboard.swf',
-      copy: $('#upload').text()
+    $('#uploadBtn').on('click', function() {
+      if ($('#imageName').val().length === 0) {
+        return;
+      }
+      return $.ajaxFileUpload({
+        url: '/writeup/uploadImage/',
+        secureurl: false,
+        fileElementId: 'imageFile',
+        dataType: 'json',
+        success: function(data) {
+          var $li, li;
+          if (data.msg === 'okay') {
+            $('.alert-success').fadeIn();
+            li = '<li class="list-group-item"><a class="btn btn-xs btn-link pull-right" data-toggle="tooltip" data-placement="right" title="click to insert" data-path data-name><i class="fa fa-share-square-o"></i></a><p></p></li>';
+            $('ul.list-group').append(li);
+            $li = $('ul.list-group li').last();
+            $li.find('p').text($('#imageName').val());
+            $li.find('a').attr('data-path', data.path);
+            $li.find('a').attr('data-name', $('#imageName').val());
+            $('[data-toggle="tooltip"]').tooltip();
+            $('a.btn.btn-xs.btn-link').on('click', function() {
+              var content;
+              content = '![' + ($(this).data('name')) + '](' + ($(this).data('path')) + ')';
+              return insertAtCursor($('textarea')[0], content);
+            });
+            return window.setTimeout("$('.alert-success').fadeOut()", 1000);
+          }
+        }
+      });
+    });
+    $('#submitBtn').on('click', function() {
+      return console.log(editor.getValue());
     });
     return stickFooter();
   });
