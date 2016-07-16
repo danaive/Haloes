@@ -158,7 +158,7 @@ def index(request):
     username = user.username if user else None
     groups = Group.objects.order_by('-score')
     if not user.group:
-        return render(request, 'no-group.jade', {
+        return render(request, 'group-recruit.jade', {
             'groups': groups,
             'username': username,
         })

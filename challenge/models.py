@@ -26,4 +26,5 @@ class Challenge(models.Model):
         return self.title + str(self.score)
 
 
-class Source(models.Model): pass
+class Source(models.Model):
+    title = models.CharField(max_length=50, unique=True)

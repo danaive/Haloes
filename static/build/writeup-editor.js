@@ -21,7 +21,7 @@
         success: function(data) {
           var $li, li;
           if (data.msg === 'okay') {
-            $('.alert-success').fadeIn();
+            $('#uploadSuccess').fadeIn();
             li = '<li class="list-group-item"><a class="btn btn-xs btn-link pull-right" data-toggle="tooltip" data-placement="right" title="click to insert" data-path data-name><i class="fa fa-share-square-o"></i></a><p></p></li>';
             $('ul.list-group').append(li);
             $li = $('ul.list-group li').last();
@@ -34,13 +34,63 @@
               content = '![' + ($(this).data('name')) + '](' + ($(this).data('path')) + ')';
               return insertAtCursor($('textarea')[0], content);
             });
-            return window.setTimeout("$('.alert-success').fadeOut()", 1000);
+            return window.setTimeout("$('#uploadSuccess').fadeOut()", 1000);
           }
         }
       });
     });
     $('#submitBtn').on('click', function() {
-      return console.log(editor.getValue());
+      var $this;
+      if ($('#CList').val() && $('#title').val()) {
+        $this = $(this).attr('disabled', 'disabled');
+        $('i.fa-spiner').show();
+        return $.ajax({
+          url: '/writeup/submit/',
+          type: 'post',
+          dataType: 'json',
+          data: {
+            title: $('#title').val(),
+            challenge: $('#CList').val(),
+            content: editor.getValue()
+          },
+          success: function(data) {
+            $('i.fa-spiner').hide();
+            $this.removeAttr('disabled');
+            if (data.msg === 'okay') {
+              $('#submitSuccess').fadeIn();
+              return window.setTimeout("location.href='/writeup/" + data.pk + "/'", 1000);
+            } else {
+              $('#submitFail').fadeIn();
+              return window.setTimeout("$('#submitFail').fadeOut()", 1000);
+            }
+          }
+        });
+      }
+    });
+    $('#SList').on('change', function() {
+      var val;
+      $('#CList').empty();
+      val = $(this).val();
+      return $.ajax({
+        url: '/writeup/getChallenges/',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          title: val
+        },
+        success: function(data) {
+          var i, item, len, ref, results;
+          if (data.msg === 'okay') {
+            ref = data.challenges;
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              item = ref[i];
+              results.push($('#CList').append("<option value=" + item.pk + ">" + item.name + "</option>"));
+            }
+            return results;
+          }
+        }
+      });
     });
     return stickFooter();
   });

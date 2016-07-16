@@ -8,7 +8,8 @@ class Writeup(models.Model):
     challenge = models.ForeignKey(Challenge)
     comments = models.ManyToManyField(Person, related_name='+', through='Comment')
     likes = models.ManyToManyField(Person, related_name='likes')
-    content = models.FilePathField()
+    content = models.TextField()
+    title = models.CharField(max_length=50)
 
 
 class Comment(models.Model):

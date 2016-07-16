@@ -9,17 +9,21 @@ block container
       ul.list-inline
         li: h4 Challenge
         li(style='width: 150px;')
-          select.form-control
-            option 1
-            option 2
+          select#SList.form-control
+            option(value='-1') Select Source
+            for item in sources
+              option(value=item)= item
+            option(value='') Others
         li: h4 /
         li(style='width: 150px;')
-          select.form-control
-            option 1
-            option 2
+          select#CList.form-control
         li: h4 Title
         li(style='width: 350px;')
-          input.form-control
+          input#title.form-control
+        li: i.fa.fa-spiner.fa-spin(style='displa: none;')
+      br
+      #submitSuccess.alert.alert-success(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') Writeup Submit Succeeded
+      #submitFail.alert.alert-danger(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') Writeup Submit Failed
     .col-md-2
       .panel.panel-default
         .panel-heading Uploaded Images
@@ -45,8 +49,8 @@ block container
                 input#imageFile.form-control(type='file', name='img')
           .modal-footer.row
             .col-xs-9
-              .alert.alert-success.pull-left(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') Image Upload Succeeded
-              .alert.alert-danger.pull-left(style='margin-bottom: 0; margin-top: 10px; padding: 7px 15px; display: none;') Image Upload Failed
+              #uploadSuccess.alert.alert-success.pull-left(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') Image Upload Succeeded
+              #uploadFail.alert.alert-danger.pull-left(style='margin-bottom: 0; margin-top: 10px; padding: 7px 15px; display: none;') Image Upload Failed
             .col-xs-3
               button#uploadBtn.btn.btn-info Upload
 
@@ -63,7 +67,7 @@ block script
   script(src='{% static "assets/simditor/markdown/simditor-markdown.js" %}')
   script(src='{% static "assets/plugins/ajax-file-upload.js" %}')
   script(src='{% static "assets/plugins/InsertToCaret.js" %}')
-  script(src='{% static "build/editor.js" %}')
+  script(src='{% static "build/writeup-editor.js" %}')
 
 append head
   link(rel='stylesheet', href='{% static "assets/simditor/styles/simditor.css" %}')

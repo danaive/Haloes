@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
-from .models import Challenge
+from .models import *
 from person.models import *
 from news.views import solve_news
 import json
@@ -210,6 +210,10 @@ def upload(request):
                 opt = {}
                 if 'source' in config:
                     opt['source'] = config['source']
+                    try:
+                        Source.objects.create(title=config['source'])
+                    except:
+                        pass
                 if 'contest' in config:
                     opt['contest'] = config['contest']
                 if 'privilege' in config:

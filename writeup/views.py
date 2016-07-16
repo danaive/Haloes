@@ -2,7 +2,9 @@ from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from .models import *
 from person.models import Person
+from challenge.models import *
 from news.views import submit_news
 from .forms import *
 import json
@@ -192,12 +194,6 @@ def edit(request, pk=u'-1'):
         return OKAY
 
 
-def detail(request, pk): pass
-
-
-def submit(request): pass
-
-
 def comment(request, pk): pass
 
 
@@ -213,8 +209,18 @@ def star(request, pk): pass
 def unstar(request, pk): pass
 
 
-def test(request):
-    return render(request, 'editor.jade')
+def editor(request):
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
+    sources = map(lambda x: x.title, Source.objects.all())
+
+    return render(request, 'writeup-editor.jade', {
+        'username': username,
+        'sources': sources,
+    })
 
 
 @csrf_exempt
@@ -242,3 +248,63 @@ def upload_image(request):
             }), content_type='application/json')
         return FAIL
     return ERROR
+
+
+def get_challenges(request):
+    if request.is_ajax:
+        sf = SourceForm(request.POST)
+        if sf.is_valid():
+            title = sf.cleaned_data['title']
+            challenges = map(lambda x: {'pk': x.pk, 'name': x.title},
+                             Challenge.objects.filter(source=title))
+            return HttpResponse(json.dumps({
+                'msg': 'okay',
+                'challenges': challenges
+            }),content_type='application/json')
+        return FAIL
+    return ERROR
+
+
+def submit(request):
+    if request.is_ajax:
+        wf = WriteupForm(request.POST)
+        if wf.is_valid():
+            try:
+                title = wf.cleaned_data['title']
+                challenge = Challenge.objects.get(pk=wf.cleaned_data['challenge'])
+                content = wf.cleaned_data['content']
+                print title
+                print challenge
+                print content
+                print Person.objects.get(pk=request.session['uid'])
+                wp = Writeup.objects.create(
+                    author=Person.objects.get(pk=request.session['uid']),
+                    title=title,
+                    challenge=challenge,
+                    content=content
+                )
+                print '456'
+                return HttpResponse(json.dumps({
+                    'msg': 'okay',
+                    'pk': wp.pk
+                }), content_type='application/json')
+            except:
+                return FAIL
+    return ERROR
+
+
+def detail(request, pk):
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
+    try:
+        wp = Writeup.objects.get(pk=int(pk))
+        return render(request, 'writeup-detail.jade', {
+            'username': username,
+            'content': wp.content,
+
+        })
+    except:
+        return render(request, '404.jade')
