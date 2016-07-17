@@ -2,4 +2,9 @@ extends frame
 {% load staticfiles %}
 
 block container
-  !{content}
+  .row
+    #writeupHolder.col-md-1(style='min-height: 450px;')
+      !{content}
+
+append script
+  script(src='{% static "build/writeup-detail.js" %}')

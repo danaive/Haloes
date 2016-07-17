@@ -8,8 +8,10 @@ class Writeup(models.Model):
     challenge = models.ForeignKey(Challenge)
     comments = models.ManyToManyField(Person, related_name='+', through='Comment')
     likes = models.ManyToManyField(Person, related_name='likes')
+    stars = models.ManyToManyField(Person, related_name='stars')
     content = models.TextField()
     title = models.CharField(max_length=50)
+    time = models.DateField(auto_now_add=True)
 
 
 class Comment(models.Model):

@@ -29,160 +29,31 @@ def index(request):
     else:
         user = None
     username = user.username if user else None
+    writeups = Writeup.objects.all()
+    for item in writeups:
+        item.like = item.likes.count()
+        item.comment = item.comments.count()
+        item.group = item.author.group.name if item.author.group else ''
+        item.writer = item.author.username
+        item.category = item.challenge.category
+        item.solve = item.challenge.title
+    writeups = sorted(writeups, key=lambda x: x.like, reverse=True)
+    mywp = sorted(filter(lambda x: x.writer == username, writeups),
+                  key=lambda x: x.time, reverse=False)
+    starredwp = user.stars.all()
+    for item in starredwp:
+        item.like = item.likes.count()
+        item.comment = item.comments.count()
+        item.group = item.author.group.name if item.author.group else ''
+        item.writer = item.author.username
+        item.solve = item.challenge.title
     return render(request, 'writeup.jade', {
         'username': username,
-        'writeups': [{
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'title': 'hehehehe',
-            'url': 16,
-            'challenge': 'dice game',
-            'category': 'MISC',
-            'author': 'danlei',
-            'team': 'DAWN',
-            'comment': 15,
-            'like': 25
-        }],
-        'mywu': [{
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25
-        }],
-        'starredwu': [{
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        }],
-        'minelen': 14,
-        'starredlen': 20
+        'writeups': writeups,
+        'mywp': mywp,
+        'starredwp': starredwp,
+        'minelen': len(mywp),
+        'starredlen': len(starredwp),
     })
 
 

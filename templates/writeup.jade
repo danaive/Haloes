@@ -1,49 +1,49 @@
 extends frame
 {% load staticfiles %}
 
-mixin writeupList(wu, url)
+mixin writeupList(wp, pk)
   tr
-    td.text-center: a(href=url)= wu.title
-    td.text-center= wu.challenge
+    td.text-center: a(href=pk)= wp.title
+    td.text-center= wp.solve
     td.text-center
-      if wu.category == 'PWN'
+      if wp.category == 'PWN'
         span.label.label-primary PWN
-      if wu.category == 'REVERSE'
+      if wp.category == 'REVERSE'
         span.label.label-success REVERSE
-      if wu.category == 'WEB'
+      if wp.category == 'WEB'
         span.label.label-danger WEB
-      if wu.category == 'CRYPTO'
+      if wp.category == 'CRYPTO'
         span.label.label-info CRYPTO
-      if wu.category == 'MISC'
+      if wp.category == 'MISC'
         span.label.label-warning MISC
-    td.text-center= wu.author
-    td.text-center= wu.team
+    td.text-center= wp.writer
+    td.text-center= wp.group
     td.text-center
-      i.fa.fa-comments-o &nbsp;#{wu.comment}
+      i.fa.fa-comments-o &nbsp;#{wp.comment}
       | &nbsp;&nbsp;
-      i.fa.fa-thumbs-o-up &nbsp;#{wu.like}
+      i.fa.fa-thumbs-o-up &nbsp;#{wp.like}
 
-mixin mineList(wu, url)
+mixin mineList(wp, pk)
   li.media(style='margin-bottom: 25px;')
-    a.pull-right.btn.btn-info(href='#{url}/edit/')
+    a.pull-right.btn.btn-info(href='#{pk}/edit/')
       i.fa.fa-pencil
       | &nbsp;Edit
     .media-body
-      h4.media-heading: a(href=url)= wu.title
-      p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
-      p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
+      h4.media-heading: a(href=pk)= wp.title
+      p #{wp.solve},&nbsp;&nbsp;#{wp.time}
+      p #[i.fa.fa-comments-o]&nbsp;#{wp.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wp.like}
 
-mixin starredList(wu, url)
+mixin starredList(wp, pk)
   li.media(style='margin-bottom: 25px;')
-    a.pull-right.btn.btn-default(href='#{url}/unstar/')
+    a.pull-right.btn.btn-default(href='#{pk}/unstar/')
       i.fa.fa-star-o
       | &nbsp;Unstar
     .media-body
       h4.media-heading
-        a(href=url)= wu.title
-        span.text-muted &nbsp;&nbsp;#{wu.author}
-      p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
-      p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
+        a(href=pk)= wp.title
+        span.text-muted &nbsp;&nbsp;#{wp.author}
+      p #{wp.solve},&nbsp;&nbsp;#{wp.time}
+      p #[i.fa.fa-comments-o]&nbsp;#{wp.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wp.like}
 
 block container
   .row
@@ -68,11 +68,11 @@ block container
               th
           tbody
             for item in writeups
-              +writeupList(item, item.url)
+              +writeupList(item, item.pk)
       .btn-group.pull-right
         button#prev.btn.btn-primary(data-page): i.fa.fa-long-arrow-left
         button#next.btn.btn-primary: i.fa.fa-long-arrow-right
-      a.btn.btn-success.pull-left(href='edit/')
+      a.btn.btn-success.pull-left(href='editor/')
         i.fa.fa-cloud-upload
         | &nbsp;Submit
 
@@ -82,18 +82,20 @@ block container
         li.active
           a(href='#mine', data-toggle='pill')
             | My WriteUp&nbsp;
-            span.badge.badge-primary= minelen
+            if minelen
+              span.badge.badge-primary= minelen
         li
           a(href='#starred', data-toggle='pill')
             | Starred WriteUp&nbsp;
-            span.badge.badge-primary= starredlen
+            if starredlen
+              span.badge.badge-primary= starredlen
       .tab-content
         #mine.tab-pane.fade.in.active: ul.media-list(style='margin-top: 30px;')
-          for item in mywu
-            +mineList(item, item.url)
+          for item in mywp
+            +mineList(item, item.pk)
         #starred.tab-pane.fade: ul.media-list(style='margin-top: 30px;')
-          for item in starredwu
-            +starredList(item, item.url)
+          for item in starredwp
+            +starredList(item, item.pk)
 
 append script
   script(src='{% static "build/writeup.js" %}')
