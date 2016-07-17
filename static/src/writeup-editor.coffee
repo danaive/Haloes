@@ -5,24 +5,12 @@ $ ->
   Simditor.locale = 'en-US'
   editor = new Simditor
     textarea: $('#editor')
-    toolbar: [
-                'title'
-                'bold'
-                'italic'
-                'strikethrough'
-                '|'
-                'ol'
-                'ul'
-                'blockquote'
-                'code'
-                'table'
-                '|'
-                'link'
-                'hr'
-                '|'
-                'markdown'
-            ]
+    toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown']
     toolbarFloatOffset: $('nav').height()
+
+  if $('#submitBtn').data 'state'
+    editor.setValue $('#contentHolder').text()
+    $('#title').val $('#titleHolder').text()
 
   $('#uploadBtn').on 'click', ->
     if $('#imageName').val().length == 0
@@ -48,7 +36,12 @@ $ ->
           window.setTimeout "$('#uploadSuccess').fadeOut()", 1000
 
   $('#submitBtn').on 'click', ->
-    if $('#CList').val() and $('#title').val()
+    if $(this).data 'state'
+      challenge = $('#challengeHolder').text()
+    else
+      challenge = $('#CList').val()
+    console.log challenge
+    if $('#title').val() and challenge
       $this = $(this).attr 'disabled', 'disabled'
       $('i.fa-spiner').show()
       $.ajax
@@ -57,7 +50,7 @@ $ ->
         dataType: 'json'
         data:
           title: $('#title').val()
-          challenge: $('#CList').val()
+          challenge: challenge
           content: editor.getValue()
         success: (data) ->
           $('i.fa-spiner').hide()
@@ -82,6 +75,5 @@ $ ->
         if data.msg == 'okay'
           for item in data.challenges
             $('#CList').append "<option value=#{item.pk}>#{item.name}</option>"
-
 
   stickFooter()

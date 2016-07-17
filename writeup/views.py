@@ -57,14 +57,6 @@ def index(request):
     })
 
 
-def edit(request, pk=u'-1'):
-    pk = int(pk)
-    if pk == -1:
-        return OKAY
-    else:
-        return OKAY
-
-
 def comment(request, pk): pass
 
 
@@ -80,18 +72,32 @@ def star(request, pk): pass
 def unstar(request, pk): pass
 
 
-def editor(request):
+def editor(request, pk='-1'):
     if request.session.get('uid', None):
         user = Person.objects.get(pk=request.session['uid'])
     else:
         user = None
     username = user.username if user else None
     sources = map(lambda x: x.title, Source.objects.all())
-
-    return render(request, 'writeup-editor.jade', {
-        'username': username,
-        'sources': sources,
-    })
+    pk = int(pk)
+    if pk == -1:
+        return render(request, 'writeup-editor.jade', {
+            'username': username,
+            'sources': sources,
+        })
+    else:
+        try:
+            wp = Writeup.objects.get(pk=pk)
+        except:
+            return render(request, '404.jade')
+        if wp.author != user:
+            return render(request, '404.jade')
+        return render(request, 'writeup-editor.jade', {
+            'username': username,
+            'content': wp.content,
+            'challenge': wp.challenge.pk,
+            'title': wp.title
+        })
 
 
 @csrf_exempt
@@ -144,17 +150,14 @@ def submit(request):
                 title = wf.cleaned_data['title']
                 challenge = Challenge.objects.get(pk=wf.cleaned_data['challenge'])
                 content = wf.cleaned_data['content']
-                print title
-                print challenge
-                print content
-                print Person.objects.get(pk=request.session['uid'])
-                wp = Writeup.objects.create(
+                wp, _ = Writeup.objects.update_or_create(
                     author=Person.objects.get(pk=request.session['uid']),
-                    title=title,
                     challenge=challenge,
-                    content=content
+                    defaults={
+                        'title': title,
+                        'content': content
+                    }
                 )
-                print '456'
                 return HttpResponse(json.dumps({
                     'msg': 'okay',
                     'pk': wp.pk
@@ -174,8 +177,13 @@ def detail(request, pk):
         wp = Writeup.objects.get(pk=int(pk))
         return render(request, 'writeup-detail.jade', {
             'username': username,
+            'title': wp.title,
             'content': wp.content,
-
+            'author': wp.author.username,
+            'authorid': wp.author.pk,
+            'like': wp.likes.count(),
+            'star': wp.likes.count(),
+            'comments': []
         })
     except:
         return render(request, '404.jade')

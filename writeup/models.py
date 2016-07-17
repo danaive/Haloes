@@ -6,7 +6,7 @@ from person.models import Person
 class Writeup(models.Model):
     author = models.ForeignKey(Person)
     challenge = models.ForeignKey(Challenge)
-    comments = models.ManyToManyField(Person, related_name='+', through='Comment')
+    comments = models.ManyToManyField(Person, related_name='+', through='Comment', through_fields=('writeup', 'author'))
     likes = models.ManyToManyField(Person, related_name='likes')
     stars = models.ManyToManyField(Person, related_name='stars')
     content = models.TextField()
@@ -15,6 +15,8 @@ class Writeup(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(Person)
+    author = models.ForeignKey(Person, related_name='comments')
     writeup = models.ForeignKey(Writeup)
     content = models.TextField()
+    time = models.DateTimeField(auto_now_add=True)
+    reply = models.ForeignKey(Person, related_name='replies', null=True)

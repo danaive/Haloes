@@ -1,10 +1,42 @@
 extends frame
 {% load staticfiles %}
 
+mixin commentList(author, pk, avatar)
+  .row
+    .col-sm-3
+      img.img-circle(src='#{MEDIA_URL}#{avatar}')
+    .col-sm-9
+
+
+
 block container
   .row
-    #writeupHolder.col-md-1(style='min-height: 450px;')
-      !{content}
+    .col-md-9
+      h1.text-center(style='margin-top: 0px;')= title
+      h4.text-center: a(href='/person/#{authorid}')= author
+      #writeupHolder(style='margin-top: 40px; min-height: 300px;')
+        !{content}
+      textarea#editor(autofocus)
+      for item in comments
+        +commentList(item, item.pk, item.avatar)
+    .col-md-3
+      h4 #{author}'s writeup
+      h4 writeup to this challenge
 
-append script
+
+block script
+  script(src='{% static "assets/simditor/scripts/jquery.min.js" %}')
+  script(src='{% static "assets/bootflat/js/site.min.js" %}')
+  script(src='{% static "assets/plugins/jquery.cookie.min.js" %}')
+  script(src='{% static "build/common.js" %}')
+  script(src='{% static "assets/simditor/scripts/module.min.js" %}')
+  script(src='{% static "assets/simditor/scripts/hotkeys.min.js" %}')
+  script(src='{% static "assets/simditor/scripts/simditor.min.js" %}')
+  script(src='{% static "assets/simditor/markdown/marked.js" %}')
+  script(src='{% static "assets/simditor/markdown/to-markdown.js" %}')
+  script(src='{% static "assets/simditor/markdown/simditor-markdown.js" %}')
   script(src='{% static "build/writeup-detail.js" %}')
+
+append head
+  link(rel='stylesheet', href='{% static "assets/simditor/styles/simditor.css" %}')
+  link(rel='stylesheet', href='{% static "assets/simditor/markdown/simditor-markdown.css" %}')

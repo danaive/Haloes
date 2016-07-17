@@ -9,6 +9,10 @@
       toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown'],
       toolbarFloatOffset: $('nav').height()
     });
+    if ($('#submitBtn').data('state')) {
+      editor.setValue($('#contentHolder').text());
+      $('#title').val($('#titleHolder').text());
+    }
     $('#uploadBtn').on('click', function() {
       if ($('#imageName').val().length === 0) {
         return;
@@ -40,8 +44,14 @@
       });
     });
     $('#submitBtn').on('click', function() {
-      var $this;
-      if ($('#CList').val() && $('#title').val()) {
+      var $this, challenge;
+      if ($(this).data('state')) {
+        challenge = $('#challengeHolder').text();
+      } else {
+        challenge = $('#CList').val();
+      }
+      console.log(challenge);
+      if ($('#title').val() && challenge) {
         $this = $(this).attr('disabled', 'disabled');
         $('i.fa-spiner').show();
         return $.ajax({
@@ -50,7 +60,7 @@
           dataType: 'json',
           data: {
             title: $('#title').val(),
-            challenge: $('#CList').val(),
+            challenge: challenge,
             content: editor.getValue()
           },
           success: function(data) {

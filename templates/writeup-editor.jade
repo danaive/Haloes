@@ -5,25 +5,33 @@ block container
   .row
     .col-md-10
       textarea#editor(autofocus)
-      button#submitBtn.btn.btn-success.pull-right(style='margin-top: 10px;') Submit
+      if content
+        button#submitBtn.btn.btn-success.pull-right(style='margin: 10px 0px 0px 10px;', data-state='1') Submit
+        a.btn.btn-danger.pull-right(href='#confirm', data-toggle='modal', style='margin-top: 10px;') Delete
+        p#contentHolder(style='display: none;')= content
+        p#challengeHolder(style='display: none;')= challenge
+        p#titleHolder(style='display: none;')= title
+      else
+        button#submitBtn.btn.btn-success.pull-right(style='margin: 10px 0px 0px 10px;', data-state='0') Submit
       ul.list-inline
-        li: h4 Challenge
-        li(style='width: 150px;')
-          select#SList.form-control
-            option(value='-1') Select Source
-            for item in sources
-              option(value=item)= item
-            option(value='') Others
-        li: h4 /
-        li(style='width: 150px;')
-          select#CList.form-control
+        if sources
+          li: h4 Challenge
+          li(style='width: 150px;')
+            select#SList.form-control
+              option(value='-1') Select Source
+              for item in sources
+                option(value=item)= item
+              option(value='') Others
+          li: h4 /
+          li(style='width: 150px;')
+            select#CList.form-control
         li: h4 Title
         li(style='width: 350px;')
           input#title.form-control
-        li: i.fa.fa-spiner.fa-spin(style='displa: none;')
+        li: i.fa.fa-spin.fa-spinner.fa-2x(style='display: none;')
       br
-      #submitSuccess.alert.alert-success(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') Writeup Submit Succeeded
-      #submitFail.alert.alert-danger(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') Writeup Submit Failed
+      #submitSuccess.alert.alert-success(style='margin: 10px 0px; padding: 7px 15px; display: none;') Writeup Submit Succeeded
+      #submitFail.alert.alert-danger(style='margin: 10px 0px; marigin-top: 10px; padding: 7px 15px; display: none;') Writeup Submit Failed
     .col-md-2
       .panel.panel-default
         .panel-heading Uploaded Images
@@ -53,6 +61,13 @@ block container
               #uploadFail.alert.alert-danger.pull-left(style='margin-bottom: 0; margin-top: 10px; padding: 7px 15px; display: none;') Image Upload Failed
             .col-xs-3
               button#uploadBtn.btn.btn-info Upload
+      #confirm.modal.fade(aria-hidden='true', style='top: 60px;')
+        .modal-dialog: .modal-content
+          .modal-header
+            button.close(aria-hidden='true', data-dismiss='modal') ×
+            h4.modal-title Deletion Confirm
+          .modal-body: p Are you sure to delete this Writeup ?
+          .modal-footer: button#deleteBtn.btn.btn-danger Sure
 
 block script
   script(src='{% static "assets/simditor/scripts/jquery.min.js" %}')
