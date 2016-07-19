@@ -15,8 +15,9 @@ mixin commentList(item, pk, avatar)
           | #{item.recver}
         small.pull-right(style='color: #999; margin: 0px 30px;')= item.timex
       p.marked(style='margin-bottom: 15px;')= item.content
-      button.btn.btn-xs.btn-link(data-focus=pk, style='padding: 0px;') Reply
-      textarea(style='display: none;')
+      button.btn.btn-xs.btn-link.reply(style='padding: 0px;') Reply
+      button.btn.btn-xs.btn-link.submit(data-focus=pk, style='padding: 0px; display: none;') Submit
+      button.btn.btn-xs.btn-link.cancel(style='display: none;') Cancel
 
 mixin writeupList(item, pk)
   li
