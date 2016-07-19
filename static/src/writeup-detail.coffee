@@ -1,9 +1,10 @@
 $ ->
 
   $('a[href$="writeup/"]').addClass 'current'
+  $('[data-toggle="tooltip"]').tooltip()
 
   $('#writeupHolder').html $('#writeupHolder').text()
-  toolbar = ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown']
+  toolbar = ['bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr']
   Simditor.locale = 'en-US'
   editor = new Simditor
     textarea: $('#editor')
@@ -34,6 +35,7 @@ $ ->
     window.editor2 = new Simditor
       textarea: $this.siblings('textarea')
       toolbar: toolbar
+      toolbarFloat: false
 
   $('button.cancel').on 'click', ->
     editor2.destroy()
@@ -54,5 +56,28 @@ $ ->
         success: (data) ->
           if data.msg == 'okay'
             location.href = ''
+
+  if $('#likestar').data 'like'
+    $('button[data-original-title="like"]').hide()
+  else
+    $('button[data-original-title="unlike"]').hide()
+  if $('#likestar').data 'star'
+    $('button[data-original-title="star"]').hide()
+  else
+    $('button[data-original-title="unstar"]').hide()
+  $('button[data-original-title="cancel"]').hide()
+
+  $('button[title]').on 'click', ->
+    state = $(this).attr 'data-original-title'
+    $(this).attr 'disabled', 'disabled'
+    $.ajax
+      url: "#{state.substr(-4)}/"
+      type: 'post'
+      dataType: 'json'
+      success: (data) ->
+        if data.msg == 'okay'
+          console.log '123'
+          $("button[data-original-title$='#{state.substr(-4)}']").toggle()
+          $('button[title]').removeAttr 'disabled'
 
   stickFooter()

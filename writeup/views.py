@@ -58,20 +58,34 @@ def index(request):
     })
 
 
-def comment(request, pk): pass
+def like(request, pk):
+    if request.is_ajax:
+        try:
+            wp = Writeup.objects.get(pk=pk)
+            user = Person.objects.get(pk=request.session['uid'])
+            if user not in wp.likes.all():
+                wp.likes.add(user)
+            else:
+                wp.likes.remove(user)
+            return OKAY
+        except:
+            return FAIL
+    return ERROR
 
 
-def like(request, pk): pass
-
-
-def unlike(request, pk): pass
-
-
-def star(request, pk): pass
-
-
-def unstar(request, pk): pass
-
+def star(request, pk):
+    if request.is_ajax:
+        try:
+            wp = Writeup.objects.get(pk=pk)
+            user = Person.objects.get(pk=request.session['uid'])
+            if user not in wp.stars.all():
+                wp.stars.add(user)
+            else:
+                wp.stars.remove(user)
+            return OKAY
+        except:
+            return FAIL
+    return ERROR
 
 def editor(request, pk='-1'):
     if request.session.get('uid', None):
@@ -174,8 +188,7 @@ def detail(request, pk):
     else:
         user = None
     username = user.username if user else None
-    # try:
-    if True:
+    try:
         wp = Writeup.objects.get(pk=int(pk))
         comments = Comment.objects.filter(writeup=wp).order_by('-time')
         for item in comments:
@@ -187,10 +200,16 @@ def detail(request, pk):
             item.timex = (item.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S')
         my_wp = Writeup.objects.filter(author=wp.author).exclude(pk=wp.pk)
         re_wp = Writeup.objects.filter(challenge=wp.challenge).exclude(pk=wp.pk)
+        con_wp = Writeup.objects.filter(challenge__source=wp.challenge.source).exclude(challenge=wp.challenge)
         for item in my_wp:
             item.like = item.likes.count()
+            item.avatar = item.author.avatar
         for item in re_wp:
             item.like = item.likes.count()
+            item.avatar = item.author.avatar
+        for item in con_wp:
+            item.like = item.likes.count()
+            item.avatar = item.author.avatar
         return render(request, 'writeup-detail.jade', {
             'username': username,
             'title': wp.title,
@@ -198,14 +217,17 @@ def detail(request, pk):
             'author': wp.author.username,
             'authorid': wp.author.pk,
             'avatar': user.avatar,
-            'like': wp.likes.count(),
-            'star': wp.stars.count(),
+            'likes': wp.likes.count(),
+            'stars': wp.stars.count(),
             'comments': comments,
             'my_wp': my_wp,
-            're_wp': re_wp
+            're_wp': re_wp,
+            'con_wp': con_wp,
+            'like': 1 if user in wp.likes.all() else 0,
+            'star': 1 if user in wp.stars.all() else 0,
+            'pk': wp.pk
         })
-    # except:
-    else:
+    except:
         return render(request, '404.jade')
 
 
@@ -213,8 +235,7 @@ def comment(request):
     if request.is_ajax:
         cf = CommentForm(request.POST)
         if cf.is_valid():
-            # try:
-            if True:
+            try:
                 comment = Comment.objects.create(
                     author=Person.objects.get(pk=request.session['uid']),
                     writeup=Writeup.objects.get(pk=cf.cleaned_data['writeup']),
@@ -226,7 +247,6 @@ def comment(request):
                     comment.reply = Person.objects.get(pk=reply)
                     comment.save()
                 return OKAY
-            # except:
-            else:
+            except:
                 return FAIL
     return ERROR

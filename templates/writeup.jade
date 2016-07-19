@@ -35,13 +35,13 @@ mixin mineList(wp, pk)
 
 mixin starredList(wp, pk)
   li.media(style='margin-bottom: 25px;')
-    a.pull-right.btn.btn-default(href='#{pk}/unstar/')
+    a.pull-right.btn.btn-default(href='#{pk}/star/')
       i.fa.fa-star-o
       | &nbsp;Unstar
     .media-body
       h4.media-heading
         a(href=pk)= wp.title
-        span.text-muted &nbsp;&nbsp;#{wp.author}
+        span.text-muted &nbsp;&nbsp;#{wp.writer}
       p #{wp.solve},&nbsp;&nbsp;#{wp.time}
       p #[i.fa.fa-comments-o]&nbsp;#{wp.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wp.like}
 

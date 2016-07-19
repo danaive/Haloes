@@ -3,8 +3,9 @@
   $(function() {
     var editor, toolbar;
     $('a[href$="writeup/"]').addClass('current');
+    $('[data-toggle="tooltip"]').tooltip();
     $('#writeupHolder').html($('#writeupHolder').text());
-    toolbar = ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown'];
+    toolbar = ['bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr'];
     Simditor.locale = 'en-US';
     editor = new Simditor({
       textarea: $('#editor'),
@@ -42,7 +43,8 @@
       $this.parent().append('<textarea style="display: none;"></textarea>');
       return window.editor2 = new Simditor({
         textarea: $this.siblings('textarea'),
-        toolbar: toolbar
+        toolbar: toolbar,
+        toolbarFloat: false
       });
     });
     $('button.cancel').on('click', function() {
@@ -70,6 +72,34 @@
           }
         });
       }
+    });
+    if ($('#likestar').data('like')) {
+      $('button[data-original-title="like"]').hide();
+    } else {
+      $('button[data-original-title="unlike"]').hide();
+    }
+    if ($('#likestar').data('star')) {
+      $('button[data-original-title="star"]').hide();
+    } else {
+      $('button[data-original-title="unstar"]').hide();
+    }
+    $('button[data-original-title="cancel"]').hide();
+    $('button[title]').on('click', function() {
+      var state;
+      state = $(this).attr('data-original-title');
+      $(this).attr('disabled', 'disabled');
+      return $.ajax({
+        url: (state.substr(-4)) + "/",
+        type: 'post',
+        dataType: 'json',
+        success: function(data) {
+          if (data.msg === 'okay') {
+            console.log('123');
+            $("button[data-original-title$='" + (state.substr(-4)) + "']").toggle();
+            return $('button[title]').removeAttr('disabled');
+          }
+        }
+      });
     });
     return stickFooter();
   });

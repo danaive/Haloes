@@ -19,13 +19,15 @@ mixin commentList(item, pk, avatar)
       button.btn.btn-xs.btn-link.submit(data-focus=pk, style='padding: 0px; display: none;') Submit
       button.btn.btn-xs.btn-link.cancel(style='display: none;') Cancel
 
-mixin writeupList(item, pk)
-  li
-    a(href='/writeup/detail/#{pk}/')= item.title
-    if item.like
-      p.pull-right
-        i.fa.fa-thumbs-o-up
-        | &nbsp;#{item.like}
+mixin writeupList(item, pk, avatar)
+  if item.like
+    span.badge.badge-default.pull-right
+      i.fa.fa-thumbs-o-up
+      | &nbsp;#{item.like}
+  img.img-circle(style='margin-right: 10px;',height='30px', width='30px', src='#{MEDIA_URL}#{avatar}',
+    data-toggle='tooltip', data-placement='left', title=item.author.username)
+  a(href='/writeup/#{pk}/')= item.title
+
 
 block container
   .row
@@ -34,6 +36,20 @@ block container
       h4.text-center: a(href='/person/#{authorid}')= author
       #writeupHolder(style='margin: 40px 0px;')
         !{content}
+      p#likestar.pull-right(data-like=like, data-star=star, data-pk=pk)
+        button.btn.btn-link(data-toggle='tooltip', data-placement='top', title='unlike')
+          i.fa.fa-lg.fa-thumbs-up
+        button.btn.btn-link(data-toggle='tooltip', data-placement='top', title='like')
+          i.fa.fa-lg.fa-thumbs-o-up
+        button.btn.btn-link(data-toggle='tooltip', data-placement='top', title='unstar')
+          i.fa.fa-lg.fa-star
+        button.btn.btn-link(data-toggle='tooltip', data-placement='top', title='star')
+          i.fa.fa-lg.fa-star-o
+        button.btn.btn-link(data-toggle='tooltip', data-placement='top', title='reply')
+          i.fa.fa-lg.fa-reply
+        button.btn.btn-link(style='display: none;', data-toggle='tooltip', data-placement='top', title='cancel')
+          i.fa.fa-lg.fa-times-circle
+      br
       hr
       .row
         .col-sm-10
@@ -43,17 +59,25 @@ block container
           button#submitBtn.btn.btn-sm.btn-block.btn-success.pull-right(style='margin-top: 15px;') Submit
       for item in comments
         +commentList(item, item.pk, item.avatar)
-    .col-md-3
-      if my_wp
-        h4 #{author}'s writeup
-        ul
-          for item in my_wp
-            +writeupList(item, item.pk)
-      if re_wp
-        h4 writeup to this challenge
-        ul
-          for item in re_wp
-            +writeupList(item, item.pk)
+    if re_wp or con_wp or my_wp
+      .col-md-3
+        .panel.panel-info
+          .panel-heading
+            h3.panel-title Relevant Writeups
+          .panel-body
+            ul(style='padding-left: 20px;')
+              if re_wp
+                li: h4 to this challenge
+                for item in re_wp
+                  +writeupList(item, item.pk, item.avatar)
+              if con_wp
+                li: h4 to this contest
+                for item in con_wp
+                  +writeupList(item, item.pk, item.avatar)
+              if my_wp
+                li: h4 by this author
+                for item in my_wp
+                  +writeupList(item, item.pk, item.avatar)
 
 
 block script
