@@ -165,6 +165,11 @@ append script
   script(src='{% static "assets/plugins/ajax-file-upload.js" %}')
   script(src='{% static "assets/plugins/bootstrap-datetimepicker.min.js" %}')
   script(src='{% static "build/group.js" %}')
+
+
+
+append head
+  link(rel='stylesheet', href='{% static "assets/plugins/bootstrap-datetimepicker.min.css" %}')
   style.
     input.task{
       border: 0px solid #fff;
@@ -185,7 +190,3 @@ append script
     td.day, th.dow, th.prev i, th.next i, th.switch{
       color: #ccc;
     }
-
-
-append head
-  link(rel='stylesheet', href='{% static "assets/plugins/bootstrap-datetimepicker.min.css" %}')

@@ -7,6 +7,7 @@ from person.models import Person
 from challenge.models import *
 from news.views import submit_news
 from .forms import *
+from datetime import timedelta
 import json
 
 
@@ -173,17 +174,59 @@ def detail(request, pk):
     else:
         user = None
     username = user.username if user else None
-    try:
+    # try:
+    if True:
         wp = Writeup.objects.get(pk=int(pk))
+        comments = Comment.objects.filter(writeup=wp).order_by('-time')
+        for item in comments:
+            item.avatar = item.author.avatar
+            item.writer = item.author.username
+            if item.reply:
+                item.recver = item.reply.username
+            item.pk = item.author.pk
+            item.timex = (item.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S')
+        my_wp = Writeup.objects.filter(author=wp.author).exclude(pk=wp.pk)
+        re_wp = Writeup.objects.filter(challenge=wp.challenge).exclude(pk=wp.pk)
+        for item in my_wp:
+            item.like = item.likes.count()
+        for item in re_wp:
+            item.like = item.likes.count()
         return render(request, 'writeup-detail.jade', {
             'username': username,
             'title': wp.title,
             'content': wp.content,
             'author': wp.author.username,
             'authorid': wp.author.pk,
+            'avatar': user.avatar,
             'like': wp.likes.count(),
-            'star': wp.likes.count(),
-            'comments': []
+            'star': wp.stars.count(),
+            'comments': comments,
+            'my_wp': my_wp,
+            're_wp': re_wp
         })
-    except:
+    # except:
+    else:
         return render(request, '404.jade')
+
+
+def comment(request):
+    if request.is_ajax:
+        cf = CommentForm(request.POST)
+        if cf.is_valid():
+            # try:
+            if True:
+                comment = Comment.objects.create(
+                    author=Person.objects.get(pk=request.session['uid']),
+                    writeup=Writeup.objects.get(pk=cf.cleaned_data['writeup']),
+                    content=cf.cleaned_data['content']
+                )
+                reply = cf.cleaned_data['reply']
+
+                if reply:
+                    comment.reply = Person.objects.get(pk=reply)
+                    comment.save()
+                return OKAY
+            # except:
+            else:
+                return FAIL
+    return ERROR

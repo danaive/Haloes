@@ -10,6 +10,26 @@
       toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown'],
       toolbarFloatOffset: $('nav').height()
     });
+    $('p.marked').each(function() {
+      return $(this).html($(this).text());
+    });
+    $('#submitBtn').on('click', function() {
+      return $.ajax({
+        url: '/writeup/comment/',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          content: editor.getValue(),
+          writeup: 2,
+          reply: 2
+        },
+        success: function(data) {
+          if (data.msg === 'okay') {
+            return alert('okay');
+          }
+        }
+      });
+    });
     return stickFooter();
   });
 

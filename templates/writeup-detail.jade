@@ -1,27 +1,58 @@
 extends frame
 {% load staticfiles %}
 
-mixin commentList(author, pk, avatar)
+mixin commentList(item, pk, avatar)
   .row
-    .col-sm-3
-      img.img-circle(src='#{MEDIA_URL}#{avatar}')
-    .col-sm-9
+    .col-sm-2
+      img.img-circle(style='margin-top: 40px; margin-left: 30px;',
+        height='80px', width='80px', src='#{MEDIA_URL}#{avatar}')
+    .col-sm-10
+      hr
+      h5.text-muted
+        a(href='/person/#{pk}/')= item.writer
+        if item.recver
+          i.fa.fa-caret-right(style='margin: 0px 20px;')
+          | #{item.recver}
+        small.pull-right(style='color: #999; margin: 0px 30px;')= item.timex
+      p.marked(style='margin-bottom: 15px;')= item.content
+      button.btn.btn-xs.btn-link(data-focus=pk, style='padding: 0px;') Reply
+      textarea(style='display: none;')
 
-
+mixin writeupList(item, pk)
+  li
+    a(href='/writeup/detail/#{pk}/')= item.title
+    if item.like
+      p.pull-right
+        i.fa.fa-thumbs-o-up
+        | &nbsp;#{item.like}
 
 block container
   .row
-    .col-md-9
+    .col-md-9(style='margin-bottom: 40px;')
       h1.text-center(style='margin-top: 0px;')= title
       h4.text-center: a(href='/person/#{authorid}')= author
-      #writeupHolder(style='margin-top: 40px; min-height: 300px;')
+      #writeupHolder(style='margin: 40px 0px;')
         !{content}
-      textarea#editor(autofocus)
+      hr
+      .row
+        .col-sm-10
+          textarea#editor(autofocus)
+        .col-sm-2.text-center
+          img.img-circle(height='100px', width='100px', src='#{MEDIA_URL}#{avatar}')
+          button#submitBtn.btn.btn-sm.btn-block.btn-success.pull-right(style='margin-top: 15px;') Submit
       for item in comments
         +commentList(item, item.pk, item.avatar)
     .col-md-3
-      h4 #{author}'s writeup
-      h4 writeup to this challenge
+      if my_wp
+        h4 #{author}'s writeup
+        ul
+          for item in my_wp
+            +writeupList(item, item.pk)
+      if re_wp
+        h4 writeup to this challenge
+        ul
+          for item in re_wp
+            +writeupList(item, item.pk)
 
 
 block script
@@ -40,3 +71,10 @@ block script
 append head
   link(rel='stylesheet', href='{% static "assets/simditor/styles/simditor.css" %}')
   link(rel='stylesheet', href='{% static "assets/simditor/markdown/simditor-markdown.css" %}')
+  style.
+    .simditor .simditor-wrapper > textarea {
+      min-height: 100px;
+    }
+    .simditor .simditor-body {
+      min-height: 100px;
+    }

@@ -14,3 +14,9 @@ class WriteupForm(forms.Form):
     title = forms.CharField()
     challenge = forms.IntegerField()
     content = forms.CharField()
+
+
+class CommentForm(forms.Form):
+    writeup = forms.IntegerField()
+    reply = forms.IntegerField()
+    content = forms.CharField()
