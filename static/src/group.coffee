@@ -49,19 +49,58 @@ $ ->
       )
 
 
-  $('#deadline').datetimepicker(
+  $('#deadline').datetimepicker
     format: 'yyyy-mm-dd'
     autoclose: true
     minView: 2
     maxView: 2
-  ).on 'changeDate', (ev) ->
-    console.log ev.date
+
 
   $('a[href^="#assign-"]').on 'click', ->
-    pk = ($(this).attr 'href').substr 8
-    name = $(this).text()
+    pk = ($(@).attr 'href').substr 8
+    name = $(@).text()
     $('#assign').attr 'data-content', pk
     $('#assign').text name
+
+  $('#newTaskBtn').on 'click', ->
+    $('#taskContent').val ''
+    $('#deadline').val ''
+    $('#assign').text 'Unassigned'
+    $('#assign').attr 'data-content', 0
+    $('#newTask').fadeToggle()
+
+  $('#taskAssign').on 'click', ->
+    if $('#taskContent').val()
+      data =
+        content: $('#taskContent').val()
+        assign: $('#assign').data 'content'
+      if $('#deadline').val()
+        data.deadline = $('#deadline').val()
+      $.ajax
+        url: 'newTask/'
+        type: 'post'
+        dataType: 'json'
+        data: data
+        success: (data) ->
+          if data.msg == 'okay'
+            console.log data.msg
+
+  $('#taskCancel').on 'click', ->
+    $('#newTask').fadeOut()
+
+  $('ul.task').hover(
+    ->
+      $(@).children().last().fadeIn 'fast'
+    ->
+      $(@).children().last().fadeOut 'fast'
+  )
+
+  $('a.doneTask').hover(
+    ->
+      $(@).find('i.fa-check').fadeIn 'fast'
+    ->
+      $(@).find('i.fa-check').fadeOut 'fast'
+  )
 
   stickFooter()
 

@@ -71,8 +71,6 @@
       autoclose: true,
       minView: 2,
       maxView: 2
-    }).on('changeDate', function(ev) {
-      return console.log(ev.date);
     });
     $('a[href^="#assign-"]').on('click', function() {
       var name, pk;
@@ -80,6 +78,49 @@
       name = $(this).text();
       $('#assign').attr('data-content', pk);
       return $('#assign').text(name);
+    });
+    $('#newTaskBtn').on('click', function() {
+      $('#taskContent').val('');
+      $('#deadline').val('');
+      $('#assign').text('Unassigned');
+      $('#assign').attr('data-content', 0);
+      return $('#newTask').fadeToggle();
+    });
+    $('#taskAssign').on('click', function() {
+      var data;
+      if ($('#taskContent').val()) {
+        data = {
+          content: $('#taskContent').val(),
+          assign: $('#assign').data('content')
+        };
+        if ($('#deadline').val()) {
+          data.deadline = $('#deadline').val();
+        }
+        return $.ajax({
+          url: 'newTask/',
+          type: 'post',
+          dataType: 'json',
+          data: data,
+          success: function(data) {
+            if (data.msg === 'okay') {
+              return console.log(data.msg);
+            }
+          }
+        });
+      }
+    });
+    $('#taskCancel').on('click', function() {
+      return $('#newTask').fadeOut();
+    });
+    $('ul.task').hover(function() {
+      return $(this).children().last().fadeIn('fast');
+    }, function() {
+      return $(this).children().last().fadeOut('fast');
+    });
+    $('a.doneTask').hover(function() {
+      return $(this).find('i.fa-check').fadeIn('fast');
+    }, function() {
+      return $(this).find('i.fa-check').fadeOut('fast');
     });
     return stickFooter();
   });

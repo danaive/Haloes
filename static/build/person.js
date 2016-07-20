@@ -52,9 +52,7 @@
       $('#followBtn').show();
     }
     $('[id$="followBtn"]').on('click', function() {
-      var $this;
-      $this = $(this);
-      $this.hide();
+      $(this).hide();
       return $.ajax({
         url: '/person/follow/',
         type: 'post',
@@ -62,15 +60,17 @@
         data: {
           username: $('#nickname').text()
         },
-        success: function(data) {
-          if (data.msg === 'okay') {
-            if ($this.attr('id').length === 9) {
-              return $('#unfollowBtn').fadeIn();
-            } else {
-              return $('#followBtn').fadeIn();
+        success: (function(_this) {
+          return function(data) {
+            if (data.msg === 'okay') {
+              if ($(_this).attr('id').length === 9) {
+                return $('#unfollowBtn').fadeIn();
+              } else {
+                return $('#followBtn').fadeIn();
+              }
             }
-          }
-        }
+          };
+        })(this)
       });
     });
     score = [];

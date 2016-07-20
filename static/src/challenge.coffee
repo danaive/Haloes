@@ -10,51 +10,49 @@ $ ->
     size: 'mini'
     onColor: 'info'
     onSwitchChange: (event, state) ->
-      $(this).bootstrapSwitch 'toggleIndeterminate'
-      $this = $(this)
+      $(@).bootstrapSwitch 'toggleIndeterminate'
       $.ajax
         url: 'switch/'
         type: 'post'
         dataType: 'json'
-        data: {
+        data:
           state: state,
-          pk: $this.data 'pk'
-        }
-        success: (data) ->
+          pk: $(@).data 'pk'
+        success: (data) =>
           if data.msg == 'okay'
-            $this.bootstrapSwitch 'state', state, true
+            $(@).bootstrapSwitch 'state', state, true
           else
-            $this.bootstrapSwitch 'state', !state, true
+            $(@).bootstrapSwitch 'state', !state, true
 
   PAGE_ITEM_COUNT = 15
 
   total = 0
   $('tr.ALL').each ->
-    if ($(this).data 'state') == 0
-      $(this).addClass 'Attempted'
+    if ($(@).data 'state') == 0
+      $(@).addClass 'Attempted'
     total += 1
     if total <= PAGE_ITEM_COUNT
-      $(this).show()
+      $(@).show()
 
   stickFooter()
 
   $('[id^="btn"]').on 'click', ->
     $('tr.ALL').hide()
     $('#cont').attr 'data-page', 0
-    cate = ($(this).attr 'id').substr 3
+    cate = ($(@).attr 'id').substr 3
     $('#cont').attr 'data-cate', cate
     cnt = 0
     $("tr.ALL.#{cate}").each ->
       cnt += 1
       if cnt <= PAGE_ITEM_COUNT
-        $(this).show()
+        $(@).show()
     stickFooter()
 
   $('[id^="pager"]').on 'click', ->
     total = $('tr.ALL').length
     page = $('#cont').data 'page'
     cate = $('#cont').data 'cate'
-    if 'Next' == ($(this).attr 'id').substr 5
+    if 'Next' == ($(@).attr 'id').substr 5
       if page + PAGE_ITEM_COUNT >= total
         return
       page += PAGE_ITEM_COUNT
@@ -68,25 +66,24 @@ $ ->
     $("tr.ALL.#{cate}").each ->
       cnt += 1
       if page < cnt <= page + PAGE_ITEM_COUNT
-        $(this).show()
+        $(@).show()
     stickFooter()
 
   $('i.fa-lightbulb-o').on 'click', ->
-    pk = $(this).data 'pk'
-    $this = $(this)
+    pk = $(@).data 'pk'
     $.ajax
       url: 'drop-attempt/'
       type: 'post'
       dataType: 'json'
       data:
         pk: pk
-      success: (data) ->
+      success: (data) =>
         if data.msg == 'okay'
-          $this.hide()
+          $(@).hide()
 
   $('a[href^="#mod-"]').on 'click', ->
-    pk = ($(this).attr 'href').substr 5
-    $('#modalTitle').text $(this).text()
+    pk = ($(@).attr 'href').substr 5
+    $('#modalTitle').text $(@).text()
     $('#submit').attr 'data-pk', pk
     $('#flagHolder').show()
     $('.alert').hide()
@@ -104,7 +101,7 @@ $ ->
           return false
 
   $('#submit').on 'click', ->
-    pk = $(this).data 'pk'
+    pk = $(@).data 'pk'
     $.ajax
       url: 'submit/'
       type: 'post'

@@ -162,6 +162,9 @@ def index(request):
             'groups': groups,
             'username': username,
         })
+    tasks = user.group.tasks.all().order_by('-pk')
+    for item in tasks:
+        item.assign = item.assign_to.username if item.assign_to else ''
     return render(request, 'group.jade', {
         'username': username,
         'groupname': user.group.name,
@@ -169,8 +172,9 @@ def index(request):
         'code': user.group.code,
         'members': user.group.members.all(),
         'writeups': [],
-        # 'members': [],
-        'newmembers': []
+        'newmembers': [],
+        'tasking': filter(lambda x: not x.done, tasks),
+        'tasked': filter(lambda x: x.done, tasks)
     })
 
 
@@ -243,7 +247,7 @@ def new_task(request):
         tf = TaskForm(request.POST)
         if tf.is_valid():
             try:
-                pk = tf.cleaned_data['assigned_to']
+                pk = tf.cleaned_data['assign']
                 assigned_to = Person.objects.get(pk=pk) if pk else None
                 deadline = tf.cleaned_data['deadline']
                 task = Task.objects.create(
@@ -251,7 +255,7 @@ def new_task(request):
                     content=tf.cleaned_data['content'],
                 )
                 if assigned_to:
-                    task.assigned_to = assigned_to
+                    task.assign_to = assigned_to
                 if deadline:
                     task.deadline = deadline
                 task.save()

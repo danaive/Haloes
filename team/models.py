@@ -67,4 +67,4 @@ class Task(models.Model):
     deadline = models.DateField(null=True)
     content = models.CharField(max_length=100)
     assign_to = models.ForeignKey(Person, null=True, related_name='assigned_tasks')
-    state = models.BooleanField(default=False)
+    done = models.BooleanField(default=False)

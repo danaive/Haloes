@@ -23,7 +23,7 @@
           dataType: 'json',
           data: {
             content: editor.getValue(),
-            writeup: 2,
+            writeup: $('#likestar').data('pk'),
             reply: 0
           },
           success: function(data) {
@@ -35,14 +35,12 @@
       }
     });
     $('button.reply').on('click', function() {
-      var $this;
       try {
         editor2.destroy();
       } catch (undefined) {}
-      $this = $(this).hide().siblings('button').show();
-      $this.parent().append('<textarea style="display: none;"></textarea>');
+      $(this).parent().append('<textarea style="display: none;"></textarea>');
       return window.editor2 = new Simditor({
-        textarea: $this.siblings('textarea'),
+        textarea: $(this).siblings('textarea'),
         toolbar: toolbar,
         toolbarFloat: false
       });
@@ -62,7 +60,7 @@
           dataType: 'json',
           data: {
             content: editor2.getValue(),
-            writeup: 2,
+            writeup: $('#likestar').data('pk'),
             reply: pk
           },
           success: function(data) {
@@ -94,7 +92,6 @@
         dataType: 'json',
         success: function(data) {
           if (data.msg === 'okay') {
-            console.log('123');
             $("button[data-original-title$='" + (state.substr(-4)) + "']").toggle();
             return $('button[title]').removeAttr('disabled');
           }

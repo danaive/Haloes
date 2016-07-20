@@ -4,8 +4,8 @@ $ ->
   stickFooter()
 
   $('a[href^="#mod-"]').on 'click', ->
-    pk = ($(this).attr 'href').substr 5
-    $('#modalTitle').text $(this).text()
+    pk = ($(@).attr 'href').substr 5
+    $('#modalTitle').text $(@).text()
     $('#submit').data 'pk', pk
     $('#flagHolder').show()
     $('.alert').hide()
@@ -23,7 +23,7 @@ $ ->
           return false
 
   $('#submit').on 'click', ->
-    pk = $(this).data 'pk'
+    pk = $(@).data 'pk'
     $.ajax
       url: '/contest/submit/'
       type: 'post'

@@ -16,5 +16,5 @@ class GroupForm(forms.Form):
 
 class TaskForm(forms.Form):
     content = forms.CharField(max_length=100)
-    deadline = forms.DateField(input_formats='%Y-%m-%d', required=False)
-    assigned_to = forms.IntegerField(required=False)
+    deadline = forms.DateField(required=False)
+    assign = forms.IntegerField(required=False)

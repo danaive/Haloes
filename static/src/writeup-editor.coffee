@@ -31,18 +31,18 @@ $ ->
           $li.find('a').attr 'data-name', $('#imageName').val()
           $('[data-toggle="tooltip"]').tooltip()
           $('a.btn.btn-xs.btn-link').on 'click', ->
-            content = '![' + ($(this).data 'name') + '](' + ($(this).data 'path') + ')'
+            content = '![' + ($(@).data 'name') + '](' + ($(@).data 'path') + ')'
             insertAtCursor $('textarea')[0], content
           window.setTimeout "$('#uploadSuccess').fadeOut()", 1000
 
   $('#submitBtn').on 'click', ->
-    if $(this).data 'state'
+    if $(@).data 'state'
       challenge = $('#challengeHolder').text()
     else
       challenge = $('#CList').val()
     console.log challenge
     if $('#title').val() and challenge
-      $this = $(this).attr 'disabled', 'disabled'
+      $(@).attr 'disabled', 'disabled'
       $('i.fa-spiner').show()
       $.ajax
         url: '/writeup/submit/'
@@ -52,9 +52,9 @@ $ ->
           title: $('#title').val()
           challenge: challenge
           content: editor.getValue()
-        success: (data) ->
+        success: (data) =>
           $('i.fa-spiner').hide()
-          $this.removeAttr 'disabled'
+          $(@).removeAttr 'disabled'
           if data.msg == 'okay'
             $('#submitSuccess').fadeIn()
             window.setTimeout "location.href='/writeup/#{data.pk}/'", 1000
@@ -64,7 +64,7 @@ $ ->
 
   $('#SList').on 'change', ->
     $('#CList').empty()
-    val = $(this).val()
+    val = $(@).val()
     $.ajax
       url: '/writeup/getChallenges/'
       type: 'post'

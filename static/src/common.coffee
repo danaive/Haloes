@@ -10,7 +10,7 @@ $ ->
     /^(GET|HEAD|OPTIONS|TRACE)$/.test(method)
   $.ajaxSetup
     beforeSend: (xhr, settings) ->
-      unless csrfSafeMethod(settings.type) or this.crossDomain
+      unless csrfSafeMethod(settings.type) or @.crossDomain
         xhr.setRequestHeader 'X-CSRFToken', csrftoken
 
   $('a[href="#signIn"]').on 'click', ->

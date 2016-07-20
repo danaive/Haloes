@@ -45,17 +45,16 @@ $ ->
   else
     $('#followBtn').show()
   $('[id$="followBtn"]').on 'click', ->
-    $this = $(this)
-    $this.hide()
+    $(@).hide()
     $.ajax
       url: '/person/follow/'
       type: 'post'
       dataType: 'json'
       data:
         username: $('#nickname').text()
-      success: (data) ->
+      success: (data) =>
         if data.msg == 'okay'
-          if $this.attr('id').length == 9
+          if $(@).attr('id').length == 9
             $('#unfollowBtn').fadeIn()
           else
             $('#followBtn').fadeIn()

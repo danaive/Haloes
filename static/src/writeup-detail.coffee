@@ -12,7 +12,7 @@ $ ->
     toolbarFloat: false
 
   $('p.marked').each ->
-    $(this).html $(this).text()
+    $(@).html $(@).text()
 
   $('#submitBtn').on 'click', ->
     if editor.getValue()
@@ -22,7 +22,7 @@ $ ->
         dataType: 'json'
         data:
           content: editor.getValue()
-          writeup: 2
+          writeup: $('#likestar').data 'pk'
           reply: 0
         success: (data) ->
           if data.msg == 'okay'
@@ -30,20 +30,19 @@ $ ->
 
   $('button.reply').on 'click', ->
     try editor2.destroy()
-    $this = $(this).hide().siblings('button').show()
-    $this.parent().append '<textarea style="display: none;"></textarea>'
+    $(@).parent().append '<textarea style="display: none;"></textarea>'
     window.editor2 = new Simditor
-      textarea: $this.siblings('textarea')
+      textarea: $(@).siblings('textarea')
       toolbar: toolbar
       toolbarFloat: false
 
   $('button.cancel').on 'click', ->
     editor2.destroy()
-    $(this).hide().siblings('button').hide()
-    $(this).siblings('button.reply').show()
+    $(@).hide().siblings('button').hide()
+    $(@).siblings('button.reply').show()
 
   $('button.submit').on 'click', ->
-    pk = $(this).data 'focus'
+    pk = $(@).data 'focus'
     if editor2.getValue()
       $.ajax
         url: '/writeup/comment/'
@@ -51,7 +50,7 @@ $ ->
         dataType: 'json'
         data:
           content: editor2.getValue()
-          writeup: 2
+          writeup: $('#likestar').data 'pk'
           reply: pk
         success: (data) ->
           if data.msg == 'okay'
@@ -68,15 +67,14 @@ $ ->
   $('button[data-original-title="cancel"]').hide()
 
   $('button[title]').on 'click', ->
-    state = $(this).attr 'data-original-title'
-    $(this).attr 'disabled', 'disabled'
+    state = $(@).attr 'data-original-title'
+    $(@).attr 'disabled', 'disabled'
     $.ajax
       url: "#{state.substr(-4)}/"
       type: 'post'
       dataType: 'json'
       success: (data) ->
         if data.msg == 'okay'
-          console.log '123'
           $("button[data-original-title$='#{state.substr(-4)}']").toggle()
           $('button[title]').removeAttr 'disabled'
 

@@ -36,6 +36,21 @@ mixin chartLabel(label, color)
     li(style='width: 10px; height: 10px; background-color: #{color}')
     li= label
 
+mixin taskList(item, pk)
+  ul.task.list-inline(style='margin-bottom: 0px;')
+    li: a.doneTask.btn.btn-link(data-pk=pk, style='padding-right: 0px;')
+      span.fa-stack
+        i.fa.fa-square-o.fa-stack-2x
+        i.fa.fa-check.fa-stack-1x(style='display: none;')
+    li= item.content
+    if item.deadline
+      li: span.badge.badge-warning= item.deadline
+    li: span.badge.badge-primary= item.assign
+    li(style='margin-left: 40px; display: none;')
+      a.btn.btn-link(style='padding-right: 0px;'): i.fa.fa-pencil
+      a.btn.btn-link: i.fa.fa-times
+
+
 block container
   .row
     .col-md-8
@@ -53,8 +68,9 @@ block container
       .row
         .col-md-12
           button#newTaskBtn.btn.btn-info.pull-right New Task
-          h3(style='margin-top: 0px;') Tasks
-          ul.list-inline
+          h3(style='margin-top: 0px; margin-bottom: 25px;') Tasks
+
+          ul#newTask.list-inline(style='margin: 0px 10px; display: none;')
             li: input#taskContent.task(placeholder='New Task')
             li: .btn-group
               button.btn.btn-xs.btn-warning: i.fa.fa-calendar
@@ -71,13 +87,16 @@ block container
                   li.divider
                   li: a(href='#assign-0') Unassigned
             li: .btn-group
-              button.btn.btn-xs.btn-success: i.fa.fa-check
-              button.btn.btn-xs.btn-danger: i.fa.fa-times
+              button#taskAssign.btn.btn-xs.btn-success: i.fa.fa-check
+              button#taskCancel.btn.btn-xs.btn-danger: i.fa.fa-times
+
+          for item in tasking
+            +taskList(item, item.pk)
       hr
       .row
         .col-md-12
           button#newDiscBtn.btn.btn-info.pull-right New Discussion
-          h3(style='margin-top: 0px;') Discussions
+          h3(style='margin-top: 0px; margin-bottom: 25px;') Discussions
       hr
       .row
         .col-md-4

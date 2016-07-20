@@ -8,24 +8,24 @@
       size: 'mini',
       onColor: 'info',
       onSwitchChange: function(event, state) {
-        var $this;
         $(this).bootstrapSwitch('toggleIndeterminate');
-        $this = $(this);
         return $.ajax({
           url: 'switch/',
           type: 'post',
           dataType: 'json',
           data: {
             state: state,
-            pk: $this.data('pk')
+            pk: $(this).data('pk')
           },
-          success: function(data) {
-            if (data.msg === 'okay') {
-              return $this.bootstrapSwitch('state', state, true);
-            } else {
-              return $this.bootstrapSwitch('state', !state, true);
-            }
-          }
+          success: (function(_this) {
+            return function(data) {
+              if (data.msg === 'okay') {
+                return $(_this).bootstrapSwitch('state', state, true);
+              } else {
+                return $(_this).bootstrapSwitch('state', !state, true);
+              }
+            };
+          })(this)
         });
       }
     });
@@ -84,9 +84,8 @@
       return stickFooter();
     });
     $('i.fa-lightbulb-o').on('click', function() {
-      var $this, pk;
+      var pk;
       pk = $(this).data('pk');
-      $this = $(this);
       return $.ajax({
         url: 'drop-attempt/',
         type: 'post',
@@ -94,11 +93,13 @@
         data: {
           pk: pk
         },
-        success: function(data) {
-          if (data.msg === 'okay') {
-            return $this.hide();
-          }
-        }
+        success: (function(_this) {
+          return function(data) {
+            if (data.msg === 'okay') {
+              return $(_this).hide();
+            }
+          };
+        })(this)
       });
     });
     $('a[href^="#mod-"]').on('click', function() {

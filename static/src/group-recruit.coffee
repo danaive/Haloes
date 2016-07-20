@@ -36,19 +36,18 @@ $ ->
             $('#createFail').fadeIn()
 
   $('btn[id^="apply-"]').on 'click', ->
-    pk = ($(this).attr 'id').substr 6
-    $this = $(this)
+    pk = ($(@).attr 'id').substr 6
     $.ajax
       url: 'apply/'
       type: 'post'
       dataType: 'json'
       data:
         pk: pk
-      success: (data) ->
+      success: (data) =>
         if data.msg == 'okay'
           $('#applySuccess').fadeIn()
           $('btn[id^="apply-"]').hide()
-          $this.next().show()
+          $(@).next().show()
           window.setTimeout "$('#applySuccess').fadeOut()", 1000
         else
           $('#applyFail').fadeIn()

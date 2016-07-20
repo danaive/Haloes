@@ -44,7 +44,7 @@
       });
     });
     $('#submitBtn').on('click', function() {
-      var $this, challenge;
+      var challenge;
       if ($(this).data('state')) {
         challenge = $('#challengeHolder').text();
       } else {
@@ -52,7 +52,7 @@
       }
       console.log(challenge);
       if ($('#title').val() && challenge) {
-        $this = $(this).attr('disabled', 'disabled');
+        $(this).attr('disabled', 'disabled');
         $('i.fa-spiner').show();
         return $.ajax({
           url: '/writeup/submit/',
@@ -63,17 +63,19 @@
             challenge: challenge,
             content: editor.getValue()
           },
-          success: function(data) {
-            $('i.fa-spiner').hide();
-            $this.removeAttr('disabled');
-            if (data.msg === 'okay') {
-              $('#submitSuccess').fadeIn();
-              return window.setTimeout("location.href='/writeup/" + data.pk + "/'", 1000);
-            } else {
-              $('#submitFail').fadeIn();
-              return window.setTimeout("$('#submitFail').fadeOut()", 1000);
-            }
-          }
+          success: (function(_this) {
+            return function(data) {
+              $('i.fa-spiner').hide();
+              $(_this).removeAttr('disabled');
+              if (data.msg === 'okay') {
+                $('#submitSuccess').fadeIn();
+                return window.setTimeout("location.href='/writeup/" + data.pk + "/'", 1000);
+              } else {
+                $('#submitFail').fadeIn();
+                return window.setTimeout("$('#submitFail').fadeOut()", 1000);
+              }
+            };
+          })(this)
         });
       }
     });

@@ -45,9 +45,8 @@
       }
     });
     $('btn[id^="apply-"]').on('click', function() {
-      var $this, pk;
+      var pk;
       pk = ($(this).attr('id')).substr(6);
-      $this = $(this);
       return $.ajax({
         url: 'apply/',
         type: 'post',
@@ -55,17 +54,19 @@
         data: {
           pk: pk
         },
-        success: function(data) {
-          if (data.msg === 'okay') {
-            $('#applySuccess').fadeIn();
-            $('btn[id^="apply-"]').hide();
-            $this.next().show();
-            return window.setTimeout("$('#applySuccess').fadeOut()", 1000);
-          } else {
-            $('#applyFail').fadeIn();
-            return window.setTimeout("$('#applyFail').fadeOut()", 1000);
-          }
-        }
+        success: (function(_this) {
+          return function(data) {
+            if (data.msg === 'okay') {
+              $('#applySuccess').fadeIn();
+              $('btn[id^="apply-"]').hide();
+              $(_this).next().show();
+              return window.setTimeout("$('#applySuccess').fadeOut()", 1000);
+            } else {
+              $('#applyFail').fadeIn();
+              return window.setTimeout("$('#applyFail').fadeOut()", 1000);
+            }
+          };
+        })(this)
       });
     });
     return $('btn.withdraw').on('click', function() {
