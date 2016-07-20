@@ -38,7 +38,7 @@ mixin chartLabel(label, color)
 
 mixin taskList(item, pk)
   ul.task.list-inline(style='margin-bottom: 0px;')
-    li: a.doneTask.btn.btn-link(data-pk=pk, style='padding-right: 0px;')
+    li.doneTask(data-pk=pk): a.btn.btn-link(style='padding-right: 0px;')
       span.fa-stack
         i.fa.fa-square-o.fa-stack-2x
         i.fa.fa-check.fa-stack-1x(style='display: none;')
@@ -47,8 +47,17 @@ mixin taskList(item, pk)
       li: span.badge.badge-warning= item.deadline
     li: span.badge.badge-primary= item.assign
     li(style='margin-left: 40px; display: none;')
-      a.btn.btn-link(style='padding-right: 0px;'): i.fa.fa-pencil
-      a.btn.btn-link: i.fa.fa-times
+      a.btn.btn-link(href='#clear-#{pk}'): i.fa.fa-times
+
+mixin doneList(item, pk)
+  .doneItem
+    ul.list-inline(style='margin-left: 15px;')
+      li.text-success: i.fa.fa-lg.fa-check-square-o
+      li= item.content
+    p.text-muted(style='margin: 15px 50px;')
+      | checked by #[span.text-warning= item.checker.username] at #[span.text-info= item.donetime]
+      span(style='margin-left: 20px; display: none;', data-toggle='tooltip', data-placement='right', title='clear')
+        a(href='#clear-#{pk}'): i.fa.fa-trash-o
 
 
 block container
@@ -83,15 +92,22 @@ block container
                   span.caret
                 ul.dropdown-menu
                   for item in members
-                    li: a(href='#assign-#{item.pk}')= item.username
+                    li: a.memberName(href='#')= item.username
                   li.divider
-                  li: a(href='#assign-0') Unassigned
+                  li: a(href='#') Unassigned
             li: .btn-group
               button#taskAssign.btn.btn-xs.btn-success: i.fa.fa-check
               button#taskCancel.btn.btn-xs.btn-danger: i.fa.fa-times
 
           for item in tasking
             +taskList(item, item.pk)
+          h6: a#comTask.btn.btn-link
+            | Completed Tasks&nbsp;
+            span: i.fa.fa-angle-double-down
+          #doneList(style='display: none;')
+            for item in tasked
+              +doneList(item, item.pk)
+
       hr
       .row
         .col-md-12

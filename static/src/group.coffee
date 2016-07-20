@@ -1,5 +1,6 @@
 $ ->
   $('a[href$="group/"]').addClass 'current'
+  $('[data-toggle="tooltip"]').tooltip()
   # charts
   score = []
   $.ajax
@@ -56,11 +57,8 @@ $ ->
     maxView: 2
 
 
-  $('a[href^="#assign-"]').on 'click', ->
-    pk = ($(@).attr 'href').substr 8
-    name = $(@).text()
-    $('#assign').attr 'data-content', pk
-    $('#assign').text name
+  $('a.memberName').on 'click', ->
+    $('#assign').text $(@).text()
 
   $('#newTaskBtn').on 'click', ->
     $('#taskContent').val ''
@@ -73,7 +71,7 @@ $ ->
     if $('#taskContent').val()
       data =
         content: $('#taskContent').val()
-        assign: $('#assign').data 'content'
+        assign: $('#assign').text()
       if $('#deadline').val()
         data.deadline = $('#deadline').val()
       $.ajax
@@ -83,24 +81,61 @@ $ ->
         data: data
         success: (data) ->
           if data.msg == 'okay'
-            console.log data.msg
+            location.href = ''
 
   $('#taskCancel').on 'click', ->
     $('#newTask').fadeOut()
 
   $('ul.task').hover(
-    ->
-      $(@).children().last().fadeIn 'fast'
-    ->
-      $(@).children().last().fadeOut 'fast'
+    -> $(@).children().last().fadeIn 'fast'
+    -> $(@).children().last().fadeOut 'fast'
   )
 
-  $('a.doneTask').hover(
-    ->
-      $(@).find('i.fa-check').fadeIn 'fast'
-    ->
-      $(@).find('i.fa-check').fadeOut 'fast'
+  $('li.doneTask').hover(
+    -> $(@).find('i.fa-check').fadeIn 'fast'
+    -> $(@).find('i.fa-check').fadeOut 'fast'
+  ).on 'click', ->
+    $.ajax
+      url: 'doTask/'
+      type: 'post'
+      dataType: 'json'
+      data:
+        pk: $(@).data 'pk'
+      success: (data) =>
+        if data.msg == 'okay'
+          $(@).parent().fadeOut()
+          $('#doneList').prepend "
+            <ul class='list-inline' style='margin-left: 15px;'>
+              <li class='text-success'><i class='fa fa-lg fa-check-square-o'></i></li>
+              <li>#{$(@).next().text()}</li>
+            </ul>
+            <p class='text-muted' style='margin: 15px 50px;'>
+              checked by <span class='text-warning'>you</span> just now
+            </p>
+            "
+
+  $('#comTask').on 'click', ->
+    $(@).find('i')
+      .toggleClass 'fa-angle-double-down'
+      .toggleClass 'fa-angle-double-up'
+    $('#doneList').fadeToggle()
+
+  $('.doneItem').hover(
+    -> $(@).find('span').last().fadeIn 'fast'
+    -> $(@).find('span').last().fadeOut 'fast'
   )
+
+  $('a[href^="#clear-"]').on 'click', ->
+    pk = $(@).attr('href').substr 7
+    $.ajax
+      url: 'clearTask/'
+      type: 'post'
+      dataType: 'json'
+      data:
+        pk: pk
+      success: (data) =>
+        if data.msg == 'okay'
+          $(@).parents('.doneItem').fadeOut().remove()
 
   stickFooter()
 

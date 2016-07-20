@@ -63,8 +63,9 @@ class Ranking(models.Model):
 
 class Task(models.Model):
     group = models.ForeignKey(Group, related_name='tasks')
-    datetime = models.DateTimeField(auto_now_add=True)
+    datetime = models.DateTimeField(auto_now=True)
     deadline = models.DateField(null=True)
     content = models.CharField(max_length=100)
     assign_to = models.ForeignKey(Person, null=True, related_name='assigned_tasks')
     done = models.BooleanField(default=False)
+    checker = models.ForeignKey(Person, null=True)

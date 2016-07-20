@@ -3,6 +3,7 @@
   $(function() {
     var score;
     $('a[href$="group/"]').addClass('current');
+    $('[data-toggle="tooltip"]').tooltip();
     score = [];
     $.ajax({
       url: '/person/get-score/',
@@ -72,12 +73,8 @@
       minView: 2,
       maxView: 2
     });
-    $('a[href^="#assign-"]').on('click', function() {
-      var name, pk;
-      pk = ($(this).attr('href')).substr(8);
-      name = $(this).text();
-      $('#assign').attr('data-content', pk);
-      return $('#assign').text(name);
+    $('a.memberName').on('click', function() {
+      return $('#assign').text($(this).text());
     });
     $('#newTaskBtn').on('click', function() {
       $('#taskContent').val('');
@@ -91,7 +88,7 @@
       if ($('#taskContent').val()) {
         data = {
           content: $('#taskContent').val(),
-          assign: $('#assign').data('content')
+          assign: $('#assign').text()
         };
         if ($('#deadline').val()) {
           data.deadline = $('#deadline').val();
@@ -103,7 +100,7 @@
           data: data,
           success: function(data) {
             if (data.msg === 'okay') {
-              return console.log(data.msg);
+              return location.href = '';
             }
           }
         });
@@ -117,10 +114,55 @@
     }, function() {
       return $(this).children().last().fadeOut('fast');
     });
-    $('a.doneTask').hover(function() {
+    $('li.doneTask').hover(function() {
       return $(this).find('i.fa-check').fadeIn('fast');
     }, function() {
       return $(this).find('i.fa-check').fadeOut('fast');
+    }).on('click', function() {
+      return $.ajax({
+        url: 'doTask/',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          pk: $(this).data('pk')
+        },
+        success: (function(_this) {
+          return function(data) {
+            if (data.msg === 'okay') {
+              $(_this).parent().fadeOut();
+              return $('#doneList').prepend("<ul class='list-inline' style='margin-left: 15px;'> <li class='text-success'><i class='fa fa-lg fa-check-square-o'></i></li> <li>" + ($(_this).next().text()) + "</li> </ul> <p class='text-muted' style='margin: 15px 50px;'> checked by <span class='text-warning'>you</span> just now </p>");
+            }
+          };
+        })(this)
+      });
+    });
+    $('#comTask').on('click', function() {
+      $(this).find('i').toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+      return $('#doneList').fadeToggle();
+    });
+    $('.doneItem').hover(function() {
+      return $(this).find('span').last().fadeIn('fast');
+    }, function() {
+      return $(this).find('span').last().fadeOut('fast');
+    });
+    $('a[href^="#clear-"]').on('click', function() {
+      var pk;
+      pk = $(this).attr('href').substr(7);
+      return $.ajax({
+        url: 'clearTask/',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          pk: pk
+        },
+        success: (function(_this) {
+          return function(data) {
+            if (data.msg === 'okay') {
+              return $(_this).parents('.doneItem').fadeOut().remove();
+            }
+          };
+        })(this)
+      });
     });
     return stickFooter();
   });

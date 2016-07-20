@@ -5,6 +5,7 @@ from .models import *
 from .forms import *
 from person.models import Person
 from news.views import group_contest_news
+from datetime import timedelta
 import json
 
 
@@ -165,6 +166,7 @@ def index(request):
     tasks = user.group.tasks.all().order_by('-pk')
     for item in tasks:
         item.assign = item.assign_to.username if item.assign_to else ''
+        item.donetime = (item.datetime + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M')
     return render(request, 'group.jade', {
         'username': username,
         'groupname': user.group.name,
@@ -247,8 +249,8 @@ def new_task(request):
         tf = TaskForm(request.POST)
         if tf.is_valid():
             try:
-                pk = tf.cleaned_data['assign']
-                assigned_to = Person.objects.get(pk=pk) if pk else None
+                name = tf.cleaned_data['assign']
+                assigned_to = Person.objects.get(username=name) if name else None
                 deadline = tf.cleaned_data['deadline']
                 task = Task.objects.create(
                     group=group,
@@ -260,6 +262,44 @@ def new_task(request):
                     task.deadline = deadline
                 task.save()
                 return OKAY
+            except:
+                return FAIL
+    return ERROR
+
+
+def do_task(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        group = user.group
+        tf = GroupForm(request.POST)
+        if tf.is_valid():
+            try:
+                pk = tf.cleaned_data['pk']
+                task = Task.objects.get(pk=pk)
+                if task.group == group and not task.done:
+                    task.done = True
+                    task.checker = user
+                    task.save()
+                    return OKAY
+                return FAIL
+            except:
+                return FAIL
+    return ERROR
+
+
+def clear_task(request):
+    if request.is_ajax:
+        user = Person.objects.get(pk=request.session['uid'])
+        group = user.group
+        tf = GroupForm(request.POST)
+        if tf.is_valid():
+            try:
+                pk = tf.cleaned_data['pk']
+                task = Task.objects.get(pk=pk)
+                if task.group == group:
+                    task.delete()
+                    return OKAY
+                return FAIL
             except:
                 return FAIL
     return ERROR
