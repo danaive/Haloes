@@ -14,6 +14,9 @@ $ ->
 
   #update info
   $('#updateBtn').on 'click', ->
+    $(@).find('i')
+      .toggleClass 'fa-angle-double-down'
+      .toggleClass 'fa-angle-double-up'
     $('.alert').hide()
     $('#updateForm').fadeToggle()
   $('#cancelBtn').on 'click', ->

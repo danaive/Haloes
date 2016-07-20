@@ -15,6 +15,7 @@
       });
     });
     $('#updateBtn').on('click', function() {
+      $(this).find('i').toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
       $('.alert').hide();
       return $('#updateForm').fadeToggle();
     });
