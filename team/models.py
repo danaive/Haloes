@@ -41,11 +41,6 @@ class Group(models.Model):
     score = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to=upload_to_group, default='avatar/group/default.gif')
     solved = models.ManyToManyField(Challenge)
-    pwn_list = models.ManyToManyField(Challenge, related_name='+')
-    reverse_list = models.ManyToManyField(Challenge, related_name='+')
-    web_list = models.ManyToManyField(Challenge, related_name='+')
-    crypto_list = models.ManyToManyField(Challenge, related_name='+')
-    misc_list = models.ManyToManyField(Challenge, related_name='+')
     code = models.CharField(max_length=50)
 
     def __unicode__(self):
@@ -69,3 +64,8 @@ class Task(models.Model):
     assign_to = models.ForeignKey(Person, null=True, related_name='assigned_tasks')
     done = models.BooleanField(default=False)
     checker = models.ForeignKey(Person, null=True)
+
+
+class GroupMaxScore(models.Model):
+    category = models.CharField(max_length=10)
+    score = models.PositiveIntegerField(default=0)

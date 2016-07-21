@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import *
 from person.models import *
+from team.models import GroupMaxScore
 from news.views import solve_news
 import json
 import zipfile
@@ -105,10 +106,20 @@ def submit(request):
                     submit__status=True,
                     category=challenge.category
                 ).aggregate(Sum('score'))['score__sum']
-                if maxsc > MaxScore.objects.get(category=challenge.category).score:
-                    MaxScore.objects.filter(
+                ms = MaxScore.objects.get(category=challenge.category)
+                if maxsc > ms.score:
+                    ms.score = maxsc
+                    ms.save()
+                if user.group:
+                    group = user.group
+                    group.solved.add(challenge)
+                    score = group.solved.filter(
                         category=challenge.category
-                    ).update(score=maxsc)
+                    ).aggregate(Sum('score'))['score__sum']
+                    gms = GroupMaxScore.objects.get(category=challenge.category)
+                    if score > gms.score:
+                        gms.score = score
+                        gms.save()
                 solve_news(user, challenge)
                 return OKAY
             else:

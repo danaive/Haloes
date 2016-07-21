@@ -213,8 +213,7 @@ def score(request):
         sform = FollowForm(request.POST)
         if sform.is_valid():
             try:
-                user = Person.objects.get(
-                    username=sform.cleaned_data['username'])
+                user = Person.objects.get(username=sform.cleaned_data['username'])
             except:
                 return ERROR
             data = {
@@ -248,8 +247,7 @@ def score(request):
                 })
             if sum(data['score']) == 0:
                 data['score'][0] = 1
-            return HttpResponse(json.dumps(data),
-                                content_type='application/json')
+            return HttpResponse(json.dumps(data), content_type='application/json')
     return ERROR
 
 
