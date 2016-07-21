@@ -18,7 +18,7 @@
         return;
       }
       return $.ajaxFileUpload({
-        url: '/writeup/uploadImage/',
+        url: '/writeup/upload-image/',
         secureurl: false,
         fileElementId: 'imageFile',
         dataType: 'json',
@@ -84,7 +84,7 @@
       $('#CList').empty();
       val = $(this).val();
       return $.ajax({
-        url: '/writeup/getChallenges/',
+        url: '/writeup/get-challenges/',
         type: 'post',
         dataType: 'json',
         data: {

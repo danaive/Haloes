@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^comment/$', views.comment),
     url(r'^(?P<pk>\d+)/like/$', views.like),
     url(r'^(?P<pk>\d+)/star/$', views.star),
-    url(r'^uploadImage/$', views.upload_image),
-    url(r'^getChallenges/$', views.get_challenges),
+    url(r'^upload-image/$', views.upload_image),
+    url(r'^get-challenges/$', views.get_challenges),
     url(r'^submit/$', views.submit),
 ]

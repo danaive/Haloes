@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^create/$', views.create, name='create'),
     url(r'^apply/$', views.apply, name='apply'),
     url(r'^withdraw/$', views.withdraw, name='withdraw'),
-    url(r'^newTask/$', views.new_task),
-    url(r'^doTask/$', views.do_task),
-    url(r'^clearTask/$', views.clear_task),
+    url(r'^new-task/$', views.new_task),
+    url(r'^do-task/$', views.do_task),
+    url(r'^clear-task/$', views.clear_task),
 ]

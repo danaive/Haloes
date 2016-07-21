@@ -16,7 +16,7 @@ $ ->
     if $('#imageName').val().length == 0
       return
     $.ajaxFileUpload
-      url: '/writeup/uploadImage/'
+      url: '/writeup/upload-image/'
       secureurl: false
       fileElementId: 'imageFile'
       dataType: 'json'
@@ -66,7 +66,7 @@ $ ->
     $('#CList').empty()
     val = $(@).val()
     $.ajax
-      url: '/writeup/getChallenges/'
+      url: '/writeup/get-challenges/'
       type: 'post'
       dataType: 'json'
       data:

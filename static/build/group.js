@@ -94,7 +94,7 @@
           data.deadline = $('#deadline').val();
         }
         return $.ajax({
-          url: 'newTask/',
+          url: 'new-task/',
           type: 'post',
           dataType: 'json',
           data: data,
@@ -120,7 +120,7 @@
       return $(this).find('i.fa-check').fadeOut('fast');
     }).on('click', function() {
       return $.ajax({
-        url: 'doTask/',
+        url: 'do-task/',
         type: 'post',
         dataType: 'json',
         data: {
@@ -149,7 +149,7 @@
       var pk;
       pk = $(this).attr('href').substr(7);
       return $.ajax({
-        url: 'clearTask/',
+        url: 'clear-task/',
         type: 'post',
         dataType: 'json',
         data: {

@@ -75,7 +75,7 @@ $ ->
       if $('#deadline').val()
         data.deadline = $('#deadline').val()
       $.ajax
-        url: 'newTask/'
+        url: 'new-task/'
         type: 'post'
         dataType: 'json'
         data: data
@@ -96,7 +96,7 @@ $ ->
     -> $(@).find('i.fa-check').fadeOut 'fast'
   ).on 'click', ->
     $.ajax
-      url: 'doTask/'
+      url: 'do-task/'
       type: 'post'
       dataType: 'json'
       data:
@@ -128,7 +128,7 @@ $ ->
   $('a[href^="#clear-"]').on 'click', ->
     pk = $(@).attr('href').substr 7
     $.ajax
-      url: 'clearTask/'
+      url: 'clear-task/'
       type: 'post'
       dataType: 'json'
       data:
