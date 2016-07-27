@@ -21,11 +21,3 @@ $ ->
         $('#userList').hide()
         $('#teamList').fadeIn()
       stickFooter()
-
-  $('a[href^="#user-"]').on 'click', ->
-    pk = ($(@).attr 'href').substr 6
-    location.href = '/person/' + pk
-
-  $('a[href^="#team-"]').on 'click', ->
-    pk = ($(@).attr 'href').substr 6
-    location.href = '/team/' + pk

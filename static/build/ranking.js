@@ -3,7 +3,7 @@
   $(function() {
     $('a[href$="ranking/"]').addClass('current');
     stickFooter();
-    $('input[type="checkbox"]').bootstrapSwitch({
+    return $('input[type="checkbox"]').bootstrapSwitch({
       size: 'mini',
       onColor: 'info',
       offColor: 'warning',
@@ -24,16 +24,6 @@
         }
         return stickFooter();
       }
-    });
-    $('a[href^="#user-"]').on('click', function() {
-      var pk;
-      pk = ($(this).attr('href')).substr(6);
-      return location.href = '/person/' + pk;
-    });
-    return $('a[href^="#team-"]').on('click', function() {
-      var pk;
-      pk = ($(this).attr('href')).substr(6);
-      return location.href = '/team/' + pk;
     });
   });
 

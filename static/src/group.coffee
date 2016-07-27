@@ -4,11 +4,11 @@ $ ->
   # charts
   score = []
   $.ajax
-    url: '/person/get-score/'
+    url: '/group/get-score/'
     type: 'post'
     dataType: 'json'
     data:
-      username: 'danlei'
+      name: $('h2').text()
     success: (data) ->
       # pie chart
       score = data.score
@@ -136,6 +136,26 @@ $ ->
       success: (data) =>
         if data.msg == 'okay'
           $(@).parents('.doneItem').fadeOut().remove()
+
+
+  $('#avatar').on 'click', ->
+    $('#avatarHolder').click()
+
+window.uploadAvatar = ->
+  $('#avatar').hide()
+  $('#iconHolder').show()
+  $.ajaxFileUpload
+    url: 'update-avatar/'
+    secureurl: false
+    fileElementId: 'avatarHolder'
+    dataType: 'json'
+    success: (data) ->
+      if data.msg == 'okay'
+        $('#avatar').attr 'src', data.path
+        $('#iconHolder').hide()
+        window.setTimeout "$('#avatar').show()", 50
+      else
+        console.log data
 
   stickFooter()
 

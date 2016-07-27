@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^(?P<pk>\d+)/$', views.index),
     url(r'^join/$', views.join, name='join'),
     url(r'^create/$', views.create, name='create'),
     url(r'^apply/$', views.apply, name='apply'),
@@ -10,4 +11,6 @@ urlpatterns = [
     url(r'^new-task/$', views.new_task),
     url(r'^do-task/$', views.do_task),
     url(r'^clear-task/$', views.clear_task),
+    url(r'^get-score/$', views.get_score),
+    url(r'^update-avatar/$', views.update_avatar),
 ]

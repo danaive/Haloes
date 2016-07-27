@@ -59,6 +59,8 @@ mixin doneList(item, pk)
       span(style='margin-left: 20px; display: none;', data-toggle='tooltip', data-placement='right', title='clear')
         a(href='#clear-#{pk}'): i.fa.fa-trash-o
 
+mixin discussionList(item, pk, avatar)
+  p
 
 block container
   .row
@@ -67,7 +69,7 @@ block container
         .col-md-3(style='margin-right: -20px;')
           img#avatar.img-thumbnail(src='#{MEDIA_URL}#{avatar}',
             width='120', height='120', style='cursor: pointer;',
-            data-toggle='tooltip', data-placement='bottom', title='Update Group Avatar')
+            data-toggle='tooltip', data-placement='bottom', title="Update Logo")
           #iconHolder.img-thumbnail(style='width: 120px; height: 120px; display: none;')
             i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
           form(enctype='multipart/form-data')
@@ -113,6 +115,9 @@ block container
         .col-md-12
           button#newDiscBtn.btn.btn-info.pull-right New Discussion
           h3(style='margin-top: 0px; margin-bottom: 25px;') Discussions
+
+          for item in discussions
+            +discussionList(item, item.pk, item.avatar)
       hr
       .row
         .col-md-4
@@ -145,7 +150,7 @@ block container
             | WriteUp
       .tab-content(style='margin-top: 15px;')
         #achievement.tab-pane.fade.in.active
-          h4 Challenge Solved
+          h4 Solved Challenges
           #accordion.panel-group
             .panel
               .panel-heading

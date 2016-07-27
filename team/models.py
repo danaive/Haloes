@@ -9,16 +9,16 @@ def upload_to():
 
 def upload_to_team(instance, filename):
     from os import urandom
-    return 'avatar/team/' + '.'.join(
+    return 'avatar/team/' + '.'.join((
         instance.name, urandom(4).encode('hex'),
-        filename.split('.')[-1])
+        filename.split('.')[-1]))
 
 
 def upload_to_group(instance, filename):
     from os import urandom
-    return 'avatar/group/' + '.'.join(
+    return 'avatar/group/' + '.'.join((
         instance.name, urandom(4).encode('hex'),
-        filename.split('.')[-1])
+        filename.split('.')[-1]))
 
 
 class Team(models.Model):

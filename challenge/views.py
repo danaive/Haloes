@@ -93,11 +93,14 @@ def submit(request):
                 return ERROR
             user = Person.objects.get(pk=request.session['uid'])
             if flag == challenge.flag:
-                Submit.objects.update_or_create(
+                state, _ = Submit.objects.update_or_create(
                     person=user,
                     challenge=challenge,
                     defaults={'status': True}
                 )
+                if state:
+                    challenge.solved += 1
+                    challenge.save()
                 user.score = user.challenges.filter(
                     submit__status=True
                 ).aggregate(Sum('score')['score__sum'])
@@ -113,13 +116,14 @@ def submit(request):
                 if user.group:
                     group = user.group
                     group.solved.add(challenge)
-                    score = group.solved.filter(
+                    group.score = group.solved.filter(
                         category=challenge.category
                     ).aggregate(Sum('score'))['score__sum']
                     gms = GroupMaxScore.objects.get(category=challenge.category)
                     if score > gms.score:
                         gms.score = score
                         gms.save()
+                    group.save()
                 solve_news(user, challenge)
                 return OKAY
             else:

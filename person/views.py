@@ -114,7 +114,7 @@ def update_avatar(request):
             user.save()
             return HttpResponse(json.dumps({
                 'msg': 'okay',
-                'path': settings.MEDIA_URL + user.avatar.name,
+                'path': settings.MEDIA_URL + user.avatar,
             }), content_type='application/json')
         return FAIL
     return ERROR
@@ -217,6 +217,7 @@ def score(request):
             except:
                 return ERROR
             data = {
+                'msg': 'okay',
                 'score': [0] * 5,
                 'capacity': []
             }
@@ -225,8 +226,7 @@ def score(request):
                 data['score'][cate[challenge.category]] += challenge.score
             data['capacity'].append({
                 'score': map(
-                    lambda ct: 100 * data['score'][ct[1]] /
-                        max(MaxScore.objects.get(category=ct[0]).score, 1),
+                    lambda x: 100 * data['score'][x[1]] / MaxScore.objects.get(category=x[0]).score,
                     sorted(cate.iteritems(), key=lambda x: x[1])
                 ),
                 'name': user.username
@@ -239,14 +239,13 @@ def score(request):
                     tmp[cate[challenge.category]] += challenge.score
                 data['capacity'].append({
                     'score': map(
-                        lambda ct: 100 * tmp[ct[1]] /
-                            max(MaxScore.objects.get(category=ct[0]).score, 1),
+                        lambda x: 100 * tmp[x[1]] / MaxScore.objects.get(category=x[0]).score,
                         sorted(cate.iteritems(), key=lambda x: x[1])
                     ),
                     'name': visitor.username
                 })
             if sum(data['score']) == 0:
-                data['score'][0] = 1
+                return FAIL
             return HttpResponse(json.dumps(data), content_type='application/json')
     return ERROR
 
@@ -268,11 +267,11 @@ def ranking(request):
                 item.fstate = 2
     groups = Group.objects.order_by('-score')
     for item in groups:
-        item.members = item.person_set.count()
+        item.membern = item.members.count()
         item.solvedn = item.solved.count()
         item.writeup = reduce(
             lambda x, y: x + y,
-            map(lambda x: x.writeup_set.count(), item.person_set.all())
+            map(lambda x: x.writeup_set.count(), item.members.all())
         )
         # item.person_set.all().writeup_set.count()
     return render(request, 'ranking.jade', {
