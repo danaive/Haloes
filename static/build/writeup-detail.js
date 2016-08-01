@@ -38,6 +38,10 @@
       try {
         editor2.destroy();
       } catch (undefined) {}
+      $('button.submit').hide();
+      $('button.cancel').hide();
+      $('button.reply').show();
+      $(this).hide().siblings('button').show();
       $(this).parent().append('<textarea style="display: none;"></textarea>');
       return window.editor2 = new Simditor({
         textarea: $(this).siblings('textarea'),

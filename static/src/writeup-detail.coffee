@@ -30,6 +30,10 @@ $ ->
 
   $('button.reply').on 'click', ->
     try editor2.destroy()
+    $('button.submit').hide()
+    $('button.cancel').hide()
+    $('button.reply').show()
+    $(@).hide().siblings('button').show()
     $(@).parent().append '<textarea style="display: none;"></textarea>'
     window.editor2 = new Simditor
       textarea: $(@).siblings('textarea')
