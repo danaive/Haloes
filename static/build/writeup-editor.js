@@ -50,7 +50,6 @@
       } else {
         challenge = $('#CList').val();
       }
-      console.log(challenge);
       if ($('#title').val() && challenge) {
         $(this).attr('disabled', 'disabled');
         $('i.fa-spiner').show();
