@@ -176,6 +176,12 @@ def index(request, pk=u'-1'):
     for item in tasks:
         item.assign = item.assign_to.username if item.assign_to else ''
         item.donetime = (item.datetime + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M')
+    issues = group.issues.all().order_by('-time')
+    for item in issues:
+        item.name = item.author.username
+        item.avatar = item.author.avatar
+        item.timex = (item.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M')
+        item.comment = item.comments.count()
     return render(request, 'group.jade', {
         'username': username,
         'groupname': group.name,
@@ -186,7 +192,7 @@ def index(request, pk=u'-1'):
         'newmembers': [],
         'tasking': filter(lambda x: not x.done, tasks),
         'tasked': filter(lambda x: x.done, tasks),
-        'discussions': []
+        'issues': issues
     })
 
 def join(request):
@@ -374,4 +380,60 @@ def update_avatar(request):
                 'path': settings.MEDIA_URL + group.avatar,
             }), content_type='application/json')
         return FAIL
+    return ERROR
+
+
+def issue(request, pk=u'-1'):
+    user = Person.objects.get(pk=request.session['uid'])
+    group = user.group
+    pk = int(pk)
+    if pk == -1:
+        return render(request, 'group-editor.jade', {
+            'username': user.username
+        })
+    # try:
+    if True:
+        issue = group.issues.get(pk=pk)
+        comments = Comment.objects.filter(issue=issue).order_by('-time')
+        for item in comments:
+            item.avatar = item.author.avatar
+            item.writer = item.author.username
+            if item.reply:
+                item.recver = item.reply.username
+            item.pk = item.author.pk
+            item.timex = (item.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S')
+        return render(request, 'group-issue.jade', {
+            'username': user.username,
+            'title': issue.title,
+            'content': issue.content,
+            'author': issue.author.username,
+            'authorid': issue.author.pk,
+            'avatar': user.avatar,
+            'comments': comments
+        })
+    # except:
+    else:
+        return render(request, '404.jade')
+
+
+def submit(request):
+    if request.is_ajax:
+        wf = IssueForm(request.POST)
+        if wf.is_valid():
+            try:
+                title = wf.cleaned_data['title']
+                content = wf.cleaned_data['content']
+                user = Person.objects.get(pk=request.session['uid'])
+                wp = Issue.objects.create(
+                    author=user,
+                    group=user.group,
+                    title=title,
+                    content=content
+                )
+                return HttpResponse(json.dumps({
+                    'msg': 'okay',
+                    'pk': wp.pk
+                }), content_type='application/json')
+            except:
+                return FAIL
     return ERROR

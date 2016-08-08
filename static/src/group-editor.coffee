@@ -1,16 +1,12 @@
 $ ->
 
-  $('a[href$="writeup/"]').addClass 'current'
+  $('a[href$="group/"]').addClass 'current'
 
   Simditor.locale = 'en-US'
   editor = new Simditor
     textarea: $('#editor')
     toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown']
     toolbarFloatOffset: $('nav').height()
-
-  if $('#submitBtn').data 'state'
-    editor.setValue $('#contentHolder').text()
-    $('#title').val $('#titleHolder').text()
 
   $('#uploadBtn').on 'click', ->
     if $('#imageName').val().length == 0
@@ -36,43 +32,24 @@ $ ->
           window.setTimeout "$('#uploadSuccess').fadeOut()", 1000
 
   $('#submitBtn').on 'click', ->
-    if $(@).data 'state'
-      challenge = $('#challengeHolder').text()
-    else
-      challenge = $('#CList').val()
-    if $('#title').val() and challenge
+    if $('#title').val() and editor.getValue()
       $(@).attr 'disabled', 'disabled'
       $('i.fa-spiner').show()
       $.ajax
-        url: '/writeup/submit/'
+        url: '/group/submit/'
         type: 'post'
         dataType: 'json'
         data:
           title: $('#title').val()
-          challenge: challenge
           content: editor.getValue()
         success: (data) =>
           $('i.fa-spiner').hide()
           $(@).removeAttr 'disabled'
           if data.msg == 'okay'
             $('#submitSuccess').fadeIn()
-            window.setTimeout "location.href='/writeup/#{data.pk}/'", 1000
+            window.setTimeout "location.href='#{data.pk}/'", 1000
           else
             $('#submitFail').fadeIn()
             window.setTimeout "$('#submitFail').fadeOut()", 1000
-
-  $('#SList').on 'change', ->
-    $('#CList').empty()
-    val = $(@).val()
-    $.ajax
-      url: '/writeup/get-challenges/'
-      type: 'post'
-      dataType: 'json'
-      data:
-        title: val
-      success: (data) ->
-        if data.msg == 'okay'
-          for item in data.challenges
-            $('#CList').append "<option value=#{item.pk}>#{item.name}</option>"
 
   stickFooter()

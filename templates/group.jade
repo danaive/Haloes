@@ -59,19 +59,19 @@ mixin doneList(item, pk)
       span(style='margin-left: 20px; display: none;', data-toggle='tooltip', data-placement='right', title='clear')
         a(href='#clear-#{pk}'): i.fa.fa-trash-o
 
-mixin discussionList(item, pk, avatar)
+mixin issueList(item, pk, avatar)
   ul.discuss.list-inline(style='margin: 20px 12px;')
     li: img.img-circle(height='30', width='30', src='#{MEDIA_URL}#{avatar}',
-      data-toggle='tooltip', data-placement='bottom', title='12123')
-    li: h4(style='margin: 0px;'): a(href='discuss/#{pk}')= item.title
+      data-toggle='tooltip', data-placement='bottom', title='#{item.name}')
+    li: h4(style='margin: 0px;'): a(href='issue/#{pk}')= item.title
     li.pull-right.text-muted
       span
         i.fa.fa-clock-o
-      | &nbsp;#{item.time}
+      | &nbsp;#{item.timex}
     li.pull-right.text-muted(style='padding-right: 20px;')
       span
         i.fa.fa-comments-o
-      | &nbsp;123
+      | &nbsp;#{item.comment}
 
 block container
   .row
@@ -124,11 +124,11 @@ block container
       hr
       .row
         .col-md-12
-          a#newDiscBtn.btn.btn-info.pull-right(href='issue/') New Discussion
-          h3(style='margin-top: 0px; margin-bottom: 25px;') Discussions
+          a#newDiscBtn.btn.btn-info.pull-right(href='issue/') New Issue
+          h3(style='margin-top: 0px; margin-bottom: 25px;') Issues
 
-          for item in discussions
-            +discussionList(item, item.pk, item.avatar)
+          for item in issues
+            +issueList(item, item.pk, item.avatar)
       hr
       .row
         .col-md-4

@@ -22,3 +22,8 @@ class TaskForm(forms.Form):
 
 class ImageForm(forms.Form):
     img = forms.ImageField()
+
+
+class IssueForm(forms.Form):
+    title = forms.CharField(max_length=30)
+    content = forms.CharField()

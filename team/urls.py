@@ -13,4 +13,7 @@ urlpatterns = [
     url(r'^clear-task/$', views.clear_task),
     url(r'^get-score/$', views.get_score),
     url(r'^update-avatar/$', views.update_avatar),
+    url(r'^issue/$', views.issue),
+    url(r'^issue/(?P<pk>\d+)/$', views.issue),
+    url(r'^submit/$', views.submit),
 ]

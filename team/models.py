@@ -66,6 +66,23 @@ class Task(models.Model):
     checker = models.ForeignKey(Person, null=True)
 
 
+class Issue(models.Model):
+    author = models.ForeignKey(Person)
+    group = models.ForeignKey(Group, related_name='issues')
+    comments = models.ManyToManyField(Person, related_name='+', through='Comment', through_fields=('issue', 'author'))
+    content = models.TextField()
+    title = models.CharField(max_length=50)
+    time = models.DateTimeField(auto_now_add=True)
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(Person, related_name='issue_comments')
+    issue = models.ForeignKey(Issue)
+    content = models.TextField()
+    time = models.DateTimeField(auto_now_add=True)
+    reply = models.ForeignKey(Person, related_name='issue_replies', null=True)
+
+
 class GroupMaxScore(models.Model):
     category = models.CharField(max_length=10)
     score = models.PositiveIntegerField(default=0)

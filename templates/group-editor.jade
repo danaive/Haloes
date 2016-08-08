@@ -1,0 +1,65 @@
+extends frame
+{% load staticfiles %}
+
+block container
+  .row
+    .col-md-10
+      textarea#editor(autofocus)
+      button#submitBtn.btn.btn-success.pull-right(style='margin: 10px 0px 0px 10px;') Submit
+      ul.list-inline
+        li: h4 Title
+        li(style='width: 750px;')
+          input#title.form-control
+        li: i.fa.fa-spin.fa-spinner.fa-2x(style='display: none;')
+      br
+      #submitSuccess.alert.alert-success(style='margin: 10px 0px; padding: 7px 15px; display: none;') Submit Succeeded
+      #submitFail.alert.alert-danger(style='margin: 10px 0px; marigin-top: 10px; padding: 7px 15px; display: none;') Submit Failed
+    .col-md-2
+      .panel.panel-default
+        .panel-heading Uploaded Images
+        ul.list-group
+        .panel-footer
+          a.btn.btn-xs.btn-info.pull-right(href='#modal-container', data-toggle='modal')
+            | Upload&nbsp;
+            i.fa.fa-cloud-upload
+          | &nbsp;
+
+      #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
+        .modal-dialog: .modal-content
+          .modal-header
+            button.close(aria-hidden='true', data-dismiss='modal') ×
+            h4.modal-title Upload Image
+          .modal-body
+            .row
+              .col-xs-6
+                label Name
+                input#imageName.form-control
+              .col-xs-6
+                label File
+                input#imageFile.form-control(type='file', name='img')
+          .modal-footer.row
+            .col-xs-9
+              #uploadSuccess.alert.alert-success.pull-left(style='margin-bottom: 0; marigin-top: 10px; padding: 7px 15px; display: none;') Image Upload Succeeded
+              #uploadFail.alert.alert-danger.pull-left(style='margin-bottom: 0; margin-top: 10px; padding: 7px 15px; display: none;') Image Upload Failed
+            .col-xs-3
+              button#uploadBtn.btn.btn-info Upload
+
+
+block script
+  script(src='{% static "assets/simditor/scripts/jquery.min.js" %}')
+  script(src='{% static "assets/bootflat/js/site.min.js" %}')
+  script(src='{% static "assets/plugins/jquery.cookie.min.js" %}')
+  script(src='{% static "build/common.js" %}')
+  script(src='{% static "assets/simditor/scripts/module.min.js" %}')
+  script(src='{% static "assets/simditor/scripts/hotkeys.min.js" %}')
+  script(src='{% static "assets/simditor/scripts/simditor.min.js" %}')
+  script(src='{% static "assets/simditor/markdown/marked.js" %}')
+  script(src='{% static "assets/simditor/markdown/to-markdown.js" %}')
+  script(src='{% static "assets/simditor/markdown/simditor-markdown.js" %}')
+  script(src='{% static "assets/plugins/ajax-file-upload.js" %}')
+  script(src='{% static "assets/plugins/InsertToCaret.js" %}')
+  script(src='{% static "build/group-editor.js" %}')
+
+append head
+  link(rel='stylesheet', href='{% static "assets/simditor/styles/simditor.css" %}')
+  link(rel='stylesheet', href='{% static "assets/simditor/markdown/simditor-markdown.css" %}')
