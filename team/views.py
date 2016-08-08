@@ -5,139 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import *
 from person.models import Person
+from writeup.models import Writeup
 from news.views import group_contest_news
 from datetime import timedelta
 import json
 
-
-def _index(request):
-    if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
-    else:
-        user = None
-    username = user.username if user else None
-    return render(request, 'group.jade', {
-        'username': username,
-        'newmember': 1,
-        'writeups': [{
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        },
-        {
-            'url': 15,
-            'title': 'DAWN',
-            'time': '2015-12-12',
-            'challenge': 'dice game',
-            'comment': 15,
-            'like': 25,
-            'author': 'danlei'
-        }],
-        'members': [{
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '1',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        },
-        {
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '#',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        },
-        {
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '#',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        },
-        {
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '#',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        }],
-        'newmembers': [{
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '#',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        },
-        {
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '#',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        },
-        {
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '#',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        },
-        {
-            'name': 'danlei',
-            'avatar': '/static/img/danlei.jpg',
-            'url': '#',
-            'major': 'MISC',
-            'score': 233,
-            'univ': 'WHU',
-        }],
-    })
 
 OKAY = HttpResponse(
     json.dumps({'msg': 'okay'}),
@@ -159,8 +31,12 @@ def index(request, pk=u'-1'):
     else:
         user = None
     username = user.username if user else None
-    groups = Group.objects.order_by('-score')
     if not user.group and pk == -1:
+        groups = Group.objects.order_by('-score')
+        for item in groups:
+            item.member = item.members.count()
+            item.solvedn = item.solved.count()
+            item.writeup = Writeup.objects.filter(author__in=item.members.all()).count()
         return render(request, 'group-recruit.jade', {
             'groups': groups,
             'username': username,
@@ -182,13 +58,20 @@ def index(request, pk=u'-1'):
         item.avatar = item.author.avatar
         item.timex = (item.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M')
         item.comment = item.comments.count()
+    writeups = Writeup.objects.filter(author__in=group.members.all())
+    cate = {'PWN': 'primary', 'REVERSE': 'success', 'WEB': 'danger', 'CRYPTO': 'info', 'MISC': 'warning'}
+    for item in writeups:
+        item.like = item.likes.count()
+        item.comment = item.comments.count()
+        item.avatar = item.author.avatar
+        item.cate = cate[item.challenge.category]
     return render(request, 'group.jade', {
         'username': username,
         'groupname': group.name,
         'avatar': group.avatar,
         'code': group.code,
         'members': group.members.all(),
-        'writeups': [],
+        'writeups': writeups,
         'newmembers': [],
         'tasking': filter(lambda x: not x.done, tasks),
         'tasked': filter(lambda x: x.done, tasks),

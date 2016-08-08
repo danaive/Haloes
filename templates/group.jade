@@ -1,35 +1,37 @@
 extends frame
 {% load staticfiles %}
 
-mixin memberList(mb, url, avatar)
+mixin memberList(mb, pk, avatar)
   li.media
-    a.pull-left(href=url): img.media-object.img-rounded(height='64', width='64', src='#{MEDIA_URL}#{avatar}')
+    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='64', width='64', src='#{MEDIA_URL}#{avatar}')
     a.pull-right.btn.btn-link
       i.fa.fa-user-times
     .media-body
       h4.media-heading= mb.username
       p #[i.fa.fa-fw.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-fw.fa-star]&nbsp;#{mb.score}
-      p #[i.fa.fa-fw.fa-university]&nbsp;#{mb.univ}
+      p #[i.fa.fa-fw.fa-university]&nbsp;#{mb.school}
 
-mixin newMemberList(mb, url, avatar)
+mixin newMemberList(mb, pk, avatar)
   li.media
-    a.pull-left(href=url): img.media-object.img-rounded(height='64', src=avatar)
+    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='64', width='64', src='#{MEDIA_URL}#{avatar}')
     a.pull-right.btn.btn-info
       | Approve&nbsp;
       i.fa.fa-user-plus
     .media-body
       h4.media-heading= mb.name
       p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
-      p #[i.fa.fa-university]&nbsp;#{mb.univ}
+      p #[i.fa.fa-university]&nbsp;#{mb.school}
 
-mixin writeupList(wu, url)
+mixin writeupList(wp, pk, avatar)
   li.media(style='margin-bottom: 25px;')
+    a.pull-left(data-toggle='tooltip', data-placement='top', title=wp.author.username)
+      img.media-object.img-rounded(height='50', width='50', src='#{MEDIA_URL}#{avatar}')
     .media-body
       h4.media-heading
-        a(href=url)= wu.title
-        span.text-muted &nbsp;&nbsp;#{wu.author}
-      p #{wu.challenge},&nbsp;&nbsp;#{wu.time}
-      p #[i.fa.fa-comments-o]&nbsp;#{wu.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wu.like}
+        a(href='/writeup/#{pk}/')= wp.title
+      p
+        span.badge(class='badge-#{wp.cate}') #{wp.challenge.title}&nbsp;#{wp.challenge.score}'
+        &nbsp;&nbsp;#[i.fa.fa-comments-o]&nbsp;#{wp.comment}&nbsp;&nbsp;&nbsp;#[i.fa.fa-thumbs-o-up]&nbsp;#{wp.like}
 
 mixin chartLabel(label, color)
   li: ul.list-inline
@@ -202,13 +204,13 @@ block container
         #writeup.tab-pane.fade
           ul.media-list
             for item in writeups
-              +writeupList(item, item.url)
+              +writeupList(item, item.pk, item.avatar)
         #membership.tab-pane.fade
           ul.media-list
             for item in newmembers
-              +newMemberList(item, item.url, item.avatar)
+              +newMemberList(item, item.pk, item.avatar)
             for item in members
-              +memberList(item, item.url, item.avatar)
+              +memberList(item, item.pk, item.avatar)
 
 
 append script

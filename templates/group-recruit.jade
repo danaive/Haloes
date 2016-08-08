@@ -3,8 +3,8 @@ extends frame
 
 mixin teamlist(team, pk)
   tr(style='')
-    td.text-center: a(href='#team-#{pk}')= team.name
-    td.text-center= team.members
+    td.text-center: a(href='#{pk}/')= team.name
+    td.text-center= team.member
     td.text-center= team.score
     td.text-center= team.solvedn
     td.text-center= team.writeup

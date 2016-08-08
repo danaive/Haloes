@@ -13,6 +13,9 @@ class Writeup(models.Model):
     title = models.CharField(max_length=50)
     time = models.DateField(auto_now_add=True)
 
+    def __unicode__(self):
+        return self.title + '@' + self.author.username
+
 
 class Comment(models.Model):
     author = models.ForeignKey(Person, related_name='comments')
