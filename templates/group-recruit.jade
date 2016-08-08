@@ -10,7 +10,6 @@ mixin teamlist(team, pk)
     td.text-center= team.writeup
     td.text-center
       button.btn.btn-xs.btn-default(id='apply-#{pk}') Apply
-      button.btn.btn-xs.btn-danger.withdraw(style='display: none;') Withdraw
 
 block container
   .row
@@ -44,7 +43,9 @@ block container
       h4 Or you can apply for one
       br
       .panel.panel-default
-        .panel-heading Group List
+        .panel-heading
+          | Group List
+          button#withdrawBtn.btn.btn-link.btn-xs.pull-right Recall Your Apply
         table#teamList.table.table-hover
           thead
             tr
@@ -59,8 +60,8 @@ block container
               +teamlist(item, item.pk)
       br
       br
-      #applySuccess.alert-success(style='display: none;') Application has been submitted
-      #applyFail.alert-danger(style='display: none;') Some Error Occured
-      #withdrawSuccess.alert-success(style='display: none;') Application has been withdrawn
+      #applySuccess.alert.alert-success(style='display: none;') Application has been submitted
+      #applyFail.alert.alert-danger(style='display: none;') Some Error Occured
+      #withdrawSuccess.alert.alert-success(style='display: none;') Application has been withdrawn
 append script
   script(src='{% static "build/group-recruit.js" %}')

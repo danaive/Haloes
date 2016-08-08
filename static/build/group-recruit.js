@@ -13,12 +13,12 @@
             code: $('#invCode').val()
           },
           success: function(data) {
-            if (data.name !== '%%') {
+            if (data.msg === 'okay') {
               $('#groupName').text(data.name);
               $('#joinSuccess').fadeIn();
-              return window.setTimeout('location.href="/gruop/"', 1000);
+              return window.setTimeout('location.href="/group/"', 1000);
             } else {
-              return $('#joinFail').fadeIn();
+              return window.setTimeout("$('#joinFail').fadeIn()", 1000);
             }
           }
         });
@@ -38,13 +38,13 @@
               $('#createSuccess').fadeIn();
               return window.setTimeout('location.href="/group/"', 1000);
             } else {
-              return $('#createFail').fadeIn();
+              return window.setTimeout("$('#createFail').fadeIn()", 1000);
             }
           }
         });
       }
     });
-    $('btn[id^="apply-"]').on('click', function() {
+    $('button[id^="apply-"]').on('click', function() {
       var pk;
       pk = ($(this).attr('id')).substr(6);
       return $.ajax({
@@ -58,8 +58,6 @@
           return function(data) {
             if (data.msg === 'okay') {
               $('#applySuccess').fadeIn();
-              $('btn[id^="apply-"]').hide();
-              $(_this).next().show();
               return window.setTimeout("$('#applySuccess').fadeOut()", 1000);
             } else {
               $('#applyFail').fadeIn();
@@ -69,7 +67,7 @@
         })(this)
       });
     });
-    return $('btn.withdraw').on('click', function() {
+    return $('#withdrawBtn').on('click', function() {
       return $.ajax({
         url: 'withdraw/',
         type: 'post',

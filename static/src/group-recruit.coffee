@@ -13,12 +13,12 @@ $ ->
         data:
           code: $('#invCode').val()
         success: (data) ->
-          if data.name != '%%'
+          if data.msg == 'okay'
             $('#groupName').text data.name
             $('#joinSuccess').fadeIn()
-            window.setTimeout 'location.href="/gruop/"', 1000
+            window.setTimeout 'location.href="/group/"', 1000
           else
-            $('#joinFail').fadeIn()
+            window.setTimeout "$('#joinFail').fadeIn()", 1000
 
   $('#createBtn').on 'click', ->
     if $('#grpName').val()
@@ -33,9 +33,9 @@ $ ->
             $('#createSuccess').fadeIn()
             window.setTimeout 'location.href="/group/"', 1000
           else
-            $('#createFail').fadeIn()
+            window.setTimeout "$('#createFail').fadeIn()", 1000
 
-  $('btn[id^="apply-"]').on 'click', ->
+  $('button[id^="apply-"]').on 'click', ->
     pk = ($(@).attr 'id').substr 6
     $.ajax
       url: 'apply/'
@@ -46,14 +46,12 @@ $ ->
       success: (data) =>
         if data.msg == 'okay'
           $('#applySuccess').fadeIn()
-          $('btn[id^="apply-"]').hide()
-          $(@).next().show()
           window.setTimeout "$('#applySuccess').fadeOut()", 1000
         else
           $('#applyFail').fadeIn()
           window.setTimeout "$('#applyFail').fadeOut()", 1000
 
-  $('btn.withdraw').on 'click', ->
+  $('#withdrawBtn').on 'click', ->
     $.ajax
       url: 'withdraw/'
       type: 'post'
