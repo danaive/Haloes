@@ -74,8 +74,6 @@
         dataType: 'json',
         success: function(data) {
           $('#withdrawSuccess').fadeIn();
-          $('btn.withdraw').hide();
-          $('btn[id^="apply-"]').show();
           return window.setTimeout("$('#withdrawSuccess').fadeOut()", 1000);
         }
       });

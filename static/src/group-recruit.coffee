@@ -58,6 +58,4 @@ $ ->
       dataType: 'json'
       success: (data) ->
         $('#withdrawSuccess').fadeIn()
-        $('btn.withdraw').hide()
-        $('btn[id^="apply-"]').show()
         window.setTimeout "$('#withdrawSuccess').fadeOut()", 1000
