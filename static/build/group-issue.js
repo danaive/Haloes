@@ -18,12 +18,12 @@
     $('#submitBtn').on('click', function() {
       if (editor.getValue()) {
         return $.ajax({
-          url: '/writeup/comment/',
+          url: '/group/comment/',
           type: 'post',
           dataType: 'json',
           data: {
             content: editor.getValue(),
-            writeup: $('#likestar').data('pk'),
+            issue: $(this).data('pk'),
             reply: 0
           },
           success: function(data) {
@@ -59,12 +59,12 @@
       pk = $(this).data('focus');
       if (editor2.getValue()) {
         return $.ajax({
-          url: '/writeup/comment/',
+          url: '/group/comment/',
           type: 'post',
           dataType: 'json',
           data: {
             content: editor2.getValue(),
-            writeup: $('#likestar').data('pk'),
+            issue: $('#submitBtn').data('pk'),
             reply: pk
           },
           success: function(data) {

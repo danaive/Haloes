@@ -33,7 +33,7 @@ block container
           textarea#editor(autofocus)
         .col-sm-2.text-center
           img.img-circle(height='100px', width='100px', src='#{MEDIA_URL}#{avatar}')
-          button#submitBtn.btn.btn-sm.btn-block.btn-success.pull-right(style='margin-top: 15px;') Submit
+          button#submitBtn.btn.btn-sm.btn-block.btn-success.pull-right(style='margin-top: 15px;', data-pk=pk) Submit
       for item in comments
         +commentList(item, item.pk, item.avatar)
 
@@ -48,7 +48,7 @@ block script
   script(src='{% static "assets/simditor/markdown/marked.js" %}')
   script(src='{% static "assets/simditor/markdown/to-markdown.js" %}')
   script(src='{% static "assets/simditor/markdown/simditor-markdown.js" %}')
-  script(src='{% static "build/writeup-detail.js" %}')
+  script(src='{% static "build/group-issue.js" %}')
 
 append head
   link(rel='stylesheet', href='{% static "assets/simditor/styles/simditor.css" %}')

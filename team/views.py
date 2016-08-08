@@ -368,8 +368,7 @@ def update_avatar(request):
             img = request.FILES['img']
             if img.size > 5 * 1024 * 1024:
                 return HttpResponse(
-                    json.dumps(
-                        {'msg': 'Image No Larger Than 5M is Accepted.'}),
+                    json.dumps({'msg': 'Image No Larger Than 5M is Accepted.'}),
                     content_type='application/json'
                 )
             group = Person.objects.get(pk=request.session['uid']).group
@@ -391,8 +390,7 @@ def issue(request, pk=u'-1'):
         return render(request, 'group-editor.jade', {
             'username': user.username
         })
-    # try:
-    if True:
+    try:
         issue = group.issues.get(pk=pk)
         comments = Comment.objects.filter(issue=issue).order_by('-time')
         for item in comments:
@@ -404,6 +402,7 @@ def issue(request, pk=u'-1'):
             item.timex = (item.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S')
         return render(request, 'group-issue.jade', {
             'username': user.username,
+            'pk': pk,
             'title': issue.title,
             'content': issue.content,
             'author': issue.author.username,
@@ -411,8 +410,7 @@ def issue(request, pk=u'-1'):
             'avatar': user.avatar,
             'comments': comments
         })
-    # except:
-    else:
+    except:
         return render(request, '404.jade')
 
 
@@ -435,5 +433,27 @@ def submit(request):
                     'pk': wp.pk
                 }), content_type='application/json')
             except:
+                return FAIL
+    return ERROR
+
+
+def comment(request):
+    if request.is_ajax:
+        cf = CommentForm(request.POST)
+        if cf.is_valid():
+            # try:
+            if True:
+                comment = Comment.objects.create(
+                    author=Person.objects.get(pk=request.session['uid']),
+                    issue=Issue.objects.get(pk=cf.cleaned_data['issue']),
+                    content=cf.cleaned_data['content']
+                )
+                reply = cf.cleaned_data['reply']
+                if reply:
+                    comment.reply = Person.objects.get(pk=reply)
+                    comment.save()
+                return OKAY
+            # except:
+            else:
                 return FAIL
     return ERROR

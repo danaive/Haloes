@@ -27,3 +27,9 @@ class ImageForm(forms.Form):
 class IssueForm(forms.Form):
     title = forms.CharField(max_length=30)
     content = forms.CharField()
+
+
+class CommentForm(forms.Form):
+    content = forms.CharField()
+    issue = forms.IntegerField()
+    reply = forms.IntegerField()

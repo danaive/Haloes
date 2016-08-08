@@ -17,12 +17,12 @@ $ ->
   $('#submitBtn').on 'click', ->
     if editor.getValue()
       $.ajax
-        url: '/writeup/comment/'
+        url: '/group/comment/'
         type: 'post'
         dataType: 'json'
         data:
           content: editor.getValue()
-          writeup: $('#likestar').data 'pk'
+          issue: $(@).data 'pk'
           reply: 0
         success: (data) ->
           if data.msg == 'okay'
@@ -49,12 +49,12 @@ $ ->
     pk = $(@).data 'focus'
     if editor2.getValue()
       $.ajax
-        url: '/writeup/comment/'
+        url: '/group/comment/'
         type: 'post'
         dataType: 'json'
         data:
           content: editor2.getValue()
-          writeup: $('#likestar').data 'pk'
+          issue: $('#submitBtn').data 'pk'
           reply: pk
         success: (data) ->
           if data.msg == 'okay'

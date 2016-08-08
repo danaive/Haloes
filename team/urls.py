@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^issue/$', views.issue),
     url(r'^issue/(?P<pk>\d+)/$', views.issue),
     url(r'^submit/$', views.submit),
+    url(r'^comment/$', views.comment),
 ]
