@@ -141,21 +141,24 @@ $ ->
   $('#avatar').on 'click', ->
     $('#avatarHolder').click()
 
-window.uploadAvatar = ->
-  $('#avatar').hide()
-  $('#iconHolder').show()
-  $.ajaxFileUpload
-    url: 'update-avatar/'
-    secureurl: false
-    fileElementId: 'avatarHolder'
-    dataType: 'json'
-    success: (data) ->
-      if data.msg == 'okay'
-        $('#avatar').attr 'src', data.path
-        $('#iconHolder').hide()
-        window.setTimeout "$('#avatar').show()", 50
-      else
-        console.log data
+  window.uploadAvatar = ->
+    $('#avatar').hide()
+    $('#iconHolder').show()
+    $.ajaxFileUpload
+      url: 'update-avatar/'
+      secureurl: false
+      fileElementId: 'avatarHolder'
+      dataType: 'json'
+      success: (data) ->
+        if data.msg == 'okay'
+          $('#avatar').attr 'src', data.path
+          $('#iconHolder').hide()
+          window.setTimeout "$('#avatar').show()", 50
+        else
+          console.log data
+
+  if($('h2').data('state') != 1)
+    $('.leader').hide()
 
   stickFooter()
 

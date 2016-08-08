@@ -164,30 +164,32 @@
         })(this)
       });
     });
-    return $('#avatar').on('click', function() {
+    $('#avatar').on('click', function() {
       return $('#avatarHolder').click();
     });
-  });
-
-  window.uploadAvatar = function() {
-    $('#avatar').hide();
-    $('#iconHolder').show();
-    $.ajaxFileUpload({
-      url: 'update-avatar/',
-      secureurl: false,
-      fileElementId: 'avatarHolder',
-      dataType: 'json',
-      success: function(data) {
-        if (data.msg === 'okay') {
-          $('#avatar').attr('src', data.path);
-          $('#iconHolder').hide();
-          return window.setTimeout("$('#avatar').show()", 50);
-        } else {
-          return console.log(data);
+    window.uploadAvatar = function() {
+      $('#avatar').hide();
+      $('#iconHolder').show();
+      return $.ajaxFileUpload({
+        url: 'update-avatar/',
+        secureurl: false,
+        fileElementId: 'avatarHolder',
+        dataType: 'json',
+        success: function(data) {
+          if (data.msg === 'okay') {
+            $('#avatar').attr('src', data.path);
+            $('#iconHolder').hide();
+            return window.setTimeout("$('#avatar').show()", 50);
+          } else {
+            return console.log(data);
+          }
         }
-      }
-    });
+      });
+    };
+    if ($('h2').data('state') !== 1) {
+      $('.leader').hide();
+    }
     return stickFooter();
-  };
+  });
 
 }).call(this);

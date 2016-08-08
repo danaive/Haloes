@@ -3,8 +3,8 @@ extends frame
 
 mixin memberList(mb, pk, avatar)
   li.media
-    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='64', width='64', src='#{MEDIA_URL}#{avatar}')
-    a.pull-right.btn.btn-link
+    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', width='50', src='#{MEDIA_URL}#{avatar}')
+    a.pull-right.btn.btn-link.leader
       i.fa.fa-user-times
     .media-body
       h4.media-heading= mb.username
@@ -13,12 +13,12 @@ mixin memberList(mb, pk, avatar)
 
 mixin newMemberList(mb, pk, avatar)
   li.media
-    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='64', width='64', src='#{MEDIA_URL}#{avatar}')
-    a.pull-right.btn.btn-info
+    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', width='50', src='#{MEDIA_URL}#{avatar}')
+    a.pull-right.btn.btn-info.leader
       | Approve&nbsp;
       i.fa.fa-user-plus
     .media-body
-      h4.media-heading= mb.name
+      h4.media-heading= mb.username
       p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
       p #[i.fa.fa-university]&nbsp;#{mb.school}
 
@@ -88,7 +88,7 @@ block container
           form(enctype='multipart/form-data')
             input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
         .col-md-9(style='margin-left: -20px;')
-          h2(style='margin: 40px 0px;')= groupname
+          h2(style='margin: 40px 0px;', data-state=state)= groupname
       .row
         .col-md-12
           button#newTaskBtn.btn.btn-info.pull-right New Task
@@ -122,15 +122,15 @@ block container
           #doneList(style='display: none;')
             for item in tasked
               +doneList(item, item.pk)
+      if state
+        hr
+        .row
+          .col-md-12
+            a#newDiscBtn.btn.btn-info.pull-right(href='issue/') New Issue
+            h3(style='margin-top: 0px; margin-bottom: 25px;') Issues
 
-      hr
-      .row
-        .col-md-12
-          a#newDiscBtn.btn.btn-info.pull-right(href='issue/') New Issue
-          h3(style='margin-top: 0px; margin-bottom: 25px;') Issues
-
-          for item in issues
-            +issueList(item, item.pk, item.avatar)
+            for item in issues
+              +issueList(item, item.pk, item.avatar)
       hr
       .row
         .col-md-4
@@ -209,6 +209,8 @@ block container
           ul.media-list
             for item in newmembers
               +newMemberList(item, item.pk, item.avatar)
+            if newmembers
+              hr
             for item in members
               +memberList(item, item.pk, item.avatar)
 

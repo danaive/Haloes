@@ -71,11 +71,13 @@ def index(request, pk=u'-1'):
         'avatar': group.avatar,
         'code': group.code,
         'members': group.members.all(),
+        'newmembers': group.appliers.all(),
+        'newmember': group.appliers.count(),
         'writeups': writeups,
-        'newmembers': [],
         'tasking': filter(lambda x: not x.done, tasks),
         'tasked': filter(lambda x: x.done, tasks),
-        'issues': issues
+        'issues': issues,
+        'state': 0 if user not in group.members.all() else 1 if user == group.leader else 2
     })
 
 def join(request):
@@ -324,8 +326,7 @@ def comment(request):
     if request.is_ajax:
         cf = CommentForm(request.POST)
         if cf.is_valid():
-            # try:
-            if True:
+            try:
                 comment = Comment.objects.create(
                     author=Person.objects.get(pk=request.session['uid']),
                     issue=Issue.objects.get(pk=cf.cleaned_data['issue']),
@@ -336,7 +337,15 @@ def comment(request):
                     comment.reply = Person.objects.get(pk=reply)
                     comment.save()
                 return OKAY
-            # except:
-            else:
+            except:
                 return FAIL
     return ERROR
+
+
+def approve(request):pass
+
+
+def kickout(request): pass
+
+
+def dismiss(request): pass
