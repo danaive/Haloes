@@ -63,12 +63,11 @@ def sign_up(request):
                         nickname=username,
                         email_check=key
                     )
-                    send_mail('Email Confirm', url, 'noreply@whuctf.org',
-                              [email])
+                    send_mail('Email Confirm', url, 'noreply@whuctf.org', [email])
+                    request.session['uid'] = user.pk
+                    return OKAY
                 except:
-                    return FAIL
-                request.session['uid'] = user.pk
-                return OKAY
+                    pass
             return FAIL
     return ERROR
 
@@ -80,15 +79,17 @@ def sign_in(request):
             username = lform.cleaned_data['username']
             password = lform.cleaned_data['password']
             salt = lform.cleaned_data['salt']
-            if '@' not in username:
-                user = Person.objects.filter(username=username)
-            else:
-                user = Person.objects.filter(email=username)
-            from hashlib import sha256
-            if user and sha256(user[0].password + salt).hexdigest() == password:
-                request.session['uid'] = user[0].pk
-                return OKAY
-            return FAIL
+            try:
+                if '@' not in username:
+                    user = Person.objects.get(username=username)
+                else:
+                    user = Person.objects.get(email=username)
+                from hashlib import sha256
+                if sha256(user.password + salt).hexdigest() == password:
+                    request.session['uid'] = user.pk
+                    return OKAY
+            except:
+                return FAIL
     return ERROR
 
 
