@@ -21,14 +21,15 @@ html(lang='en')
       button#signIn(data-salt=salt) Sign in
       #signInDone.alert.alert-success
         strong Welcome!
-        | &nbsp;&nbsp;(o^∇^o)ﾉ
+        p &nbsp;&nbsp;(o^∇^o)ﾉ
       #signInFail.alert.alert-warning
         strong Invalid Username or Password
-        br
-        | &nbsp;&nbsp;ㄟ(▔,▔)ㄏ
+        p &nbsp;&nbsp;ㄟ(▔,▔)ㄏ
+      #emailFail.alert.alert-warning
+        strong Check the Email to Activate Your Account plz.
       #alertError.alert.alert-warning
         strong Some Error Occured
-        | &nbsp;&nbsp; (╬￣皿￣)
+        p &nbsp;&nbsp; ..(｡•ˇ‸ˇ•｡)..
     .reg-form
       h1 Sign Up
       input#remail(placeholder='Email')
@@ -37,11 +38,10 @@ html(lang='en')
       button#signUp Sign up
       #signUpDone.alert.alert-success
         strong Welcome!
-        | &nbsp;&nbsp;╰(*°▽°*)╯
+        p &nbsp;&nbsp;╰(*°▽°*)╯
       #signUpFail.alert.alert-warning
         strong Occupied Username or Email
-        br
-        | &nbsp;&nbsp;（￣工￣lll）
+        p &nbsp;&nbsp;(´･･)ﾉ(._.`)
 
     script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
     script(src='{% static "assets/plugins/jquery.cookie.min.js" %}')

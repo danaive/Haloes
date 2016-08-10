@@ -48,5 +48,7 @@ $ ->
             window.setTimeout 'location.href="/person"', 500
           else if data.msg == 'fail'
             $('#signUpFail').fadeIn()
+          else if data.msg == 'email'
+            $('#emailFail').fadeIn()
           else
             $('#alertError').fadeIn()

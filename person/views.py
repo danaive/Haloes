@@ -86,6 +86,8 @@ def sign_in(request):
                     user = Person.objects.get(email=username)
                 from hashlib import sha256
                 if sha256(user.password + salt).hexdigest() == password:
+                    if user.email_check != 'done':
+                        return HttpResponse(json.dumps({'msg': 'email'}), content_type='application/json')
                     request.session['uid'] = user.pk
                     return OKAY
             except:
