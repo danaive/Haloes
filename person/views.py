@@ -15,14 +15,16 @@ from base64 import b64encode
 import json
 
 
-def _send_email_check(email):
+def _send_email_check(email, username):
     from django.core.mail import send_mail
+    from os.path import join
     key = b64encode(urandom(12))
-    url = 'http://{domain}/check-in/?token={token}'.format(
+    html = open(join(settings.BASE_DIR, 'email_check.html').read().format(
+        username=username,
         domain=settings.DOMAIN_NAME,
         token=key + b64encode(sha256(username + key).digest())
     )
-    send_mail('Email Confirm', url, 'noreply@whuctf.org', [email])
+    send_mail('Email Confirm', url, 'noreply@whuctf.org', [email], html_message=html)
     return key
 
 
@@ -54,7 +56,7 @@ def sign_up(request):
                         password=password,
                         email=email,
                         nickname=username,
-                        email_check=_send_email_check(email)
+                        email_check=_send_email_check(email, username)
                     )
                     request.session['uid'] = user.pk
                     return OKAY
