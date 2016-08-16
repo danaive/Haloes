@@ -20,7 +20,7 @@ def _send_email_check(email, username, password):
     from os.path import join
     key = urandom(8).encode('hex')
     html = open(join(settings.BASE_DIR, 'email_check.html')).read().format(
-        username=username,
+        username=username.encode('utf-8'),
         domain=settings.DOMAIN_NAME,
         token=key + sha256(key + password).hexdigest()[:32]
     )
