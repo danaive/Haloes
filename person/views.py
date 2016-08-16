@@ -50,7 +50,7 @@ def sign_up(request):
             password = rform.cleaned_data['password']
             email = rform.cleaned_data['email']
             if '@' not in username and len(username) <= 16:
-                if True
+                if True:
                     user = Person.objects.create(
                         username=username,
                         password=password,
