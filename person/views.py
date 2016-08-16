@@ -8,23 +8,22 @@ from .forms import *
 from .models import Person, MaxScore
 from team.models import Group
 from news.models import News
-from news.views import motto_news
+from news.views import *
 from os import urandom
 from hashlib import sha256
 from base64 import b64encode
 import json
 
-OKAY = HttpResponse(
-    json.dumps({'msg': 'okay'}),
-    content_type='application/json')
 
-FAIL = HttpResponse(
-    json.dumps({'msg': 'fail'}),
-    content_type='application/json')
-
-ERROR = HttpResponse(
-    json.dumps({'msg': 'error'}),
-    content_type='application/json')
+def _send_email_check(email):
+    from django.core.mail import send_mail
+    key = b64encode(urandom(12))
+    url = 'http://{domain}/check-in/?token={token}'.format(
+        domain=settings.DOMAIN_NAME,
+        token=key + b64encode(sha256(username + key).digest())
+    )
+    send_mail('Email Confirm', url, 'noreply@whuctf.org', [email])
+    return key
 
 
 @csrf_exempt
@@ -50,20 +49,13 @@ def sign_up(request):
             msg = 'fail'
             if '@' not in username and len(username) <= 16:
                 try:
-                    from django.core.mail import send_mail
-                    key = b64encode(urandom(12))
-                    url = 'http://{domain}/check-in/?token={token}'.format(
-                        domain=settings.DOMAIN_NAME,
-                        token=key + b64encode(sha256(username + key).digest())
-                    )
                     user = Person.objects.create(
                         username=username,
                         password=password,
                         email=email,
                         nickname=username,
-                        email_check=key
+                        email_check=_send_email_check(email)
                     )
-                    send_mail('Email Confirm', url, 'noreply@whuctf.org', [email])
                     request.session['uid'] = user.pk
                     return OKAY
                 except:
@@ -87,7 +79,7 @@ def sign_in(request):
                 from hashlib import sha256
                 if sha256(user.password + salt).hexdigest() == password:
                     if user.email_check != 'done':
-                        return HttpResponse(json.dumps({'msg': 'email'}), content_type='application/json')
+                        return response('email')
                     request.session['uid'] = user.pk
                     return OKAY
             except:
@@ -107,44 +99,35 @@ def update_avatar(request):
         if iform.is_valid():
             img = request.FILES['img']
             if img.size > 5 * 1024 * 1024:
-                return HttpResponse(
-                    json.dumps(
-                        {'msg': 'Image No Larger Than 5M is Accepted.'}),
-                    content_type='application/json'
-                )
+                return FAIL
             user = Person.objects.get(pk=request.session['uid'])
             user.avatar = img
             user.save()
-            return HttpResponse(json.dumps({
-                'msg': 'okay',
-                'path': settings.MEDIA_URL + user.avatar,
-            }), content_type='application/json')
+            return response('okay', {'path': settings.MEDIA_URL + user.avatar})
         return FAIL
     return ERROR
 
 
 def update_info(request):
-    # email check to be added
     if request.is_ajax:
         uform = UpdateForm(request.POST)
         if uform.is_valid():
             user = Person.objects.get(pk=request.session['uid'])
-            attrs = ['major', 'school', 'email', 'blog', 'motto']
-            if (uform.cleaned_data['motto'] and
-                uform.cleaned_data['motto'] != user.motto):
-                motto_news(user)
-            for attr in attrs:
+            email = uform.cleaned_data['email']
+            if email and email != user.email:
+                user.check_email = _send_email_check(email)
+            for attr in ['major', 'school', 'email', 'blog', 'motto']:
                 if uform.cleaned_data[attr]:
                     setattr(user, attr, uform.cleaned_data[attr])
             user.save()
-            return HttpResponse(json.dumps({
-                'msg': 'okay',
+            data = {
                 'major': user.major,
                 'school': user.school,
                 'email': user.email,
                 'blog': user.blog,
                 'motto': user.motto,
-            }), content_type='application/json')
+            }
+            return response('okay', data)
     return ERROR
 
 
@@ -162,8 +145,7 @@ def follow(request):
         fform = FollowForm(request.POST)
         if fform.is_valid():
             try:
-                user = Person.objects.get(
-                    username=fform.cleaned_data['username'])
+                user = Person.objects.get(username=fform.cleaned_data['username'])
             except:
                 return ERROR
             follower = Person.objects.get(pk=request.session['uid'])
@@ -220,7 +202,6 @@ def score(request):
             except:
                 return ERROR
             data = {
-                'msg': 'okay',
                 'score': [0] * 5,
                 'capacity': []
             }
@@ -249,7 +230,7 @@ def score(request):
                 })
             if sum(data['score']) == 0:
                 return FAIL
-            return HttpResponse(json.dumps(data), content_type='application/json')
+            return response('okay', data)
     return ERROR
 
 
@@ -295,10 +276,9 @@ def get_news(request):
         from django.db.models import Q
         if user.group:
             news = News.objects.filter(
-                Q(person__in=user.following) |
-                Q(group=user.group)).order_by('-time')[page:page+10]
+                Q(person__in=user.following) | Q(group=user.group)
+            ).order_by('-time')[page:page+10]
         else:
-            news = News.objects.filter(
-                person__in=user.following)[page:page+10]
+            news = News.objects.filter(person__in=user.following)[page:page+10]
         return HttpResponse(json.dumps(news), content_type='application/json')
     return ERROR

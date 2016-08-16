@@ -281,3 +281,7 @@ body input:focus{
   border-color: #A94442;
   color: #A94442;
 }
+
+.alert p{
+  margin-bottom: 0px;
+}

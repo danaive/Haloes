@@ -25,8 +25,8 @@ SECRET_KEY = 't9rd&$vms)e%+=k_mf(az)s*vqn%ni+e4+)5pi+8!*g!&fjps6'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-# Application definition
 
+# Application definition
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -82,6 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'haloes.wsgi.application'
+
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -95,6 +96,7 @@ DATABASES = {
         'PORT': '3306'
     }
 }
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -107,6 +109,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -122,15 +125,17 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
 
+FIXTURE_DIRS = [
+    os.path.join(BASE_DIR, 'fixture/'),
+]
+
+# Docker Configures
+
 DOCKER_IP = '127.0.0.1'
 
 DOCKER_PORT = 2375
 
-# server version need to be ensure
-DOCKER_VERSION = 'xxx'
+DOCKER_VERSION = 'xxx' # update version here
 
-FIXTURE_DIRS = [
-    os.path.join(BASE_DIR, 'fixture/'),
-]
 
 DOMAIN_NAME = 'whuctf.org'

@@ -5,23 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from person.models import Person
 from challenge.models import *
-from news.views import submit_news
+from news.views import *
 from .forms import *
 from datetime import timedelta
 import json
-
-
-OKAY = HttpResponse(
-    json.dumps({'msg': 'okay'}),
-    content_type='application/json')
-
-FAIL = HttpResponse(
-    json.dumps({'msg': 'fail'}),
-    content_type='application/json')
-
-ERROR = HttpResponse(
-    json.dumps({'msg': 'error'}),
-    content_type='application/json')
 
 
 def index(request):
@@ -134,10 +121,7 @@ def upload_image(request):
             with open(filepath, 'wb+') as dest:
                 for chunk in img.chunks():
                     dest.write(chunk)
-            return HttpResponse(json.dumps({
-                'msg': 'okay',
-                'path': settings.MEDIA_URL + 'image/' + filename
-            }), content_type='application/json')
+            return response('okay', {'path': settings.MEDIA_URL + 'image/' + filename})
         return FAIL
     return ERROR
 
@@ -149,10 +133,7 @@ def get_challenges(request):
             title = sf.cleaned_data['title']
             challenges = map(lambda x: {'pk': x.pk, 'name': x.title},
                              Challenge.objects.filter(source=title))
-            return HttpResponse(json.dumps({
-                'msg': 'okay',
-                'challenges': challenges
-            }),content_type='application/json')
+            return response('okay', {'challenges': challenges})
         return FAIL
     return ERROR
 
@@ -173,10 +154,7 @@ def submit(request):
                         'content': content
                     }
                 )
-                return HttpResponse(json.dumps({
-                    'msg': 'okay',
-                    'pk': wp.pk
-                }), content_type='application/json')
+                return response('okay', {'pk': wp.pk})
             except:
                 return FAIL
     return ERROR

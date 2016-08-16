@@ -3,7 +3,6 @@
   $(function() {
     var score;
     $('a[href$="person/"]').addClass('current');
-    stickFooter();
     $('[href="#logout"]').on('click', function() {
       return $.ajax({
         url: 'sign-out/',
@@ -138,9 +137,10 @@
       }
     });
     $('[data-toggle="tooltip"]').tooltip();
-    return $('#avatar').on('click', function() {
+    $('#avatar').on('click', function() {
       return $('#avatarHolder').click();
     });
+    return stickFooter();
   });
 
   window.uploadAvatar = function() {
@@ -154,11 +154,11 @@
       success: function(data) {
         if (data.msg === 'okay') {
           $('#avatar').attr('src', data.path);
-          $('#iconHolder').hide();
-          return window.setTimeout("$('#avatar').show()", 50);
         } else {
-          return console.log(data);
+          alert('Image No Larger Than 5M is Accepted.');
         }
+        $('#iconHolder').hide();
+        return window.setTimeout("$('#avatar').show()", 50);
       }
     });
   };

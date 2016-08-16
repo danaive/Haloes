@@ -167,29 +167,30 @@
     $('#avatar').on('click', function() {
       return $('#avatarHolder').click();
     });
-    window.uploadAvatar = function() {
-      $('#avatar').hide();
-      $('#iconHolder').show();
-      return $.ajaxFileUpload({
-        url: 'update-avatar/',
-        secureurl: false,
-        fileElementId: 'avatarHolder',
-        dataType: 'json',
-        success: function(data) {
-          if (data.msg === 'okay') {
-            $('#avatar').attr('src', data.path);
-            $('#iconHolder').hide();
-            return window.setTimeout("$('#avatar').show()", 50);
-          } else {
-            return console.log(data);
-          }
-        }
-      });
-    };
     if ($('h2').data('state') !== 1) {
       $('.leader').hide();
     }
     return stickFooter();
   });
+
+  window.uploadAvatar = function() {
+    $('#avatar').hide();
+    $('#iconHolder').show();
+    return $.ajaxFileUpload({
+      url: 'update-avatar/',
+      secureurl: false,
+      fileElementId: 'avatarHolder',
+      dataType: 'json',
+      success: function(data) {
+        if (data.msg === 'okay') {
+          $('#avatar').attr('src', data.path);
+        } else {
+          alert('Image No Larger Than 5M is Accepted.');
+        }
+        $('#iconHolder').hide();
+        return window.setTimeout("$('#avatar').show()", 50);
+      }
+    });
+  };
 
 }).call(this);

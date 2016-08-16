@@ -1,4 +1,18 @@
 from .models import *
+from django.http import HttpResponse
+import json
+
+
+def response(msg, data=None):
+    dic = {'msg': msg}
+    if data:
+        dic.update(data)
+    return HttpResponse(json.dumps(dic), content_type='application/json')
+
+
+OKAY = response('okay')
+FAIL = response('fail')
+ERROR = response('error')
 
 
 def motto_news(user):

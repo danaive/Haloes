@@ -1,7 +1,6 @@
 $ ->
 
   $('a[href$="person/"]').addClass 'current'
-  stickFooter()
 
   # sign out
   $('[href="#logout"]').on 'click', ->
@@ -116,6 +115,8 @@ $ ->
   $('#avatar').on 'click', ->
     $('#avatarHolder').click()
 
+  stickFooter()
+
 window.uploadAvatar = ->
   $('#avatar').hide()
   $('#iconHolder').show()
@@ -127,7 +128,7 @@ window.uploadAvatar = ->
     success: (data) ->
       if data.msg == 'okay'
         $('#avatar').attr 'src', data.path
-        $('#iconHolder').hide()
-        window.setTimeout "$('#avatar').show()", 50
       else
-        console.log data
+        alert 'Image No Larger Than 5M is Accepted.'
+      $('#iconHolder').hide()
+      window.setTimeout "$('#avatar').show()", 50

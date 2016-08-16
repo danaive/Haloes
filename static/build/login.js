@@ -36,6 +36,8 @@
               return window.setTimeout('location.href="/person"', 500);
             } else if (data.msg === 'fail') {
               return $('#signInFail').fadeIn();
+            } else if (data.msg === 'email') {
+              return $('#emailFail').fadeIn();
             } else {
               return $('#alertError').fadeIn();
             }

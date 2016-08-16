@@ -8,22 +8,10 @@ from .forms import *
 from .models import *
 from person.models import *
 from team.models import GroupMaxScore
-from news.views import solve_news
+from news.views import *
 import json
 import zipfile
 import re
-
-OKAY = HttpResponse(
-    json.dumps({'msg': 'okay'}),
-    content_type='application/json')
-
-FAIL = HttpResponse(
-    json.dumps({'msg': 'fail'}),
-    content_type='application/json')
-
-ERROR = HttpResponse(
-    json.dumps({'msg': 'error'}),
-    content_type='application/json')
 
 
 def index(request):
@@ -145,10 +133,8 @@ def get_challenge(request):
                 challenge = Challenge.objects.get(pk=pk)
             except:
                 return ERROR
-            return HttpResponse(json.dumps({
-                'msg': 'okay',
-                'content': challenge.description
-            }), content_type='application/json')
+            return response('okay', {'content': challenge.description})
+    return ERROR
 
 
 def switch(request):
@@ -227,6 +213,7 @@ def upload(request):
                     opt['source'] = config['source']
                     try:
                         Source.objects.create(title=config['source'])
+                        # update here "get_or_create"
                     except:
                         pass
                 if 'contest' in config:
@@ -242,5 +229,5 @@ def upload(request):
                 )
                 return OKAY
             except:
-                return ERROR
+                pass
     return ERROR

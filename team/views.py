@@ -6,22 +6,9 @@ from .models import *
 from .forms import *
 from person.models import Person
 from writeup.models import Writeup
-from news.views import group_contest_news
+from news.views import *
 from datetime import timedelta
 import json
-
-
-OKAY = HttpResponse(
-    json.dumps({'msg': 'okay'}),
-    content_type='application/json')
-
-FAIL = HttpResponse(
-    json.dumps({'msg': 'fail'}),
-    content_type='application/json')
-
-ERROR = HttpResponse(
-    json.dumps({'msg': 'error'}),
-    content_type='application/json')
 
 
 def index(request, pk=u'-1'):
@@ -90,12 +77,7 @@ def join(request):
                 group = Group.objects.get(code=code)
                 user.group = group
                 user.save()
-                return HttpResponse(
-                    json.dumps({
-                        'name': group.name,
-                        'msg': 'OKAY'
-                    }),
-                    content_type='application/json')
+                return response('okay', {'name': group.name})
             except:
                 return FAIL
     return ERROR
@@ -214,7 +196,6 @@ def get_score(request):
             except:
                 return ERROR
             data = {
-                'msg': 'okay',
                 'score': [0] * 5,
                 'capacity': []
             }
@@ -242,7 +223,7 @@ def get_score(request):
                 })
             if sum(data['score']) == 0:
                 return FAIL
-            return HttpResponse(json.dumps(data), content_type='application/json')
+            return response('okay', data)
     return ERROR
 
 @csrf_exempt
@@ -252,17 +233,11 @@ def update_avatar(request):
         if iform.is_valid():
             img = request.FILES['img']
             if img.size > 5 * 1024 * 1024:
-                return HttpResponse(
-                    json.dumps({'msg': 'Image No Larger Than 5M is Accepted.'}),
-                    content_type='application/json'
-                )
+                return FAIL
             group = Person.objects.get(pk=request.session['uid']).group
             group.avatar = img
             group.save()
-            return HttpResponse(json.dumps({
-                'msg': 'okay',
-                'path': settings.MEDIA_URL + group.avatar,
-            }), content_type='application/json')
+            return response('okay', {'path': settings.MEDIA_URL + group.avatar})
         return FAIL
     return ERROR
 

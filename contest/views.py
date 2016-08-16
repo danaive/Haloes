@@ -7,22 +7,9 @@ from .forms import *
 from person.models import Person
 from challenge.models import Challenge
 from team.models import *
-from news.views import contest_news
+from news.views import *
 from datetime import datetime, timedelta, tzinfo
 import json
-
-
-OKAY = HttpResponse(
-    json.dumps({'msg': 'okay'}),
-    content_type='application/json')
-
-FAIL = HttpResponse(
-    json.dumps({'msg': 'fail'}),
-    content_type='application/json')
-
-ERROR = HttpResponse(
-    json.dumps({'msg': 'error'}),
-    content_type='application/json')
 
 
 class UTC(tzinfo):
