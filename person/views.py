@@ -19,11 +19,11 @@ def _send_email_check(email, username):
     from django.core.mail import send_mail
     from os.path import join
     key = b64encode(urandom(12))
-    html = open(join(settings.BASE_DIR, 'email_check.html').read().format(
+    html = open(join(settings.BASE_DIR, 'email_check.html')).read().format(
         username=username,
         domain=settings.DOMAIN_NAME,
         token=key + b64encode(sha256(username + key).digest())
-    ))
+    )
     send_mail('Email Confirm', 'Email Confirm at Haloes',
         'noreply@' + settings.DOMAIN_NAME, [email], html_message=html)
     return key
