@@ -56,7 +56,7 @@ def sign_up(request):
                         password=password,
                         email=email,
                         nickname=username,
-                        email_check=_send_email_check(email, password)
+                        email_check=_send_email_check(email, username, password)
                     )
                     request.session['uid'] = user.pk
                     return OKAY
