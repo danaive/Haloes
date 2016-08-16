@@ -6,10 +6,10 @@ body{
 
 img.logo{
   position: absolute;
-  top: 30px;
-  left: calc(50% - 440px);
-  width: 880px;
-  height: 268px;
+  top: 130px;
+  left: calc(50% - 250px);
+  width: 500px;
+  /*height: 268px;*/
   opacity:0.5;
 }
 
