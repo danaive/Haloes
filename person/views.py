@@ -18,13 +18,14 @@ import json
 def _send_email_check(email, username):
     from django.core.mail import send_mail
     from os.path import join
-    key = b64encode(urandom(12))
+    key = urandom(8).encode('hex')
     html = open(join(settings.BASE_DIR, 'email_check.html')).read().format(
         username=username,
         domain=settings.DOMAIN_NAME,
-        token=key + b64encode(sha256(username + key).digest())
+        token=username.encode('utf-8').encode('hex') +
+              sha256(username.encode('utf-8').encode('hex') + key).hexdigest()[:32]
     )
-    send_mail('Email Confirm', 'Email Confirm at Haloes',
+    send_mail('Email Confirm', 'Email Confirm for Haloes',
         'noreply@' + settings.DOMAIN_NAME, [email], html_message=html)
     return key
 
@@ -32,14 +33,15 @@ def _send_email_check(email, username):
 @csrf_exempt
 def check_email(request, token):
     try:
-        key = token[:16]
-        user = Person.objects.get(email_check=token)
-        if b64encode(sha256(user.name + key).digest()) == token[16:]:
+        username = token[:-32]
+        user = Person.objects.get(username.decode('hex').decode('utf-8'))
+        key = user.email_check
+        if sha256(username + key).hexdigest()[:32] == token[-32:]
             user.email_check = 'done'
             user.save()
             return HttpResponseRedirect(reverse('person:index'))
     except:
-        return ERROR
+        return render(request, '404.jade')
 
 
 def sign_up(request):
@@ -78,7 +80,6 @@ def sign_in(request):
                     user = Person.objects.get(username=username)
                 else:
                     user = Person.objects.get(email=username)
-                from hashlib import sha256
                 if sha256(user.password + salt).hexdigest() == password:
                     if user.email_check != 'done':
                         return response('email')
