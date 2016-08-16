@@ -36,7 +36,7 @@ def check_email(request, token):
         username = token[:-32]
         user = Person.objects.get(username.decode('hex').decode('utf-8'))
         key = user.email_check
-        if sha256(username + key).hexdigest()[:32] == token[-32:]
+        if sha256(username + key).hexdigest()[:32] == token[-32:]:
             user.email_check = 'done'
             user.save()
             return HttpResponseRedirect(reverse('person:index'))
