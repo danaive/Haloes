@@ -24,7 +24,7 @@ def _send_email_check(email, username):
         domain=settings.DOMAIN_NAME,
         token=key + b64encode(sha256(username + key).digest())
     )
-    send_mail('Email Confirm', url, 'noreply@whuctf.org', [email], html_message=html)
+    send_mail('Email Confirm', 'Email Confirm', 'noreply@whuctf.org', [email], html_message=html)
     return key
 
 
