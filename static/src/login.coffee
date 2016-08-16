@@ -47,7 +47,6 @@ $ ->
         success: (data) ->
           if data.msg == 'okay'
             $('#signUpDone').fadeIn()
-            window.setTimeout 'location.href="/person"', 500
           else if data.msg == 'fail'
             $('#signUpFail').fadeIn()
           else
