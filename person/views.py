@@ -49,9 +49,8 @@ def sign_up(request):
             username = rform.cleaned_data['username']
             password = rform.cleaned_data['password']
             email = rform.cleaned_data['email']
-            msg = 'fail'
             if '@' not in username and len(username) <= 16:
-                try:
+                if True
                     user = Person.objects.create(
                         username=username,
                         password=password,
@@ -61,7 +60,7 @@ def sign_up(request):
                     )
                     request.session['uid'] = user.pk
                     return OKAY
-                except:
+                else
                     pass
             return FAIL
     return ERROR
