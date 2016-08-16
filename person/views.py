@@ -60,7 +60,7 @@ def sign_up(request):
                     )
                     request.session['uid'] = user.pk
                     return OKAY
-                else
+                else:
                     pass
             return FAIL
     return ERROR
