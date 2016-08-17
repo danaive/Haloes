@@ -52,7 +52,7 @@ def sign_up(request):
             if '@' not in username and len(username) <= 16:
                 if True:
                     user = Person.objects.create(
-                        username=username.encode('utf-8'),
+                        username=username,
                         password=password,
                         email=email,
                         nickname=username,
