@@ -37,6 +37,7 @@ def check_email(request, token):
         if sha256(key + user.password).hexdigest()[:32] == token[16:]:
             user.email_check = 'done'
             user.save()
+            request.session['uid'] = user.pk
             return HttpResponseRedirect(reverse('person:index'))
     except:
         return render(request, '404.jade')
