@@ -4,7 +4,7 @@ extends frame
 mixin challengeList(clg, pk, state, cate, priv)
   tr.ALL(class=cate, data-state=state, style='display: none;')
     td.text-center: a(href='#mod-#{pk}')= clg.title
-    td.text-center= clg.source
+    td.text-center= clg.origin
     td.text-center
       if clg.category == 'PWN'
         span.label.label-primary PWN
@@ -58,7 +58,7 @@ block container
           thead
             tr
               th.text-center Title
-              th.text-center Source
+              th.text-center Origin
               th.text-center Category
               th.text-center Score
               th.text-center Solved

@@ -58,8 +58,7 @@
           },
           success: function(data) {
             if (data.msg === 'okay') {
-              $('#signUpDone').fadeIn();
-              return window.setTimeout('location.href="/person"', 500);
+              return $('#signUpDone').fadeIn();
             } else if (data.msg === 'fail') {
               return $('#signUpFail').fadeIn();
             } else {

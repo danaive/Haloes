@@ -14,12 +14,12 @@ block container
       else
         button#submitBtn.btn.btn-success.pull-right(style='margin: 10px 0px 0px 10px;', data-state='0') Submit
       ul.list-inline
-        if sources
+        if origins
           li: h4 Challenge
           li(style='width: 150px;')
             select#SList.form-control
-              option(value='-1') Select Source
-              for item in sources
+              option(value='-1') Select Origin
+              for item in origins
                 option(value=item)= item
               option(value='') Others
           li: h4 /

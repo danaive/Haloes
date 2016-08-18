@@ -130,9 +130,8 @@
         rctx = $('#radarChart').get(0).getContext('2d');
         return new Chart(rctx).Radar(rdata, {
           scaleOverride: true,
-          scaleSteps: 5,
-          scaleStepWidth: 25,
-          scaleStartValue: -25
+          scaleSteps: 4,
+          scaleStepWidth: 25
         });
       }
     });

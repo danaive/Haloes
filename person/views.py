@@ -229,8 +229,8 @@ def score(request):
                     ),
                     'name': visitor.username
                 })
-            if sum(data['score']) == 0:
-                return FAIL
+            # if sum(data['score']) == 0:
+            #     return FAIL
             return response('okay', data)
     return ERROR
 

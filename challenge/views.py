@@ -21,7 +21,7 @@ def index(request):
         user = None
     username = user.username if user else None
     challenges = Challenge.objects.all()
-    attrs = ['pk', 'title', 'source', 'score', 'status',
+    attrs = ['pk', 'title', 'origin', 'score', 'status',
              'privilege']
     cha_list = []
     for challenge in challenges:
@@ -209,13 +209,9 @@ def upload(request):
                     # end
                 pat = re.compile(r'#{\s*(\S+)\s*}')
                 opt = {}
-                if 'source' in config:
-                    opt['source'] = config['source']
-                    try:
-                        Source.objects.create(title=config['source'])
-                        # update here "get_or_create"
-                    except:
-                        pass
+                if 'origin' in config:
+                    opt['origin'] = config['origin']
+                    Origin.objects.get_or_create(title=config['origin'])
                 if 'contest' in config:
                     opt['contest'] = config['contest']
                 if 'privilege' in config:

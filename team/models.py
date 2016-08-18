@@ -3,9 +3,6 @@ from person.models import Person, Submit
 from challenge.models import Challenge
 from contest.models import Contest
 
-def upload_to():
-    return 'wtf'
-
 
 def upload_to_team(instance, filename):
     from os import urandom

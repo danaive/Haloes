@@ -6,7 +6,7 @@ class ImageForm(forms.Form):
     img = forms.ImageField()
 
 
-class SourceForm(forms.Form):
+class OriginForm(forms.Form):
     title = forms.CharField()
 
 

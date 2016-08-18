@@ -80,12 +80,12 @@ def editor(request, pk='-1'):
     else:
         user = None
     username = user.username if user else None
-    sources = map(lambda x: x.title, Source.objects.all())
+    origins = map(lambda x: x.title, Origin.objects.all())
     pk = int(pk)
     if pk == -1:
         return render(request, 'writeup-editor.jade', {
             'username': username,
-            'sources': sources,
+            'origins': origins,
         })
     else:
         try:
@@ -128,11 +128,11 @@ def upload_image(request):
 
 def get_challenges(request):
     if request.is_ajax:
-        sf = SourceForm(request.POST)
+        sf = OriginForm(request.POST)
         if sf.is_valid():
             title = sf.cleaned_data['title']
             challenges = map(lambda x: {'pk': x.pk, 'name': x.title},
-                             Challenge.objects.filter(source=title))
+                             Challenge.objects.filter(origin=title))
             return response('okay', {'challenges': challenges})
         return FAIL
     return ERROR
@@ -178,7 +178,7 @@ def detail(request, pk):
             item.timex = (item.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S')
         my_wp = Writeup.objects.filter(author=wp.author).exclude(pk=wp.pk)
         re_wp = Writeup.objects.filter(challenge=wp.challenge).exclude(pk=wp.pk)
-        con_wp = Writeup.objects.filter(challenge__source=wp.challenge.source).exclude(challenge=wp.challenge)
+        con_wp = Writeup.objects.filter(challenge__origin=wp.challenge.origin).exclude(challenge=wp.challenge)
         for item in my_wp:
             item.like = item.likes.count()
             item.avatar = item.author.avatar

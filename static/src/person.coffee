@@ -84,7 +84,10 @@ $ ->
         highlight: highlight[i]
       } for _, i in label)
       pctx = $("#pieChart").get(0).getContext '2d'
-      new Chart(pctx).Pie pdata, {animateScale: true}
+      new Chart(pctx).Pie(
+        pdata
+        animateScale: true
+      )
 
       # radar chart
       capacity = data.capacity
@@ -105,9 +108,9 @@ $ ->
       new Chart(rctx).Radar(
         rdata
         scaleOverride: true
-        scaleSteps: 5
+        scaleSteps: 4
         scaleStepWidth: 25
-        scaleStartValue: -25
+        # scaleStartValue: -5
       )
 
   # avatar
