@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from person.models import Person
-from challenge.models import *
+from challenge.models import Challenge, Origin
 from news.views import *
 from .forms import *
 from datetime import timedelta
@@ -28,7 +28,7 @@ def index(request):
     writeups = sorted(writeups, key=lambda x: x.like, reverse=True)
     mywp = sorted(filter(lambda x: x.writer == username, writeups),
                   key=lambda x: x.time, reverse=False)
-    starredwp = user.stars.all()
+    starredwp = user.stars.all() if user else []
     for item in starredwp:
         item.like = item.likes.count()
         item.comment = item.comments.count()
@@ -131,8 +131,8 @@ def get_challenges(request):
         sf = OriginForm(request.POST)
         if sf.is_valid():
             title = sf.cleaned_data['title']
-            challenges = map(lambda x: {'pk': x.pk, 'name': x.title},
-                             Challenge.objects.filter(origin=title))
+            origin = Origin.objects.get(title=title)
+            challenges = map(lambda x: {'pk': x.pk, 'name': x.title}, origin.challenge_set.all())
             return response('okay', {'challenges': challenges})
         return FAIL
     return ERROR

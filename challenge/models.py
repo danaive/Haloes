@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 from contest.models import Contest
 
 
+class Origin(models.Model):
+    title = models.CharField(max_length=50, unique=True)
+
+    def __unicode__(self):
+        return self.title
+
+
 class Challenge(models.Model):
     title = models.CharField(max_length=50, unique=True)
     category = models.CharField(max_length=10,
@@ -10,7 +17,7 @@ class Challenge(models.Model):
     )
     score = models.PositiveIntegerField()
     flag = models.CharField(max_length=50)
-    origin = models.CharField(max_length=50, blank=True)
+    origin = models.ForeignKey(Origin, null=True)
     status = models.CharField(max_length=3, choices=(('on', 'ON'), ('off', 'OFF')))
     solved = models.PositiveIntegerField(default=0)
     contest = models.ForeignKey(Contest, null=True, blank=True, on_delete=models.SET_NULL)
@@ -21,10 +28,6 @@ class Challenge(models.Model):
 
     def __unicode__(self):
         return self.title + str(self.score)
-
-
-class Origin(models.Model):
-    title = models.CharField(max_length=50, unique=True)
 
 
 class Package(models.Model):

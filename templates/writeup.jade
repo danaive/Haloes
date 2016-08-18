@@ -76,26 +76,26 @@ block container
         i.fa.fa-cloud-upload
         | &nbsp;Submit
 
-
-    .col-md-4
-      ul.nav.nav-pills
-        li.active
-          a(href='#mine', data-toggle='pill')
-            | My WriteUp&nbsp;
-            if minelen
-              span.badge.badge-primary= minelen
-        li
-          a(href='#starred', data-toggle='pill')
-            | Starred WriteUp&nbsp;
-            if starredlen
-              span.badge.badge-primary= starredlen
-      .tab-content
-        #mine.tab-pane.fade.in.active: ul.media-list(style='margin-top: 30px;')
-          for item in mywp
-            +mineList(item, item.pk)
-        #starred.tab-pane.fade: ul.media-list(style='margin-top: 30px;')
-          for item in starredwp
-            +starredList(item, item.pk)
+    if username
+      .col-md-4
+        ul.nav.nav-pills
+          li.active
+            a(href='#mine', data-toggle='pill')
+              | My WriteUp&nbsp;
+              if minelen
+                span.badge.badge-primary= minelen
+          li
+            a(href='#starred', data-toggle='pill')
+              | Starred WriteUp&nbsp;
+              if starredlen
+                span.badge.badge-primary= starredlen
+        .tab-content
+          #mine.tab-pane.fade.in.active: ul.media-list(style='margin-top: 30px;')
+            for item in mywp
+              +mineList(item, item.pk)
+          #starred.tab-pane.fade: ul.media-list(style='margin-top: 30px;')
+            for item in starredwp
+              +starredList(item, item.pk)
 
 append script
   script(src='{% static "build/writeup.js" %}')
