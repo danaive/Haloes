@@ -50,7 +50,7 @@ def index(request):
     return render(request, 'challenge.jade', {
         'username': username,
         'challenges': cha_list,
-        'privilege': user.privilege
+        'privilege': user.privilege if user else -1
     })
 
 
@@ -178,52 +178,4 @@ def switch(request):
             except:
                 return ERROR
             return OKAY
-    return ERROR
-
-
-@csrf_exempt
-def upload(request):
-    if request.is_ajax:
-        zf = ZipForm(request.POST, request.FILES)
-        if zf.is_valid():
-            from os import urandom
-            zipname = urandom(8).encode('hex')
-            filepath = settings.MEDIA_ROOT + 'source/' + zipname + '.zip'
-            with open(filepath, 'wb') as fw:
-                for chunk in request.FILES['source']:
-                    fw.write(chunk)
-            try:
-                zip = zipfile.ZipFile(filepath)
-                config = json.loads(zip.read('config.json'))
-                title = config['title']
-                dlpath = config['category'] + '/' + config['title']
-                para = {}
-                for item in config['statics']:
-                    zip.extract(item, settings.MEDIA_ROOT + dlpath)
-                    para[item] = settings.MEDIA_URL + dlpath + '/' + item
-                if 'dockerfile' in config:
-                    # docker deployment begin
-
-                    para['port'] = 'some port'
-
-                    # end
-                pat = re.compile(r'#{\s*(\S+)\s*}')
-                opt = {}
-                if 'origin' in config:
-                    opt['origin'] = config['origin']
-                    Origin.objects.get_or_create(title=config['origin'])
-                if 'contest' in config:
-                    opt['contest'] = config['contest']
-                if 'privilege' in config:
-                    opt['privilege'] = config['privilege']
-                Challenge.objects.update_or_create(
-                    title=config['title'], category=config['category'],
-                    score=config['score'], flag=config['flag'],
-                    zipfile=filepath, defaults=opt,
-                    description=pat.sub(r'%(\1)s', config['content']) % para,
-                    status='off' if 'dockerfile' in config else 'on'
-                )
-                return OKAY
-            except:
-                pass
     return ERROR

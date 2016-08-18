@@ -115,13 +115,3 @@ $ ->
           $('.alert-success').fadeIn()
         else if data.msg == 'fail'
           $('.alert-danger').fadeIn()
-
-  $('#uploadBtn').on 'click', ->
-    $.ajaxFileUpload
-      url: '/challenge/upload/'
-      secureurl: false
-      fileElementId: 'zipHolder'
-      dataType: 'json'
-      success: (data) ->
-        console.log data.msg
-

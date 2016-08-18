@@ -17,11 +17,11 @@ class PackageAdmin(admin.ModelAdmin):
     actions = ['deploy_challenge']
 
     def deploy_challenge(self, request, queryset):
-        import zipfile, os
+        import zipfile, os, json, re
         success, fail = 0, 0
         for pack in queryset:
             filepath = os.path.join(settings.MEDIA_ROOT, pack.zipfile.name)
-            try:
+            if True:
                 zip = zipfile.ZipFile(filepath)
                 config = json.loads(zip.read('config.json'))
                 dlpath = os.path.join(settings.MEDIA_URL, config['category'], config['title'])
@@ -36,8 +36,7 @@ class PackageAdmin(admin.ModelAdmin):
                 pat = re.compile(r'#{\s*(\S+)\s*}')
                 opt = {}
                 if 'origin' in config:
-                    opt['origin'] = config['origin']
-                    Origin.objects.get_or_create(title=config['origin'])
+                    opt['origin'], _ = Origin.objects.get_or_create(title=config['origin'])
                 if 'contest' in config:
                     opt['contest'] = config['contest']
                 if 'privilege' in config:
@@ -45,15 +44,15 @@ class PackageAdmin(admin.ModelAdmin):
                 Challenge.objects.update_or_create(
                     title=config['title'], category=config['category'],
                     score=config['score'], flag=config['flag'],
-                    description=pat.sub(r'%(\1)s', config['content']) % para,
+                    description=pat.sub(r'%(\1)s', config['content']) % const,
                     status='off' if 'dockerfile' in config else 'on',
                     defaults=opt
                 )
                 pack.title = config['title']
-                pack.published = True
+                pack.deployed = True
                 pack.save()
                 success += 1
-            except:
+            else:
                 fail += 1
         self.message_user(request, '%d challenges deployed, %d failed' % (success, fail))
 
