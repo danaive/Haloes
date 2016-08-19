@@ -13,13 +13,14 @@ class ChallengeAdmin(admin.ModelAdmin):
 
 
 class PackageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'docker_required', 'deployed')
+    list_display = ('title', 'uploader', 'docker_required', 'deployed')
     actions = ['deploy_challenge']
 
     def deploy_challenge(self, request, queryset):
         import zipfile, os, json, re
         success, fail = 0, 0
         for pack in queryset:
+            # randomlize the filename
             filepath = os.path.join(settings.MEDIA_ROOT, pack.zipfile.name)
             if True:
                 zip = zipfile.ZipFile(filepath)
@@ -55,8 +56,6 @@ class PackageAdmin(admin.ModelAdmin):
             else:
                 fail += 1
         self.message_user(request, '%d challenges deployed, %d failed' % (success, fail))
-
-
 
 
 admin.site.register(Challenge, ChallengeAdmin)

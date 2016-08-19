@@ -30,9 +30,14 @@ class Challenge(models.Model):
         return self.title + str(self.score)
 
 
+def upload_to(instance, filename):
+    from os import urandom
+    return 'zipfile/%s.%s' % (filename, urandom(8).encode('hex'))
+
+
 class Package(models.Model):
     title = models.CharField(max_length=50, unique=True)
     uploader = models.ForeignKey(User)
-    zipfile = models.FileField(upload_to='zipfile')
+    zipfile = models.FileField(upload_to=upload_to)
     docker_required = models.BooleanField()
     deployed = models.BooleanField(default=False)
