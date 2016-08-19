@@ -14,7 +14,7 @@ html(lang='en')
     nav.navbar.navbar-default.navbar-custom(role='navigation', style='background-color: #434A54;')
       .container
         .navbar-header
-          a.navbar-brand(href='#'): img(src='{% static "img/logo-text.png" %}', height='40')
+          a.navbar-brand(href='#'): img(src='{% static "img/haloes-text.png" %}', height='20', style='margin-top: 8px;')
         .collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-left
             li: a.nav-link(href='{% url "challenge:index" %}') Challenge
@@ -46,12 +46,15 @@ html(lang='en')
     .container(style='padding-top: 80px;')
       block container
 
-    .footer(style='padding: 15px 0px; background-color: #EEE; font-size: 10px;')
+    .footer(style='padding: 10px 0px; background-color: #EEE; font-size: 10px;')
       .container
-        .footer-copyright.pull-left
+        .footer-copyright.pull-left(style='margin-top: 8px;')
           | Powered by #[b DAWN] Team @ Wuhan University.
-        .footer-copyright.pull-right
+        .footer-copyright.pull-right(style='margin-top: 8px;')
           | #[a(href='mailto:wangdanlei@whu.edu.cn', target='_blank') Bug Report] and #[a(href='mailto:wangdanlei@whu.edu.cn', target='_blank') Collaboration] are Welcomed.
+        .footer-copyright.text-center
+          img(src='{% static "img/whu-logo.png" %}', height='35', style='margin-right: 10px;')
+          img(src='{% static "img/logo-text.png" %}', height='20')
 
     block script
       script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')

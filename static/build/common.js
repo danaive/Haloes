@@ -5,7 +5,7 @@
     window.stickFooter = function() {
       var docHeight, footerTop;
       docHeight = $(window).height();
-      footerTop = $('.footer').position().top + $('.footer').height() + 30;
+      footerTop = $('.footer').position().top + $('.footer').height() + 20;
       if (footerTop < docHeight) {
         return $('.footer').css({
           'margin-top': (docHeight - footerTop) + 'px'

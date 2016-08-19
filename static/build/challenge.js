@@ -126,7 +126,7 @@
         }
       });
     });
-    $('#submit').on('click', function() {
+    return $('#submit').on('click', function() {
       var pk;
       pk = $(this).data('pk');
       return $.ajax({
@@ -144,17 +144,6 @@
           } else if (data.msg === 'fail') {
             return $('.alert-danger').fadeIn();
           }
-        }
-      });
-    });
-    return $('#uploadBtn').on('click', function() {
-      return $.ajaxFileUpload({
-        url: '/challenge/upload/',
-        secureurl: false,
-        fileElementId: 'zipHolder',
-        dataType: 'json',
-        success: function(data) {
-          return console.log(data.msg);
         }
       });
     });
