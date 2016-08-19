@@ -16,6 +16,8 @@ import json
 
 
 def _send_email_check(email, username, password):
+    if settings.DEBUG:
+        return 'done'
     from django.core.mail import send_mail
     from os.path import join
     key = urandom(8).encode('hex')
@@ -51,7 +53,7 @@ def sign_up(request):
             password = rform.cleaned_data['password']
             email = rform.cleaned_data['email']
             if '@' not in username and len(username) <= 16:
-                if True:
+                try:
                     user = Person.objects.create(
                         username=username,
                         password=password,
@@ -60,7 +62,7 @@ def sign_up(request):
                         email_check=_send_email_check(email, username, password)
                     )
                     return OKAY
-                else:
+                except:
                     pass
             return FAIL
     return ERROR
@@ -99,12 +101,15 @@ def update_avatar(request):
         iform = ImageForm(request.POST, request.FILES)
         if iform.is_valid():
             img = request.FILES['img']
-            if img.size > 5 * 1024 * 1024:
+            if img.size > 500 * 1024:
                 return FAIL
             user = Person.objects.get(pk=request.session['uid'])
             user.avatar = img
             user.save()
-            return response('okay', {'path': settings.MEDIA_URL + user.avatar})
+            from PIL import Image
+            img = Image.open(user.avatar.path)
+            img.resize((120, 120), Image.ANTIALIAS).save(user.avatar.path, 'PNG')
+            return response('okay', {'path': user.avatar.url})
         return FAIL
     return ERROR
 

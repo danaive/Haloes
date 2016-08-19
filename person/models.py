@@ -4,9 +4,7 @@ from challenge.models import Challenge
 
 def upload_to(instance, filename):
     from os import urandom
-    return 'avatar/person/' + '.'.join(
-        (instance.username, urandom(4).encode('hex'),
-        filename.split('.')[-1]))
+    return 'avatar/person/%s.%s.png' % (instance.username, urandom(4).encode('hex'))
 
 
 class Person(models.Model):

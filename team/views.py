@@ -226,18 +226,22 @@ def get_score(request):
             return response('okay', data)
     return ERROR
 
+
 @csrf_exempt
 def update_avatar(request):
     if request.is_ajax:
         iform = ImageForm(request.POST, request.FILES)
         if iform.is_valid():
             img = request.FILES['img']
-            if img.size > 5 * 1024 * 1024:
+            if img.size > 500 * 1024:
                 return FAIL
             group = Person.objects.get(pk=request.session['uid']).group
             group.avatar = img
             group.save()
-            return response('okay', {'path': settings.MEDIA_URL + group.avatar})
+            from PIL import Image
+            img = Image.open(group.avatar.path)
+            img.resize((120, 120), Image.ANTIALIAS).save(group.avatar.path, 'PNG')
+            return response('okay', {'path': group.avatar.url})
         return FAIL
     return ERROR
 

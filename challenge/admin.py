@@ -22,7 +22,7 @@ class PackageAdmin(admin.ModelAdmin):
         for pack in queryset:
             # randomlize the filename
             filepath = os.path.join(settings.MEDIA_ROOT, pack.zipfile.name)
-            if True:
+            try:
                 zip = zipfile.ZipFile(filepath)
                 config = json.loads(zip.read('config.json'))
                 dlpath = os.path.join(settings.MEDIA_URL, config['category'], config['title'])
@@ -53,7 +53,7 @@ class PackageAdmin(admin.ModelAdmin):
                 pack.deployed = True
                 pack.save()
                 success += 1
-            else:
+            except:
                 fail += 1
         self.message_user(request, '%d challenges deployed, %d failed' % (success, fail))
 

@@ -6,16 +6,12 @@ from contest.models import Contest
 
 def upload_to_team(instance, filename):
     from os import urandom
-    return 'avatar/team/' + '.'.join((
-        instance.name, urandom(4).encode('hex'),
-        filename.split('.')[-1]))
+    return 'avatar/team/%s.%s.png' % (instance.name, urandom(4).encode('hex'))
 
 
 def upload_to_group(instance, filename):
     from os import urandom
-    return 'avatar/group/' + '.'.join((
-        instance.name, urandom(4).encode('hex'),
-        filename.split('.')[-1]))
+    return 'avatar/group/%s.%s.png' % (instance.name, urandom(4).encode('hex'))
 
 
 class Team(models.Model):
