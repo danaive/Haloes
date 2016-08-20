@@ -9,6 +9,9 @@
       toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown'],
       toolbarFloatOffset: $('nav').height()
     });
+    $('.alert').on('click', function() {
+      return $(this).fadeOut();
+    });
     if ($('#submitBtn').data('state')) {
       editor.setValue($('#contentHolder').text());
       $('#title').val($('#titleHolder').text());

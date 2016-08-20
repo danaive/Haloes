@@ -9,6 +9,9 @@
       toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown'],
       toolbarFloatOffset: $('nav').height()
     });
+    $('.alert').on('click', function() {
+      return $(this).fadeOut();
+    });
     $('#uploadBtn').on('click', function() {
       if ($('#imageName').val().length === 0) {
         return;

@@ -4,6 +4,9 @@ $ ->
 
   stickFooter()
 
+  $('.alert').on 'click', ->
+    $(@).fadeOut()
+
   $('#joinBtn').on 'click', ->
     if $('#invCode').val()
       $.ajax

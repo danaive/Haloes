@@ -3,6 +3,9 @@
   $(function() {
     $('a[href$="group/"]').addClass('current');
     stickFooter();
+    $('.alert').on('click', function() {
+      return $(this).fadeOut();
+    });
     $('#joinBtn').on('click', function() {
       if ($('#invCode').val()) {
         return $.ajax({

@@ -8,6 +8,9 @@ $ ->
     toolbar: ['title', 'bold', 'italic', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'markdown']
     toolbarFloatOffset: $('nav').height()
 
+  $('.alert').on 'click', ->
+    $(@).fadeOut()
+
   $('#uploadBtn').on 'click', ->
     if $('#imageName').val().length == 0
       return

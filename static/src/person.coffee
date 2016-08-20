@@ -11,6 +11,9 @@ $ ->
       success: ->
         location.href = '/'
 
+  $('.alert').on 'click', ->
+    $(@).fadeOut()
+
   #update info
   $('#updateBtn').on 'click', ->
     $(@).find('i')
