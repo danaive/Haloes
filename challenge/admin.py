@@ -20,10 +20,8 @@ class PackageAdmin(admin.ModelAdmin):
         import zipfile, os, json, re
         success, fail = 0, 0
         for pack in queryset:
-            # randomlize the filename
-            filepath = os.path.join(settings.MEDIA_ROOT, pack.zipfile.name)
             try:
-                zip = zipfile.ZipFile(filepath)
+                zip = zipfile.ZipFile(pack.zipfile.path)
                 config = json.loads(zip.read('config.json'))
                 dlpath = os.path.join(settings.MEDIA_URL, config['category'], config['title'])
                 const = {}
