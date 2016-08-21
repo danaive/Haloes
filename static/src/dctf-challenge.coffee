@@ -10,7 +10,7 @@ $ ->
     $('#flagHolder').show()
     $('.alert').hide()
     $.ajax
-      url: '/challenge/get-challenge/'
+      url: '/challenge/detail/'
       type: 'post'
       dataType: 'json'
       data:

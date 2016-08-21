@@ -11,7 +11,7 @@
       $('#flagHolder').show();
       $('.alert').hide();
       return $.ajax({
-        url: '/challenge/get-challenge/',
+        url: '/challenge/detail/',
         type: 'post',
         dataType: 'json',
         data: {

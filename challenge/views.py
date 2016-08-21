@@ -124,7 +124,7 @@ def submit(request):
     return ERROR
 
 
-def get_challenge(request):
+def detail(request):
     if request.is_ajax:
         cf = ChallengeForm(request.POST)
         if cf.is_valid():
@@ -179,3 +179,7 @@ def switch(request):
                 return ERROR
             return OKAY
     return ERROR
+
+
+def get_challenge(request):
+    pass

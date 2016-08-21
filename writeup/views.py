@@ -74,6 +74,7 @@ def star(request, pk):
             return FAIL
     return ERROR
 
+
 def editor(request, pk='-1'):
     if request.session.get('uid', None):
         user = Person.objects.get(pk=request.session['uid'])

@@ -110,7 +110,7 @@
       $('#flagHolder').show();
       $('.alert').hide();
       return $.ajax({
-        url: 'get-challenge/',
+        url: 'detail/',
         type: 'post',
         dataType: 'json',
         data: {
