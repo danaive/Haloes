@@ -146,10 +146,17 @@ block container
 
       .tab-content(style='margin-top: 15px;')
         #news.tab-pane.fade.in.active
-          ul.media-list
-            +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
-            +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'submitted writeup actf2015 of Dice Game.')
-            +newsList('danlei', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
+          ul#newsHolder.media-list(data-page='0')
+            //- +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'solved challenge Dice Game of MISC 400.')
+            //- +newsList('DAWN', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'submitted writeup actf2015 of Dice Game.')
+            //- +newsList('danlei', '#', '/static/img/logo.png', '12 Apr, 2015 at 12:50', 'joined DAWN team')
+          .row
+            .col-xs-5: hr
+            .col-xs-2
+              p.text-center(style='margin-top: 10px;')
+                a#moreNews(href='##') more
+                i.fa.fa-spin.fa-spinner(style='display: none;')
+            .col-xs-5: hr
         #following.tab-pane.fade
           ul.media-list
             for item in followings

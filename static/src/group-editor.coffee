@@ -22,7 +22,12 @@ $ ->
       success: (data) ->
         if data.msg == 'okay'
           $('#uploadSuccess').fadeIn()
-          li = '<li class="list-group-item"><a class="btn btn-xs btn-link pull-right" data-toggle="tooltip" data-placement="right" title="click to insert" data-path data-name><i class="fa fa-share-square-o"></i></a><p></p></li>'
+          li = '''<li class="list-group-item"> \
+                    <a class="btn btn-xs btn-link pull-right" data-toggle="tooltip" data-placement="right" title="click to insert" data-path data-name> \
+                      <i class="fa fa-share-square-o"></i> \
+                    </a> \
+                    <p></p> \
+                  </li>'''
           $('ul.list-group').append li
           $li = $('ul.list-group li').last()
           $li.find('p').text $('#imageName').val()

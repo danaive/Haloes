@@ -121,6 +121,42 @@ $ ->
   $('#avatar').on 'click', ->
     $('#avatarHolder').click()
 
+  getNews = () ->
+    step = 6
+    page = $('#newsHolder').data 'page'
+    $('#moreNews').hide()
+    $('#moreNews').siblings('i').fadeIn()
+    $.ajax
+      url: 'get-news/'
+      type: 'get'
+      dataType: 'json'
+      data:
+        page: page
+      success: (data) ->
+        if data.msg == 'okay'
+          putNews = (news) ->
+            li = """<li class='media'> \
+                      <a class='pull-right' href='#{news.link}'> \
+                        <img class='media-object img-rounded' height='64' src='#{news.avatar}'> \
+                      </a> \
+                      <div class='media-body'> \
+                        <h4 class='media-heading'>#{news.title}</h4> \
+                        <p>#{news.time}</p> \
+                        <p>#{news.content}</p> \
+                      </div> \
+                    </li>"""
+            $('#newsHolder').append li
+          putNews news for news in data
+          $('#newsHolder').attr 'data-page', ($('#newsHolder').data 'page') + step
+        $('#moreNews').siblings('i').hide()
+        $('#moreNews').show()
+
+
+  $('#moreNews').on 'click', ->
+    getNews()
+
+  getNews()
+
   stickFooter()
 
 window.uploadAvatar = ->
