@@ -1,5 +1,6 @@
 from .models import *
 from django.http import HttpResponse
+from datetime import timedelta
 import json
 
 
@@ -39,7 +40,8 @@ def submit_news(user, challenge, writeup):
 
 def solve_news(user, challenge):
     News.objects.create(
-        title=user.username, avatar=user.avatar,
+        title=user.username,
+        avatar=user.avatar,
         link='/person/%d/' % user.pk,
         content="solved challenge <a href='/challenge/{pk}/'>{title}</a>({cate} {score}\').".format(
             title=challenge.title,
@@ -52,13 +54,49 @@ def solve_news(user, challenge):
     )
 
 
+def join_group(user, group):
+    News.objects.create(
+        title=user.username,
+        avatar=user.avatar,
+        link='/person/%d/' % user.pk,
+        content="joined group <a href='/group/{pk}/'>{group}</a>.".format(
+            group=group.name,
+            pk=group.pk
+        ),
+        person=user,
+        group=group
+    )
+
+
+def group_task(user, group):
+    News.objects.create(
+        title=group.name,
+        avatar=group.avatar,
+        link='/group/',
+        content='new task was assigned to you.',
+        person=user,
+        public=False
+    )
+
+
+def group_issue(group):
+    news.objects.create(
+        title=group.name,
+        avatar=group.avatar,
+        link='/group/',
+        content='new issue was published.',
+        group=group
+    )
+
+
 def group_contest_news(group, contest):
     News.objects.create(
-        title=group.name, avatar=group.avatar,
+        title=group.name,
+        avatar=group.avatar,
         link='/group/%d/' % group.pk,
         content="registered for the contest <a href='/contest/{pk}/'>{contest}</a>, start at {time}.".format(
             contest=contest.title,
-            time=contest.time,
+            time=(contest.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M'),
             pk=contest.pk
         ),
         person=group.leader,
@@ -73,7 +111,7 @@ def contest_news(user, contest):
         link='/person/%d/' % user.pk,
         content="added a practice contest <a href='/contest/{pk}/'>{contest}</a>, start at {time}.".format(
             contest=contest.title,
-            time=contest.time,
+            time=(contest.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M'),
             pk=contest.pk
         ),
         person=user,

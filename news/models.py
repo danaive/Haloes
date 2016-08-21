@@ -11,3 +11,4 @@ class News(models.Model):
     content = models.CharField(max_length=100)
     person = models.ForeignKey(Person, null=True)
     group = models.ForeignKey(Group, null=True)
+    public = models.BooleanField(default=True)

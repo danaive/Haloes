@@ -282,9 +282,11 @@ def get_news(request):
         from django.db.models import Q
         if user.group:
             news = News.objects.filter(
-                Q(person__in=user.following) | Q(group=user.group)
+                Q(person__in=user.following, public=True) | Q(group=user.group) | Q(person=user)
             ).order_by('-time')[page:page+10]
         else:
-            news = News.objects.filter(person__in=user.following)[page:page+10]
+            news = News.objects.filter(
+                Q(person__in=user.following, public=True) | Q(person=user)
+            ).order_by('-time')[page:page+10]
         return HttpResponse(json.dumps(news), content_type='application/json')
     return ERROR
