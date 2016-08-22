@@ -145,6 +145,19 @@ $ ->
   if($('h2').data('state') != 1)
     $('.leader').hide()
 
+  $('h2').hover(
+    -> $(@).find('a').fadeIn 'slow'
+    -> $(@).find('a').fadeOut 'fast'
+  )
+
+  $('#dismissBtn').on 'click', ->
+    if $('#nameHolder').val() == $('#nameHolder').data 'name'
+      $.post 'dismiss/'
+      location.href = '/group/'
+    else
+      console.log $('#nameHolder').val()
+      console.log $('#nameHolder').data 'name'
+
   stickFooter()
 
 window.uploadAvatar = ->
@@ -162,7 +175,3 @@ window.uploadAvatar = ->
         alert 'Image No Larger Than 5M is Accepted.'
       $('#iconHolder').hide()
       window.setTimeout "$('#avatar').show()", 50
-
-
-
-

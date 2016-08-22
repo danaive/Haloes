@@ -171,6 +171,20 @@
     if ($('h2').data('state') !== 1) {
       $('.leader').hide();
     }
+    $('h2').hover(function() {
+      return $(this).find('a').fadeIn('slow');
+    }, function() {
+      return $(this).find('a').fadeOut('fast');
+    });
+    $('#dismissBtn').on('click', function() {
+      if ($('#nameHolder').val() === $('#nameHolder').data('name')) {
+        $.post('dismiss/');
+        return location.href = '/group/';
+      } else {
+        console.log($('#nameHolder').val());
+        return console.log($('#nameHolder').data('name'));
+      }
+    });
     return stickFooter();
   });
 

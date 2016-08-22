@@ -86,9 +86,29 @@ block container
           #iconHolder.img-thumbnail(style='width: 120px; height: 120px; display: none;')
             i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
           form(enctype='multipart/form-data')
-            input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
+            input#avatarHolder(type='file', name='img', 
+              style='display: none;', onchange='uploadAvatar();')
         .col-md-9(style='margin-left: -20px;')
-          h2(style='margin: 40px 0px;', data-state=state)= groupname
+          h2(style='margin: 40px 0px;', data-state=state)
+            | #{groupname}
+            a.btn.btn-xs.btn-danger(data-toggle='modal', href='#modal-container' 
+              style='margin-left: 30px; display: none;') Dismiss
+          #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
+            .modal-dialog(style='width: 400px;'): .modal-content
+              .modal-header
+                button.close(aria-hidden='true', data-dismiss='modal') ×
+                h4.modal-title Dismiss Confirm
+              .modal-body
+                p.
+                  This action CANNOT be undone. This will permanently delete the
+                  group's tasks, issues and comments, and remove all membership.
+                p Please type in the name of the group to confirm.
+              .modal-footer.row
+                .col-xs-12
+                  input#nameHolder.form-control(type='text', data-name=groupname)
+                .col-xs-12(style='margin-top: 10px;')
+                  button#dismissBtn.btn.btn-block.btn-danger(data-pk) 
+                    | I understand consequences, dismiss the group
       .row
         .col-md-12
           button#newTaskBtn.btn.btn-info.pull-right New Task

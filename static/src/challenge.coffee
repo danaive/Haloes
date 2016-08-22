@@ -98,7 +98,7 @@ $ ->
           $('.modal-body').html data.content
           $('#toggleModal').click()
         else
-          return false
+          false
 
   $('#submit').on 'click', ->
     pk = $(@).data 'pk'
