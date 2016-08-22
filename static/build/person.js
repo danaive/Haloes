@@ -150,21 +150,23 @@
       $('#moreNews').siblings('i').fadeIn();
       return $.ajax({
         url: 'get-news/',
-        type: 'get',
+        type: 'post',
         dataType: 'json',
         data: {
           page: page
         },
         success: function(data) {
-          var j, len, news, putNews;
+          var j, len, news, putNews, ref;
           if (data.msg === 'okay') {
+            console.log(data);
             putNews = function(news) {
               var li;
-              li = "<li class='media'> <a class='pull-right' href='" + news.link + "'> <img class='media-object img-rounded' height='64' src='" + news.avatar + "'> </a> <div class='media-body'> <h4 class='media-heading'>" + news.title + "</h4> <p>" + news.time + "</p> <p>" + news.content + "</p> </div> </li>";
+              li = "<li class='media'> <a class='pull-left' href='" + news.link + "'> <img class='media-object img-rounded' height='64' src='" + news.avatar + "'> </a> <div class='media-body'> <h4 class='media-heading'>" + news.title + "</h4> <p>" + news.time + "</p> <p>" + news.content + "</p> </div> </li>";
               return $('#newsHolder').append(li);
             };
-            for (j = 0, len = data.length; j < len; j++) {
-              news = data[j];
+            ref = data.news;
+            for (j = 0, len = ref.length; j < len; j++) {
+              news = ref[j];
               putNews(news);
             }
             $('#newsHolder').attr('data-page', ($('#newsHolder').data('page')) + step);

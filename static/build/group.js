@@ -158,7 +158,8 @@
         success: (function(_this) {
           return function(data) {
             if (data.msg === 'okay') {
-              return $(_this).parents('.doneItem').fadeOut().remove();
+              $(_this).parents('.doneItem').fadeOut().remove();
+              return $(_this).parents('ul.task').fadeOut().remove();
             }
           };
         })(this)

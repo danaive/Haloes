@@ -21,27 +21,27 @@ FAIL = response('fail')
 ERROR = response('error')
 
 
-def submit_news(user, challenge, writeup):
+def submit_news(writeup):
     News.objects.create(
-        title=user.username,
-        avatar=user.avatar,
-        link='/person/%d/' % user.pk,
+        title=writeup.author.username,
+        avatar=writeup.author.avatar.url,
+        link='/person/%d/' % writeup.author.pk,
         content="submitted writeup <a href='/writeup/{pk}/'>{writeup}</a> of {title}({cate} {score}').".format(
             writeup=writeup.title,
-            title=challenge.title,
-            cate=challenge.category,
-            score=challenge.score,
+            title=writeup.challenge.title,
+            cate=writeup.challenge.category,
+            score=writeup.challenge.score,
             pk=writeup.pk
         ),
-        person=user,
-        group=user.group
+        person=writeup.author,
+        group=writeup.author.group
     )
 
 
 def solve_news(user, challenge):
     News.objects.create(
         title=user.username,
-        avatar=user.avatar,
+        avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
         content="solved challenge <a href='/challenge/{pk}/'>{title}</a>({cate} {score}\').".format(
             title=challenge.title,
@@ -57,7 +57,7 @@ def solve_news(user, challenge):
 def join_group(user, group):
     News.objects.create(
         title=user.username,
-        avatar=user.avatar,
+        avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
         content="joined group <a href='/group/{pk}/'>{group}</a>.".format(
             group=group.name,
@@ -68,23 +68,27 @@ def join_group(user, group):
     )
 
 
-def group_task(user, group):
+def group_task(user, group, assigned):
     News.objects.create(
         title=group.name,
-        avatar=group.avatar,
+        avatar=group.avatar.url,
         link='/group/',
-        content='new task was assigned to you.',
-        person=user,
+        content='{leader} assigned new task to you.'.format(
+            leader=user.username
+        ),
+        person=assigned,
         public=False
     )
 
 
-def group_issue(group):
+def group_issue(user, group):
     news.objects.create(
         title=group.name,
-        avatar=group.avatar,
+        avatar=group.avatar.url,
         link='/group/',
-        content='new issue was published.',
+        content='new issue was published by {author}.'.format(
+            author=user.username
+        ),
         group=group
     )
 
@@ -92,7 +96,7 @@ def group_issue(group):
 def group_contest_news(group, contest):
     News.objects.create(
         title=group.name,
-        avatar=group.avatar,
+        avatar=group.avatar.url,
         link='/group/%d/' % group.pk,
         content="registered for the contest <a href='/contest/{pk}/'>{contest}</a>, start at {time}.".format(
             contest=contest.title,
@@ -107,7 +111,7 @@ def group_contest_news(group, contest):
 def contest_news(user, contest):
     News.objects.create(
         title=user.username,
-        avatar=user.avatar,
+        avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
         content="added a practice contest <a href='/contest/{pk}/'>{contest}</a>, start at {time}.".format(
             contest=contest.title,

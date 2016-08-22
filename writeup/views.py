@@ -147,7 +147,7 @@ def submit(request):
                 title = wf.cleaned_data['title']
                 challenge = Challenge.objects.get(pk=wf.cleaned_data['challenge'])
                 content = wf.cleaned_data['content']
-                wp, _ = Writeup.objects.update_or_create(
+                wp, state = Writeup.objects.update_or_create(
                     author=Person.objects.get(pk=request.session['uid']),
                     challenge=challenge,
                     defaults={
@@ -155,6 +155,8 @@ def submit(request):
                         'content': content
                     }
                 )
+                if state:
+                    submit_news(wp)
                 return response('okay', {'pk': wp.pk})
             except:
                 return FAIL

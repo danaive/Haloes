@@ -136,6 +136,7 @@ $ ->
       success: (data) =>
         if data.msg == 'okay'
           $(@).parents('.doneItem').fadeOut().remove()
+          $(@).parents('ul.task').fadeOut().remove()
 
 
   $('#avatar').on 'click', ->

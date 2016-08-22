@@ -128,15 +128,16 @@ $ ->
     $('#moreNews').siblings('i').fadeIn()
     $.ajax
       url: 'get-news/'
-      type: 'get'
+      type: 'post'
       dataType: 'json'
       data:
         page: page
       success: (data) ->
         if data.msg == 'okay'
+          console.log data
           putNews = (news) ->
             li = """<li class='media'> \
-                      <a class='pull-right' href='#{news.link}'> \
+                      <a class='pull-left' href='#{news.link}'> \
                         <img class='media-object img-rounded' height='64' src='#{news.avatar}'> \
                       </a> \
                       <div class='media-body'> \
@@ -146,7 +147,7 @@ $ ->
                       </div> \
                     </li>"""
             $('#newsHolder').append li
-          putNews news for news in data
+          putNews news for news in data.news
           $('#newsHolder').attr 'data-page', ($('#newsHolder').data 'page') + step
         $('#moreNews').siblings('i').hide()
         $('#moreNews').show()

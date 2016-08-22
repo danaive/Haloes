@@ -77,6 +77,7 @@ def join(request):
                 group = Group.objects.get(code=code)
                 user.group = group
                 user.save()
+                join_group(user, group)
                 return response('okay', {'name': group.name})
             except:
                 return FAIL
@@ -132,7 +133,7 @@ def new_task(request):
         if tf.is_valid():
             try:
                 name = tf.cleaned_data['assign']
-                assigned_to = Person.objects.get(username=name) if name else None
+                assigned_to = Person.objects.get(username=name) if name != 'Unassigned' else None
                 deadline = tf.cleaned_data['deadline']
                 task = Task.objects.create(
                     group=group,
@@ -140,6 +141,7 @@ def new_task(request):
                 )
                 if assigned_to:
                     task.assign_to = assigned_to
+                    group_task(user, group, assigned_to)
                 if deadline:
                     task.deadline = deadline
                 task.save()
@@ -292,10 +294,8 @@ def submit(request):
                     title=title,
                     content=content
                 )
-                return HttpResponse(json.dumps({
-                    'msg': 'okay',
-                    'pk': wp.pk
-                }), content_type='application/json')
+                group_issue(user, user.group)
+                return response('okay', {'pk': wp.pk})
             except:
                 return FAIL
     return ERROR

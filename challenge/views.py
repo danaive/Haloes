@@ -77,10 +77,10 @@ def submit(request):
             flag = cf.cleaned_data['flag']
             try:
                 challenge = Challenge.objects.get(pk=pk)
+                user = Person.objects.get(pk=request.session['uid'])
             except:
                 return ERROR
-            user = Person.objects.get(pk=request.session['uid'])
-            if flag == challenge.flag:
+            if flag == challenge.flag and challenge not in user.challenges:
                 state, _ = Submit.objects.update_or_create(
                     person=user,
                     challenge=challenge,
@@ -89,6 +89,7 @@ def submit(request):
                 if state:
                     challenge.solved += 1
                     challenge.save()
+                user.challenges.add(challenge)
                 user.score = user.challenges.filter(
                     submit__status=True
                 ).aggregate(Sum('score')['score__sum'])

@@ -12,6 +12,7 @@ from news.views import *
 from os import urandom
 from hashlib import sha256
 from base64 import b64encode
+from datetime import timedelta
 import json
 
 
@@ -276,7 +277,7 @@ def get_news(request):
     if request.is_ajax:
         user = Person.objects.get(pk=request.session['uid'])
         try:
-            page = int(request.GET.get('page', 0))
+            page = int(request.POST.get('page', 0))
         except:
             return ERROR
         from django.db.models import Q
@@ -289,6 +290,15 @@ def get_news(request):
                 Q(person__in=user.following.all(), public=True) | Q(person=user)
             ).order_by('-time')[page:page+10]
         if news:
-            return response('okay', {'news': news.values()})
+            newsx = []
+            for item in news.values():
+                itemx = {}
+                itemx['time'] = (item['time'] + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M')
+                itemx['title'] = item['title']
+                itemx['content'] = item['content']
+                itemx['link'] = item['link']
+                itemx['avatar'] = item['avatar']
+                newsx.append(itemx)
+            return response('okay', {'news': newsx})
         return FAIL
     return ERROR
