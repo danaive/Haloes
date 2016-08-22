@@ -10,7 +10,7 @@ class GroupNameForm(forms.Form):
     name = forms.CharField(max_length=50)
 
 
-class GroupForm(forms.Form):
+class IntForm(forms.Form):
     pk = forms.IntegerField()
 
 

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import *
@@ -107,7 +108,7 @@ def create(request):
 def apply(request):
     if request.is_ajax:
         user = Person.objects.get(pk=request.session['uid'])
-        gf = GroupForm(request.POST)
+        gf = IntForm(request.POST)
         if gf.is_valid() and not user.group:
             pk = gf.cleaned_data['pk']
             user.apply_group = Group.objects.get(pk=pk)
@@ -155,7 +156,7 @@ def do_task(request):
     if request.is_ajax:
         user = Person.objects.get(pk=request.session['uid'])
         group = user.group
-        tf = GroupForm(request.POST)
+        tf = IntForm(request.POST)
         if tf.is_valid():
             try:
                 pk = tf.cleaned_data['pk']
@@ -175,7 +176,7 @@ def clear_task(request):
     if request.is_ajax:
         user = Person.objects.get(pk=request.session['uid'])
         group = user.group
-        tf = GroupForm(request.POST)
+        tf = IntForm(request.POST)
         if tf.is_valid():
             try:
                 pk = tf.cleaned_data['pk']
@@ -321,10 +322,46 @@ def comment(request):
     return ERROR
 
 
-def approve(request):pass
+def approve(request):
+    if request.is_ajax:
+        gf = IntForm(request.POST)
+        if gf.is_valid():
+            try:
+                user = Person.objects.get(pk=request.session['uid'])
+                approved = Person.objects.get(pk=gf.cleaned_data['pk'])
+                group = user.group
+                if not approved.group and user == group.leader:
+                    group.add(approved)
+                    join_group(approved, group)
+                    return OKAY
+            except:
+                pass
+        return FAIL
+    return ERROR
 
 
-def kickout(request): pass
+def kickout(request):
+    if request.is_ajax:
+        gf = IntForm(request.POST)
+        if gf.is_valid():
+            try:
+                user = Person.objects.get(pk=request.session['uid'])
+                kicked = Person.objects.get(pk=gf.cleaned_data['pk'])
+                group = user.group
+                if kicked.group == group and user == group.leader:
+                    group.remove(kicked)
+                    return OKAY
+            except:
+                pass
+        return FAIL
+    return ERROR
 
 
-def dismiss(request): pass
+def dismiss(request):
+    user = Person.objects.get(request.session['uid'])
+    if user.group and user.group.leader == user:
+        user.group.delete()
+        user.group = None
+        return HttpResponseRedirect(reverse('group:index'))
+    else:
+        return render(request, '404.jade')

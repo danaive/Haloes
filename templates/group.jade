@@ -4,7 +4,7 @@ extends frame
 mixin memberList(mb, pk, avatar)
   li.media
     a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', width='50', src='#{MEDIA_URL}#{avatar}')
-    a.pull-right.btn.btn-link.leader
+    a.pull-right.btn.btn-link.leader.kickout(data-pk=pk)
       i.fa.fa-user-times
     .media-body
       h4.media-heading= mb.username
@@ -14,7 +14,7 @@ mixin memberList(mb, pk, avatar)
 mixin newMemberList(mb, pk, avatar)
   li.media
     a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', width='50', src='#{MEDIA_URL}#{avatar}')
-    a.pull-right.btn.btn-info.leader
+    a.pull-right.btn.btn-info.leader.approve(data-pk=pk)
       | Approve&nbsp;
       i.fa.fa-user-plus
     .media-body
