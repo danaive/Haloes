@@ -28,7 +28,7 @@ $ ->
 
   total = 0
   $('tr.ALL').each ->
-    if ($(@).data 'state') == 0
+    if $(@).data('state') == 0
       $(@).addClass 'Attempted'
     total += 1
     if total <= PAGE_ITEM_COUNT
@@ -38,9 +38,9 @@ $ ->
 
   $('[id^="btn"]').on 'click', ->
     $('tr.ALL').hide()
-    $('#cont').attr 'data-page', 0
+    $('#cont').data 'page', 0
     cate = ($(@).attr 'id').substr 3
-    $('#cont').attr 'data-cate', cate
+    $('#cont').data 'cate', cate
     cnt = 0
     $("tr.ALL.#{cate}").each ->
       cnt += 1
@@ -61,7 +61,7 @@ $ ->
         return
       page -= PAGE_ITEM_COUNT
     $('tr.ALL').hide()
-    $('#cont').attr 'data-page', page
+    $('#cont').data 'page', page
     cnt = 0
     $("tr.ALL.#{cate}").each ->
       cnt += 1
@@ -84,7 +84,7 @@ $ ->
   $('a[href^="#mod-"]').on 'click', ->
     pk = ($(@).attr 'href').substr 5
     $('#modalTitle').text $(@).text()
-    $('#submit').attr 'data-pk', pk
+    $('#submit').data 'pk', pk
     $('#flagHolder').show()
     $('.alert').hide()
     $.ajax
