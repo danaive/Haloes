@@ -8,7 +8,7 @@ $ ->
     type: 'post'
     dataType: 'json'
     data:
-      name: $('h2').text()
+      name: $('#nameHolder').data 'name'
     success: (data) ->
       # pie chart
       score = data.score
@@ -43,9 +43,9 @@ $ ->
       new Chart(rctx).Radar(
         rdata
         scaleOverride: true
-        scaleSteps: 5
+        scaleSteps: 4
         scaleStepWidth: 25
-        scaleStartValue: -25
+        # scaleStartValue: -25
       )
 
 

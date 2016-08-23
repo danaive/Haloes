@@ -5,7 +5,7 @@ $ ->
   # sign out
   $('[href="#logout"]').on 'click', ->
     $.ajax
-      url: 'sign-out/'
+      url: '/sign-out/'
       type: 'post'
       dataType: 'json'
       success: ->
@@ -25,7 +25,7 @@ $ ->
     $('#updateForm').fadeOut()
   $('#confBtn').on 'click', ->
     $.ajax
-      url: 'update-info/'
+      url: '/person/update-info/'
       type: 'post'
       dataType: 'json'
       data:
@@ -141,8 +141,8 @@ $ ->
                       </a> \
                       <div class='media-body'> \
                         <h4 class='media-heading'>#{news.title}</h4> \
-                        <p>#{news.time}</p> \
                         <p>#{news.content}</p> \
+                        <p>#{news.time}</p> \
                       </div> \
                     </li>"""
             $('#newsHolder').append li
@@ -163,7 +163,7 @@ window.uploadAvatar = ->
   $('#avatar').hide()
   $('#iconHolder').show()
   $.ajaxFileUpload
-    url: 'update-avatar/'
+    url: '/person/update-avatar/'
     secureurl: false
     fileElementId: 'avatarHolder'
     dataType: 'json'

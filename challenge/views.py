@@ -80,22 +80,22 @@ def submit(request):
                 user = Person.objects.get(pk=request.session['uid'])
             except:
                 return ERROR
-            if flag == challenge.flag and challenge not in user.challenges:
+            if flag == challenge.flag:
                 state, _ = Submit.objects.update_or_create(
                     person=user,
                     challenge=challenge,
                     defaults={'status': True}
                 )
+                solved = user.challenges.filter(submit__status=True)
                 if state:
                     challenge.solved += 1
                     challenge.save()
-                user.challenges.add(challenge)
-                user.score = user.challenges.filter(
-                    submit__status=True
-                ).aggregate(Sum('score')['score__sum'])
+                    solve_news(user, challenge)
+                else:
+                    return OKAY
+                user.score = solved.aggregate(Sum('score'))['score__sum']
                 user.save()
-                maxsc = user.challenges.filter(
-                    submit__status=True,
+                maxsc = solved.filter(
                     category=challenge.category
                 ).aggregate(Sum('score'))['score__sum']
                 ms = MaxScore.objects.get(category=challenge.category)
@@ -105,7 +105,9 @@ def submit(request):
                 if user.group:
                     group = user.group
                     group.solved.add(challenge)
-                    group.score = group.solved.filter(
+                    group.score = group.solved.all().aggregate(
+                        Sum('score'))['score__sum']
+                    score = group.solved.filter(
                         category=challenge.category
                     ).aggregate(Sum('score'))['score__sum']
                     gms = GroupMaxScore.objects.get(category=challenge.category)
@@ -113,7 +115,6 @@ def submit(request):
                         gms.score = score
                         gms.save()
                     group.save()
-                solve_news(user, challenge)
                 return OKAY
             else:
                 Submit.objects.update_or_create(
@@ -167,9 +168,15 @@ def switch(request):
             # true is on, false is off
             state = sf.cleaned_data['state']
             from docker import Client
-            url = "tcp://{ip}:{port}".format(ip=settings.DOCKER_IP, port=settings.DOCKER_PORT)
+            url = "tcp://{ip}:{port}".format(
+                ip=settings.DOCKER_IP,
+                port=settings.DOCKER_PORT
+            )
             version = settings.DOCKER_VERSION
-            cotainer_name = "{pk}_{name}".format(pk=challenge.pk, name=challenge.title)
+            cotainer_name = "{pk}_{name}".format(
+                pk=challenge.pk,
+                name=challenge.title
+            )
             client = Client(base_url=url, version=version)
             try:
                 if state:

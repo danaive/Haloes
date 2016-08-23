@@ -119,6 +119,7 @@
         success: function(data) {
           if (data.msg === 'okay') {
             $('.modal-body').html(data.content);
+            $('#flagHolder').text('');
             return $('#toggleModal').click();
           } else {
             return false;
@@ -139,6 +140,7 @@
         },
         success: function(data) {
           $('flagHolder').hide();
+          $('.alert').hide();
           if (data.msg === 'okay') {
             return $('.alert-success').fadeIn();
           } else if (data.msg === 'fail') {

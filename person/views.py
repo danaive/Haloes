@@ -273,16 +273,20 @@ def ranking(request):
     })
 
 
-def get_news(request):
+def get_news(request, pk=u'-1'):
     if request.is_ajax:
+        pk = int(pk)
         step = 6
-        user = Person.objects.get(pk=request.session['uid'])
         try:
             page = int(request.POST.get('page', 0))
+            user = Person.objects.get(pk=request.session['uid'])
+            focus = Person.objects.get(pk=pk) if pk != -1 and pk != user.pk else None
         except:
             return ERROR
         from django.db.models import Q
-        if user.group:
+        if focus:
+            news = News.objects.filter(person=focus).order_by('-time')[page:page+step]
+        elif user.group:
             news = News.objects.filter(
                 Q(person__in=user.following.all(), public=True) | Q(group=user.group) | Q(person=user)
             ).order_by('-time')[page:page+step]

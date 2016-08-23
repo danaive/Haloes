@@ -8,6 +8,10 @@ html(lang='en')
       link(rel='stylesheet', href='{% static "assets/bootflat/css/site.min.css" %}')
       link(rel='stylesheet', href='{% static "assets/bootflat/fonts/fonts.googleapis.com.css" %}')
       link(rel='stylesheet', href='{% static "assets/font-awesome/css/font-awesome.min.css" %}')
+      style.
+        a.hovering {
+          border-bottom: 3px solid #b2e0f1;
+        }
 
   body
     {% csrf_token %}

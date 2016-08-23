@@ -32,8 +32,8 @@ mixin newsList(title, url, logo, time, content)
     a.pull-left(href=url): img.media-object.img-rounded(height='64', src=logo)
     .media-body
       h4.media-heading= title
-      p= time
       p!= content
+      p= time
 
 mixin followList(mb, url, avatar)
   li.media
@@ -167,3 +167,10 @@ append script
   script(src='{% static "assets/charts/chart.min.js" %}')
   script(src='{% static "assets/plugins/ajax-file-upload.js" %}')
   script(src='{% static "build/person.js" %}')
+
+append head
+  style.
+    h4.media-heading {
+      margin-bottom: 5px;
+      font-size: 16px;
+    }

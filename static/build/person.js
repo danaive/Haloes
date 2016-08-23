@@ -5,7 +5,7 @@
     $('a[href$="person/"]').addClass('current');
     $('[href="#logout"]').on('click', function() {
       return $.ajax({
-        url: 'sign-out/',
+        url: '/sign-out/',
         type: 'post',
         dataType: 'json',
         success: function() {
@@ -26,7 +26,7 @@
     });
     $('#confBtn').on('click', function() {
       return $.ajax({
-        url: 'update-info/',
+        url: '/person/update-info/',
         type: 'post',
         dataType: 'json',
         data: {
@@ -160,7 +160,7 @@
           if (data.msg === 'okay') {
             putNews = function(news) {
               var li;
-              li = "<li class='media'> <a class='pull-left' href='" + news.link + "'> <img class='media-object img-rounded' height='64' src='" + news.avatar + "'> </a> <div class='media-body'> <h4 class='media-heading'>" + news.title + "</h4> <p>" + news.time + "</p> <p>" + news.content + "</p> </div> </li>";
+              li = "<li class='media'> <a class='pull-left' href='" + news.link + "'> <img class='media-object img-rounded' height='64' src='" + news.avatar + "'> </a> <div class='media-body'> <h4 class='media-heading'>" + news.title + "</h4> <p>" + news.content + "</p> <p>" + news.time + "</p> </div> </li>";
               return $('#newsHolder').append(li);
             };
             ref = data.news;
@@ -186,7 +186,7 @@
     $('#avatar').hide();
     $('#iconHolder').show();
     return $.ajaxFileUpload({
-      url: 'update-avatar/',
+      url: '/person/update-avatar/',
       secureurl: false,
       fileElementId: 'avatarHolder',
       dataType: 'json',

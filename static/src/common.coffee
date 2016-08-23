@@ -24,3 +24,8 @@ $ ->
   $('a[href="#signOut"]').on 'click', ->
     $.post '/sign-out/'
     location.href = '/'
+
+  $('ul.navbar-nav li').hover(
+    -> $(@).children('a').addClass 'hovering'
+    -> $(@).children('a').removeClass 'hovering'
+  )

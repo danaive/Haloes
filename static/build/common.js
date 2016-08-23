@@ -33,9 +33,14 @@
     $('a[href="#signUp"]').on('click', function() {
       return location.href = '/';
     });
-    return $('a[href="#signOut"]').on('click', function() {
+    $('a[href="#signOut"]').on('click', function() {
       $.post('/sign-out/');
       return location.href = '/';
+    });
+    return $('ul.navbar-nav li').hover(function() {
+      return $(this).children('a').addClass('hovering');
+    }, function() {
+      return $(this).children('a').removeClass('hovering');
     });
   });
 

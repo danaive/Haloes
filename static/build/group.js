@@ -10,7 +10,7 @@
       type: 'post',
       dataType: 'json',
       data: {
-        name: $('h2').text()
+        name: $('#nameHolder').data('name')
       },
       success: function(data) {
         var _, capacity, color, highlight, i, label, pctx, pdata, rctx, rdata, rgba;
@@ -61,9 +61,8 @@
         rctx = $('#radarChart').get(0).getContext('2d');
         return new Chart(rctx).Radar(rdata, {
           scaleOverride: true,
-          scaleSteps: 5,
-          scaleStepWidth: 25,
-          scaleStartValue: -25
+          scaleSteps: 4,
+          scaleStepWidth: 25
         });
       }
     });

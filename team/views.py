@@ -228,8 +228,8 @@ def get_score(request):
                     ),
                     'name': visitor.group.name
                 })
-            if sum(data['score']) == 0:
-                return FAIL
+            # if sum(data['score']) == 0:
+            #     return FAIL
             return response('okay', data)
     return ERROR
 

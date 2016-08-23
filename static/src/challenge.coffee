@@ -96,6 +96,7 @@ $ ->
       success: (data) ->
         if data.msg == 'okay'
           $('.modal-body').html data.content
+          $('#flagHolder').text ''
           $('#toggleModal').click()
         else
           false
@@ -111,6 +112,7 @@ $ ->
         pk: pk
       success: (data) ->
         $('flagHolder').hide()
+        $('.alert').hide()
         if data.msg == 'okay'
           $('.alert-success').fadeIn()
         else if data.msg == 'fail'
