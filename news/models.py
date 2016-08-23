@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from person.models import Person
 from team.models import Group
