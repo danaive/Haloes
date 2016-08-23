@@ -158,7 +158,6 @@
         success: function(data) {
           var j, len, news, putNews, ref;
           if (data.msg === 'okay') {
-            console.log(data);
             putNews = function(news) {
               var li;
               li = "<li class='media'> <a class='pull-left' href='" + news.link + "'> <img class='media-object img-rounded' height='64' src='" + news.avatar + "'> </a> <div class='media-body'> <h4 class='media-heading'>" + news.title + "</h4> <p>" + news.time + "</p> <p>" + news.content + "</p> </div> </li>";
@@ -169,7 +168,7 @@
               news = ref[j];
               putNews(news);
             }
-            $('#newsHolder').attr('data-page', ($('#newsHolder').data('page')) + step);
+            $('#newsHolder').data('page', ($('#newsHolder').data('page')) + step);
           }
           $('#moreNews').siblings('i').hide();
           return $('#moreNews').show();

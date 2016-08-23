@@ -4,6 +4,11 @@ $ ->
 
   stickFooter()
 
+  apply = $('#teamCont').data 'pk'
+  if apply != -1
+    $('button.btn-default').hide()
+    $("button[id='apply-#{apply}']").siblings('p.text-danger').show()
+
   $('.alert').on 'click', ->
     $(@).fadeOut()
 
@@ -48,7 +53,9 @@ $ ->
         pk: pk
       success: (data) =>
         if data.msg == 'okay'
+          $('button.btn-default').hide()
           $('#applySuccess').fadeIn()
+          $(@).siblings('p.text-danger').fadeIn()
           window.setTimeout "$('#applySuccess').fadeOut()", 1000
         else
           $('#applyFail').fadeIn()
@@ -60,5 +67,7 @@ $ ->
       type: 'post'
       dataType: 'json'
       success: (data) ->
+        $('p.text-danger').hide()
+        $('button.btn-default').fadeIn()
         $('#withdrawSuccess').fadeIn()
         window.setTimeout "$('#withdrawSuccess').fadeOut()", 1000

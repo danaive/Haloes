@@ -10,6 +10,7 @@ mixin teamlist(team, pk)
     td.text-center= team.writeup
     td.text-center
       button.btn.btn-xs.btn-default(id='apply-#{pk}') Apply
+      p.text-danger(style='display: none;') Applied
 
 block container
   .row
@@ -54,7 +55,7 @@ block container
               th.text-center Solved
               th.text-center WriteUp
               th
-          tbody#teamCont(data-page='0')
+          tbody#teamCont(data-page='0', data-pk=apply)
             for item in groups
               +teamlist(item, item.pk)
       br

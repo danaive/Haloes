@@ -275,6 +275,7 @@ def ranking(request):
 
 def get_news(request):
     if request.is_ajax:
+        step = 6
         user = Person.objects.get(pk=request.session['uid'])
         try:
             page = int(request.POST.get('page', 0))
@@ -284,11 +285,11 @@ def get_news(request):
         if user.group:
             news = News.objects.filter(
                 Q(person__in=user.following.all(), public=True) | Q(group=user.group) | Q(person=user)
-            ).order_by('-time')[page:page+10]
+            ).order_by('-time')[page:page+step]
         else:
             news = News.objects.filter(
                 Q(person__in=user.following.all(), public=True) | Q(person=user)
-            ).order_by('-time')[page:page+10]
+            ).order_by('-time')[page:page+step]
         if news:
             newsx = []
             for item in news.values():

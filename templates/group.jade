@@ -2,10 +2,13 @@ extends frame
 {% load staticfiles %}
 
 mixin memberList(mb, pk, avatar)
-  li.media
-    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', width='50', src='#{MEDIA_URL}#{avatar}')
-    a.pull-right.btn.btn-link.leader.kickout(data-pk=pk)
-      i.fa.fa-user-times
+  li.media.member
+    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', 
+      width='50', src='#{MEDIA_URL}#{avatar}')
+    if mb.username != username
+      a.pull-right.btn.btn-link.leader.kickout(data-toggle='modal', href='#kickout-modal', 
+        data-pk=pk, data-name=mb.username, style='display: none;')
+        i.fa.fa-lg.fa-user-times
     .media-body
       h4.media-heading= mb.username
       p #[i.fa.fa-fw.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-fw.fa-star]&nbsp;#{mb.score}
@@ -13,14 +16,16 @@ mixin memberList(mb, pk, avatar)
 
 mixin newMemberList(mb, pk, avatar)
   li.media
-    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', width='50', src='#{MEDIA_URL}#{avatar}')
+    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='50', 
+      width='50', src='#{MEDIA_URL}#{avatar}')
     a.pull-right.btn.btn-info.leader.approve(data-pk=pk)
       | Approve&nbsp;
       i.fa.fa-user-plus
+    i.pull-right.fa.fa-2x.fa-check.text-success(style='display: none;')
     .media-body
       h4.media-heading= mb.username
-      p #[i.fa.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-star]&nbsp;#{mb.score}
-      p #[i.fa.fa-university]&nbsp;#{mb.school}
+      p #[i.fa.fa-fw.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-fw.fa-star]&nbsp;#{mb.score}
+      p #[i.fa.fa-fw.fa-university]&nbsp;#{mb.school}
 
 mixin writeupList(wp, pk, avatar)
   li.media(style='margin-bottom: 25px;')
@@ -102,13 +107,27 @@ block container
                 p.
                   This action CANNOT be undone. This will permanently delete the
                   group's tasks, issues and comments, and remove all membership.
+                br
                 p Please type in the name of the group to confirm.
               .modal-footer.row
                 .col-xs-12
                   input#nameHolder.form-control(type='text', data-name=groupname)
                 .col-xs-12(style='margin-top: 10px;')
-                  button#dismissBtn.btn.btn-block.btn-danger(data-pk) 
+                  button#dismissBtn.btn.btn-block.btn-danger
                     | I understand consequences, dismiss the group
+          #kickout-modal.modal.fade(aria-hidden='true', style='top: 60px;')
+            .modal-dialog(style='width: 400px;'): .modal-content
+              .modal-header
+                button.close(aria-hidden='true', data-dismiss='modal') ×
+                h4.modal-title Dismiss Confirm
+              .modal-body
+                p 
+                  | Are You Sure To Kick Out&nbsp;
+                  span kickoutName
+              .modal-footer.row
+                .col-xs-12(style='margin-top: 10px;')
+                  button#kickoutBtn.btn.btn-success(data-pk) Yes
+          
       .row
         .col-md-12
           button#newTaskBtn.btn.btn-info.pull-right New Task

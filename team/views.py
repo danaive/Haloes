@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -28,6 +29,7 @@ def index(request, pk=u'-1'):
         return render(request, 'group-recruit.jade', {
             'groups': groups,
             'username': username,
+            'apply': -1 if not user.apply_group else user.apply_group.pk
         })
     elif pk == -1 or user.group and user.group.pk == pk:
         group = user.group
@@ -111,8 +113,10 @@ def apply(request):
         gf = IntForm(request.POST)
         if gf.is_valid() and not user.group:
             pk = gf.cleaned_data['pk']
-            user.apply_group = Group.objects.get(pk=pk)
+            group = Group.objects.get(pk=pk)
+            user.apply_group = group
             user.save()
+            apply_group(user, group)
             return OKAY
     return ERROR
 
@@ -331,7 +335,9 @@ def approve(request):
                 approved = Person.objects.get(pk=gf.cleaned_data['pk'])
                 group = user.group
                 if not approved.group and user == group.leader:
-                    group.add(approved)
+                    group.members.add(approved)
+                    approved.apply_group = None
+                    approved.save()
                     join_group(approved, group)
                     return OKAY
             except:
@@ -349,7 +355,7 @@ def kickout(request):
                 kicked = Person.objects.get(pk=gf.cleaned_data['pk'])
                 group = user.group
                 if kicked.group == group and user == group.leader:
-                    group.remove(kicked)
+                    group.members.remove(kicked)
                     return OKAY
             except:
                 pass

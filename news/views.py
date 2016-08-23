@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .models import *
 from django.http import HttpResponse
 from datetime import timedelta
@@ -22,7 +23,7 @@ ERROR = response('error')
 
 
 def submit_news(writeup):
-    News.objects.create(
+    News.objects.update_or_create(
         title=writeup.author.username,
         avatar=writeup.author.avatar.url,
         link='/person/%d/' % writeup.author.pk,
@@ -55,7 +56,7 @@ def solve_news(user, challenge):
 
 
 def join_group(user, group):
-    News.objects.create(
+    News.objects.update_or_create(
         title=user.username,
         avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
@@ -93,7 +94,19 @@ def group_issue(user, group):
     )
 
 
-def group_contest_news(group, contest):
+def apply_group(user, group):
+    News.objects.update_or_create(
+        title=user.username,
+        avatar=user.avatar.url,
+        link='/person/%d/' % user.pk,
+        content="submitted application for the membership of {group}.".format(
+            group=group.name
+        ),
+        group=group
+    )
+
+
+def group_contest(group, contest):
     News.objects.create(
         title=group.name,
         avatar=group.avatar.url,

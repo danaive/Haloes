@@ -14,7 +14,6 @@ $ ->
       score = data.score
       label = ['PWN', 'REVERSE', 'WEB', 'CRYPTO', 'MISC']
       color = ['#3BAFDA', '#8CC152', '#ED5565', '#37BC9B', '#FFCE54']
-      # color = ['#68BC31', '#2091CF', '#AF4E96', '#DA5430', '#FFA400']
       highlight = ['#4FC3EE', '#A0D566', '#FF6979', '#4BD0AF', '#FFE268']
       pdata = ({
         label: label[i],
@@ -157,6 +156,39 @@ $ ->
     else
       console.log $('#nameHolder').val()
       console.log $('#nameHolder').data 'name'
+
+  $('li.member').hover(
+    -> $(@).find('a.kickout').fadeIn 'slow'
+    -> $(@).find('a.kickout').fadeOut 'fast'
+  )
+
+  $('#kickout-modal').on 'show.bs.modal', (event) ->
+    $(@).find('span').text $(event.relatedTarget).data 'name'
+    $(@).find('button').attr 'data-pk', $(event.relatedTarget).data 'pk'
+
+  $('#kickoutBtn').on 'click', ->
+    $.ajax
+      url: 'kickout/'
+      type: 'post'
+      dataType: 'json'
+      data:
+        pk: $(@).data 'pk'
+      success: (data) =>
+        if data.msg == 'okay'
+          $('#kickout-modal').modal 'hide'
+          $("a.kickout[data-pk='#{$(@).data 'pk'}']").parents('li.media').fadeOut 'slow'
+
+  $('a.approve').on 'click', ->
+    $.ajax
+      url: 'approve/'
+      type: 'post'
+      dataType: 'json'
+      data:
+        pk: $(@).data 'pk'
+      success: (data) =>
+        if data.msg == 'okay'
+          $(@).hide()
+          $(@).siblings('i.text-success').fadeIn 'slow'
 
   stickFooter()
 

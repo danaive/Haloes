@@ -185,6 +185,51 @@
         return console.log($('#nameHolder').data('name'));
       }
     });
+    $('li.member').hover(function() {
+      return $(this).find('a.kickout').fadeIn('slow');
+    }, function() {
+      return $(this).find('a.kickout').fadeOut('fast');
+    });
+    $('#kickout-modal').on('show.bs.modal', function(event) {
+      $(this).find('span').text($(event.relatedTarget).data('name'));
+      return $(this).find('button').attr('data-pk', $(event.relatedTarget).data('pk'));
+    });
+    $('#kickoutBtn').on('click', function() {
+      return $.ajax({
+        url: 'kickout/',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          pk: $(this).data('pk')
+        },
+        success: (function(_this) {
+          return function(data) {
+            if (data.msg === 'okay') {
+              $('#kickout-modal').modal('hide');
+              return $("a.kickout[data-pk='" + ($(_this).data('pk')) + "']").parents('li.media').fadeOut('slow');
+            }
+          };
+        })(this)
+      });
+    });
+    $('a.approve').on('click', function() {
+      return $.ajax({
+        url: 'approve/',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          pk: $(this).data('pk')
+        },
+        success: (function(_this) {
+          return function(data) {
+            if (data.msg === 'okay') {
+              $(_this).hide();
+              return $(_this).siblings('i.text-success').fadeIn('slow');
+            }
+          };
+        })(this)
+      });
+    });
     return stickFooter();
   });
 

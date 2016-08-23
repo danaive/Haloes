@@ -3,5 +3,5 @@
 Waiting for DAWN !
 
 ### todo
-* add url of kickout/approve/dismiss
-* add actions in coffee
+* add utf-8 in py
+* fix bug in challenge.coffee about data
