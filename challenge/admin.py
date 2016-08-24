@@ -21,8 +21,7 @@ class PackageAdmin(admin.ModelAdmin):
         import zipfile, os, json, re, string
         success, fail = 0, 0
         for pack in queryset:
-            # try:
-            if True:
+            try:
                 zp = zipfile.ZipFile(pack.zipfile.path)
                 config = json.loads(zp.read('config.json'))
                 # assert not filter(lambda x: x not in string.printable, pack.title)
@@ -58,8 +57,7 @@ class PackageAdmin(admin.ModelAdmin):
                 pack.deployed = True
                 pack.save()
                 success += 1
-            # except:
-            else:
+            except:
                 fail += 1
         self.message_user(request, '%d challenges deployed, %d failed' % (success, fail))
 
