@@ -1,9 +1,9 @@
 extends frame
 {% load staticfiles %}
 
-mixin teamlist(team, pk)
+mixin teamList(team, pk)
   tr(style='')
-    td.text-center: a(href='#{pk}/')= team.name
+    td.text-center: a(href='/group/#{pk}/')= team.name
     td.text-center= team.member
     td.text-center= team.score
     td.text-center= team.solvedn
@@ -57,7 +57,7 @@ block container
               th
           tbody#teamCont(data-page='0', data-pk=apply)
             for item in groups
-              +teamlist(item, item.pk)
+              +teamList(item, item.pk)
       br
       br
       #applySuccess.alert.alert-success(style='display: none;') Application has been submitted

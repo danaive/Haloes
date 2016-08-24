@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'^switch/$', views.switch, name='switch'),
     url(r'^submit/$', views.submit, name='submit'),
     url(r'^detail/$', views.detail, name='detail'),
-    url(r'^(?P<pk>\d+)/$', views.get_challenge)
+    url(r'^(?P<pk>\d+)/$', views.search)
 ]

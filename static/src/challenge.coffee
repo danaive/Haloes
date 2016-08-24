@@ -81,12 +81,13 @@ $ ->
         if data.msg == 'okay'
           $(@).hide()
 
-  $('a[href^="#mod-"]').on 'click', ->
-    pk = ($(@).attr 'href').substr 5
-    $('#modalTitle').text $(@).text()
+  $('#modal-container').on 'show.bs.modal', (event) ->
+    pk = $(event.relatedTarget).data 'pk'
+    $('#modalTitle').text $(event.relatedTarget).text()
     $('#submit').data 'pk', pk
     $('#flagHolder').show()
     $('.alert').hide()
+    $('#flagHolder').text ''
     $.ajax
       url: 'detail/'
       type: 'post'
@@ -96,8 +97,6 @@ $ ->
       success: (data) ->
         if data.msg == 'okay'
           $('.modal-body').html data.content
-          $('#flagHolder').text ''
-          $('#toggleModal').click()
         else
           false
 

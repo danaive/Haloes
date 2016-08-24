@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^group/', include('team.urls', namespace='team')),
     url(r'^contest/', include('contest.urls', namespace='contest')),
     url(r'^ranking/', 'person.views.ranking', name='ranking'),
-    url(r'^sign-out/', 'person.views.sign_out', name='sign_out')
+    url(r'^sign-out/', 'person.views.sign_out', name='sign_out'),
+    url(r'^search/', 'challenge.views.search')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

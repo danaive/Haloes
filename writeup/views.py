@@ -4,10 +4,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
+from .forms import *
 from person.models import Person
 from challenge.models import Challenge, Origin
 from news.views import *
-from .forms import *
 from datetime import timedelta
 import json
 

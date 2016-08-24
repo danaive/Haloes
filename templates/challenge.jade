@@ -3,7 +3,7 @@ extends frame
 
 mixin challengeList(clg, pk, state, cate, priv)
   tr.ALL(class=cate, data-state=state, style='display: none;')
-    td.text-center: a(href='#mod-#{pk}')= clg.title
+    td.text-center: a(data-toggle='modal', href='#modal-container', data-pk=pk)= clg.title
     td.text-center= clg.origin
     td.text-center
       if clg.category == 'PWN'
@@ -69,8 +69,6 @@ block container
       .btn-group.pull-right
         button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
         button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
-
-      a#toggleModal.btn(data-toggle='modal', href='#modal-container', style='display: none;') modal
 
       #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
         .modal-dialog: .modal-content

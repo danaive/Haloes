@@ -27,10 +27,10 @@ html(lang='en')
             li: a.nav-link(href='{% url "team:index" %}') Group
             li: a.nav-link(href='{% url "ranking" %}') Ranking
 
-          form.navbar-form.navbar-left(role='search' style='margin-left: 20px;')
+          form.navbar-form.navbar-left(role='search', style='margin-left: 20px;', action='/search/')
             .form-search.search-only
               i.search-icon.fa.fa-search
-              input.form-control.search-query(type='text')
+              input.form-control.search-query(name='q', type='text')
 
           ul.nav.navbar-nav.navbar-right
             if self

@@ -102,13 +102,14 @@
         })(this)
       });
     });
-    $('a[href^="#mod-"]').on('click', function() {
+    $('#modal-container').on('show.bs.modal', function(event) {
       var pk;
-      pk = ($(this).attr('href')).substr(5);
-      $('#modalTitle').text($(this).text());
+      pk = $(event.relatedTarget).data('pk');
+      $('#modalTitle').text($(event.relatedTarget).text());
       $('#submit').data('pk', pk);
       $('#flagHolder').show();
       $('.alert').hide();
+      $('#flagHolder').text('');
       return $.ajax({
         url: 'detail/',
         type: 'post',
@@ -118,9 +119,7 @@
         },
         success: function(data) {
           if (data.msg === 'okay') {
-            $('.modal-body').html(data.content);
-            $('#flagHolder').text('');
-            return $('#toggleModal').click();
+            return $('.modal-body').html(data.content);
           } else {
             return false;
           }

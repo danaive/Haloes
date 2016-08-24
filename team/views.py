@@ -76,7 +76,6 @@ def index(request, pk=u'-1'):
             '%sList' % item: tmp,
             '%sNum' % item: tmp.count()
         })
-        print solved.filter(category=item).count(), item
     return render(request, 'group.jade', ret)
 
 def join(request):

@@ -7,7 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import *
 from person.models import *
-from team.models import GroupMaxScore
+from team.models import *
+from writeup.models import *
+from contest.models import *
 from news.views import *
 import json
 import zipfile
@@ -188,5 +190,39 @@ def switch(request):
     return ERROR
 
 
-def get_challenge(request):
-    pass
+def search(request, pk=u'-1'):
+    if int(pk) != -1:
+        return OKAY
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
+    else:
+        user = None
+    username = user.username if user else None
+    value = request.GET.get('q', None)
+    ret = {'username': username, 'ucnt': 0, 'privilege': user.privilege}
+    if value == '':
+        return render(request, 'search.jade', ret)
+    from django.db.models import Q
+    print value, '----'
+    ret['xpersons'] = Person.objects.filter(
+        Q(username__icontains=value) | Q(school__icontains=value)
+    )
+    ret['challenges'] = Challenge.objects.filter(
+        Q(title__icontains=value) | Q(origin__title__icontains=value)
+    )
+    ret['writeups'] = Writeup.objects.filter(
+        Q(title__icontains=value) | Q(author__username__icontains=value)
+    )
+    ret['groups'] = Group.objects.filter(name__icontains=value)
+    ret['contents'] = Contest.objects.filter(title__icontains=value)
+    ret['ucnt'] = sum(map(lambda x: 0 if x[0][0] in 'up' else x[1].count(),
+                          ret.iteritems()))
+    if ret['groups']:
+        for item in ret['groups']:
+            item.member = item.members.count()
+            item.solvedn = item.solved.count()
+            item.writeup = Writeup.objects.filter(
+                author__in=item.members.all()).count()
+        if user:
+            ret['apply'] = -1 if not user.apply_group else user.apply_group.pk
+    return render(request, 'search.jade', ret)

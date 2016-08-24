@@ -1,0 +1,205 @@
+extends frame
+{% load staticfiles %}
+
+mixin personList(mb, pk, avatar)
+  li.media.member(style='margin-left: 40px;')
+    a.pull-left(href='/person/#{pk}/'): img.media-object.img-rounded(height='64', 
+      width='64', src='#{MEDIA_URL}#{avatar}')
+    .media-body
+      h4.media-heading('style=margin-bottom: 5px; font-size: 16px;')= mb.username
+      p #[i.fa.fa-fw.fa-crosshairs]&nbsp;#{mb.major}&nbsp;&nbsp;&nbsp;#[i.fa.fa-fw.fa-star]&nbsp;#{mb.score}
+      p #[i.fa.fa-fw.fa-university]&nbsp;#{mb.school}
+
+mixin challengeList(clg, pk, state, cate, priv)
+  tr
+    td.text-center: a(data-toggle='modal', href='#modal-container', data-pk=pk)= clg.title
+    td.text-center= clg.origin
+    td.text-center
+      if clg.category == 'PWN'
+        span.label.label-primary PWN
+      if clg.category == 'REVERSE'
+        span.label.label-success REVERSE
+      if clg.category == 'WEB'
+        span.label.label-danger WEB
+      if clg.category == 'CRYPTO'
+        span.label.label-info CRYPTO
+      if clg.category == 'MISC'
+        span.label.label-warning MISC
+    td.text-center= clg.score
+    td.text-center= clg.solved
+    if clg.status == 'on' and clg.privilege > priv
+      td.text-center: input(data-pk=pk, type='checkbox', checked, disabled)
+    if clg.status == 'off' and clg.privilege > priv
+      td.text-center: input(data-pk=pk, type='checkbox', disabled)
+    if clg.status == 'on' and clg.privilege <= priv
+      td.text-center: input(data-pk=pk, type='checkbox', checked)
+    if clg.status == 'off' and clg.privilege <= priv
+      td.text-center: input(data-pk=pk, type='checkbox')
+    if clg.state == 0
+      td.text-center
+        i.fa.fa-lightbulb-o(data-pk=pk, data-toggle='tooltip', data-placement='bottom', title='Attempted')
+    if clg.state == 1
+      td.text-center
+        i.fa.fa-flag(data-toggle='tooltip', data-placement='bottom', title='Solved')
+    if clg.state == 2
+      td.text-center
+        i.fa.fa-flag-checkered(data-toggle='tooltip', data-placement='bottom', title='Team-Solved')
+    if clg.state == -1
+      td.text-center &nbsp;
+
+mixin writeupList(wp, pk)
+  tr
+    td.text-center: a(href='/writeup/#{pk}/')= wp.title
+    td.text-center= wp.solve
+    td.text-center
+      if wp.category == 'PWN'
+        span.label.label-primary PWN
+      if wp.category == 'REVERSE'
+        span.label.label-success REVERSE
+      if wp.category == 'WEB'
+        span.label.label-danger WEB
+      if wp.category == 'CRYPTO'
+        span.label.label-info CRYPTO
+      if wp.category == 'MISC'
+        span.label.label-warning MISC
+    td.text-center= wp.writer
+    td.text-center= wp.group
+    td.text-center
+      i.fa.fa-comments-o &nbsp;#{wp.comment}
+      | &nbsp;&nbsp;
+      i.fa.fa-thumbs-o-up &nbsp;#{wp.like}
+
+mixin teamList(team, pk)
+  tr
+    td.text-center: a(href='/group/#{pk}/')= team.name
+    td.text-center= team.member
+    td.text-center= team.score
+    td.text-center= team.solvedn
+    td.text-center= team.writeup
+    td.text-center
+      button.btn.btn-xs.btn-default(id='apply-#{pk}') Apply
+      p.text-danger(style='display: none;') Applied
+
+mixin constestList(ct, pk)
+  tr
+    td.text-center: a(href=pk)= ct.title
+    td.text-center= ct.start
+    td.text-center= ct.duration
+    td.text-center
+      if ct.status == 'pending'
+        span.label.label-warning Pending
+      if ct.status == 'running'
+        span.label.label-danger Running
+      if ct.status == 'ended'
+        span.label.label-success Ended
+    if ct.register == -1
+      td.text-center: span.label Registration ended
+    else
+      td.text-center
+        a.btn.btn-xs.btn-info(href=pk) Register
+        | &nbsp;&nbsp;
+        i.fa.fa-user
+        | &nbsp;#{ct.register}
+
+block container
+  .row
+    .col-md-8
+      h4(style='margin-bottom: 30px;') #{ucnt} items found in total.
+      ul.media-list.list-inline
+        for item in xpersons
+          +personList(item, item.pk, item.avatar)
+      if xpersons
+        hr
+      
+      if challenges
+        .panel.panel-danger
+          .panel-heading Challenges
+          table.table.table-hover
+            thead
+              tr
+                th.text-center Title
+                th.text-center Origin
+                th.text-center Category
+                th.text-center Score
+                th.text-center Solved
+                th.text-center Status
+                th
+            tbody
+              for item in challenges
+                +challengeList(item, item.pk, item.state, item.category, privilege)
+
+        #modal-container.modal.fade(aria-hidden='true', style='top: 60px;')
+          .modal-dialog: .modal-content
+            .modal-header
+              button.close(aria-hidden='true', data-dismiss='modal') ×
+              h4#modalTitle.modal-title Test
+            .modal-body
+              p 
+            .modal-footer.row
+              .col-xs-9
+                input#flagHolder.form-control(type='text', placeholder='Input the Flag')
+                  .alert.alert-success.pull-left(style='margin-bottom: 0; margin-top: 10px; padding: 7px 15px; display: none;') You Got the FLAG Congratulations !!!
+                .alert.alert-danger.pull-left(style='margin-bottom: 0; margin-top: 10px; padding: 7px 15px; display: none;') Incorrect FLAG
+              .col-xs-3
+                button#submit.btn.btn-info(data-pk) Submit  
+          
+      if writeups
+        .panel.panel-primary
+          .panel-heading Writeups
+          table.table.table-hover
+            thead
+              tr
+                th.text-center Title
+                th.text-center Challenge
+                th.text-center Category
+                th.text-center Author
+                th.text-center Team
+                th
+            tbody
+              for item in writeups
+                +writeupList(item, item.pk)
+                
+      if groups
+        .panel.panel-default
+          .panel-heading
+            | Groups
+            button#withdrawBtn.btn.btn-link.btn-xs.pull-right Recall Your Apply
+          table#teamList.table.table-hover
+            thead
+              tr
+                th.text-center Group
+                th.text-center Members
+                th.text-center Score
+                th.text-center Solved
+                th.text-center WriteUp
+                th
+            tbody#teamCont(data-page='0', data-pk=apply)
+              for item in groups
+                +teamList(item, item.pk)
+                
+      if contests
+        .panel.panel
+          .panel-heading Contests
+          table.table.table-hover
+            thead
+              tr
+                th.text-center Name
+                th.text-center Start (UTC+8)
+                th.text-center Length
+                th.text-center Status
+                th
+            tbody
+              for item in contests
+                +constestList(item, item.pk)
+                
+append script
+  script(src='{% static "assets/bootflat/js/bootstrap-switch.min.js" %}')
+  script(src='{% static "build/search.js" %}')
+  
+append head
+  link(rel='stylesheet', href='{% static "assets/bootflat/css/bootstrap-switch.min.css" %}')
+  style.
+    h4.media-heading {
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
