@@ -79,6 +79,12 @@ mixin issueList(item, pk, avatar)
       span
         i.fa.fa-comments-o
       | &nbsp;#{item.comment}
+      
+mixin solvedList(item, pk)
+  ul.list-inline(style='margin-left: 15px;')
+    li(style='min-width: 100px;'): a(href='/challenge/')= item.title
+    li(style='min-width: 35px;') #{item.score}'
+    li.text-muted= item.origin
 
 block container
   .row
@@ -209,36 +215,46 @@ block container
                 h4.panel-title
                   a(data-toggle='collapse', data-parent='#accordion', href='#collapsePwn')
                     | PWN
-                    span.badge.badge-info.pull-right 23
-              #collapsePwn.panel-collapse.collapse PWN
+                    span.badge.badge-primary.pull-right= PWNNum
+              #collapsePwn.panel-collapse.collapse(style='margin-top: 5px;')
+                for item in PWNList
+                  +solvedList(item, item.pk)
             .panel
               .panel-heading
                 h4.panel-title
                   a(data-toggle='collapse', data-parent='#accordion', href='#collapseReverse')
                     | REVERSE
-                    span.badge.badge-info.pull-right 23
-              #collapseReverse.panel-collapse.collapse: .panel-body REVERSE
+                    span.badge.badge-success.pull-right= REVERSENum
+              #collapseReverse.panel-collapse.collapse(style='margin-top: 5px;')
+                for item in REVERSEList
+                  +solvedList(item, item.pk)
             .panel
               .panel-heading
                 h4.panel-title
                   a(data-toggle='collapse', data-parent='#accordion', href='#collapseWeb')
                     | WEB
-                    span.badge.badge-info.pull-right 23
-              #collapseWeb.panel-collapse.collapse WEB
+                    span.badge.badge-danger.pull-right= WEBNum
+              #collapseWeb.panel-collapse.collapse(style='margin-top: 5px;')
+                for item in WEBList
+                  +solvedList(item, item.pk)
             .panel
               .panel-heading
                 h4.panel-title
                   a(data-toggle='collapse', data-parent='#accordion', href='#collapseCrypto')
                     | CRYPTO
-                    span.badge.badge-info.pull-right 23
-              #collapseCrypto.panel-collapse.collapse CRYPTO
+                    span.badge.badge-info.pull-right= CRYPTONum
+              #collapseCrypto.panel-collapse.collapse(style='margin-top: 5px;')
+                for item in CRYPTOList
+                  +solvedList(item, item.pk)
             .panel
               .panel-heading
                 h4.panel-title
                   a(data-toggle='collapse', data-parent='#accordion', href='#collapseMisc')
                     | MISC
-                    span.badge.badge-info.pull-right 23
-              #collapseMisc.panel-collapse.collapse MISC
+                    span.badge.badge-warning.pull-right= MISCNum
+              #collapseMisc.panel-collapse.collapse(style='margin-top: 5px;')
+                for item in MISCList
+                  +solvedList(item, item.pk)
 
         #writeup.tab-pane.fade
           ul.media-list

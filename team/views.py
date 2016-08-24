@@ -31,7 +31,7 @@ def index(request, pk=u'-1'):
             'username': username,
             'apply': -1 if not user.apply_group else user.apply_group.pk
         })
-    elif pk == -1 or user.group and user.group.pk == pk:
+    elif pk == -1 or user.group.pk == pk:
         group = user.group
     else:
         try:
@@ -55,7 +55,8 @@ def index(request, pk=u'-1'):
         item.comment = item.comments.count()
         item.avatar = item.author.avatar
         item.cate = cate[item.challenge.category]
-    return render(request, 'group.jade', {
+    solved = group.solved.all()
+    ret = {
         'username': username,
         'groupname': group.name,
         'avatar': group.avatar,
@@ -68,7 +69,15 @@ def index(request, pk=u'-1'):
         'tasked': filter(lambda x: x.done, tasks),
         'issues': issues,
         'state': 0 if user not in group.members.all() else 1 if user == group.leader else 2
-    })
+    }
+    for item in cate:
+        tmp = solved.filter(category=item)
+        ret.update({
+            '%sList' % item: tmp,
+            '%sNum' % item: tmp.count()
+        })
+        print solved.filter(category=item).count(), item
+    return render(request, 'group.jade', ret)
 
 def join(request):
     if request.is_ajax:

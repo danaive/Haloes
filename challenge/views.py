@@ -21,8 +21,7 @@ def index(request):
         user = None
     username = user.username if user else None
     challenges = Challenge.objects.all()
-    attrs = ['pk', 'title', 'origin', 'score', 'status',
-             'privilege']
+    attrs = ['pk', 'title', 'origin', 'score', 'status', 'privilege']
     cha_list = []
     for challenge in challenges:
         cha_item = {}
