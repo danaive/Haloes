@@ -24,7 +24,7 @@ class Challenge(models.Model):
     contest = models.ForeignKey(Contest, null=True, blank=True, on_delete=models.SET_NULL)
     description = models.TextField()
     zipfile = models.FileField()
-    privilege = models.IntegerField(default=0)
+    privilege = models.IntegerField(default=3)
     public = models.BooleanField(default=True)
 
     def __unicode__(self):

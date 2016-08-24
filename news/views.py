@@ -28,8 +28,8 @@ def submit_news(writeup):
         avatar=writeup.author.avatar.url,
         link='/person/%d/' % writeup.author.pk,
         content="submitted writeup <a href='/writeup/{pk}/'>{writeup}</a> of {title}({cate} {score}').".format(
-            writeup=writeup.title,
-            title=writeup.challenge.title,
+            writeup=writeup.title.encode('utf-8'),
+            title=writeup.challenge.title.encode('utf-8'),
             cate=writeup.challenge.category,
             score=writeup.challenge.score,
             pk=writeup.pk
@@ -45,7 +45,7 @@ def solve_news(user, challenge):
         avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
         content="solved challenge <a href='/challenge/{pk}/'>{title}</a>({cate} {score}\').".format(
-            title=challenge.title,
+            title=challenge.title.encode('utf-8'),
             cate=challenge.category,
             score=challenge.score,
             pk=challenge.pk
@@ -61,7 +61,7 @@ def join_group(user, group):
         avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
         content="joined group <a href='/group/{pk}/'>{group}</a>.".format(
-            group=group.name,
+            group=group.name.encode('utf-8'),
             pk=group.pk
         ),
         person=user,
@@ -75,7 +75,7 @@ def group_task(user, group, assigned):
         avatar=group.avatar.url,
         link='/group/',
         content='{leader} assigned new task to you.'.format(
-            leader=user.username
+            leader=user.username.encode('utf-8')
         ),
         person=assigned,
         public=False
@@ -88,7 +88,7 @@ def group_issue(user, group):
         avatar=group.avatar.url,
         link='/group/',
         content='new issue was published by {author}.'.format(
-            author=user.username
+            author=user.username.encode('utf-8')
         ),
         group=group
     )
@@ -100,7 +100,7 @@ def apply_group(user, group):
         avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
         content="submitted application for the membership of {group}.".format(
-            group=group.name
+            group=group.name.encode('utf-8')
         ),
         group=group
     )
@@ -112,7 +112,7 @@ def group_contest(group, contest):
         avatar=group.avatar.url,
         link='/group/%d/' % group.pk,
         content="registered for the contest <a href='/contest/{pk}/'>{contest}</a>, start at {time}.".format(
-            contest=contest.title,
+            contest=contest.title.encode('utf-8'),
             time=(contest.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M'),
             pk=contest.pk
         ),
@@ -127,7 +127,7 @@ def contest_news(user, contest):
         avatar=user.avatar.url,
         link='/person/%d/' % user.pk,
         content="added a practice contest <a href='/contest/{pk}/'>{contest}</a>, start at {time}.".format(
-            contest=contest.title,
+            contest=contest.title.encode('utf-8'),
             time=(contest.time + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M'),
             pk=contest.pk
         ),
