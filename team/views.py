@@ -86,6 +86,7 @@ def join(request):
             code = cf.cleaned_data['code']
             try:
                 group = Group.objects.get(code=code)
+                group.solved.add(user.challenges.filter(submit__status=True))
                 user.group = group
                 user.save()
                 join_group(user, group)
@@ -344,6 +345,8 @@ def approve(request):
                 group = user.group
                 if not approved.group and user == group.leader:
                     group.members.add(approved)
+                    for item in user.challenges.filter(submit__status=True):
+                        group.solved.add(item)
                     approved.apply_group = None
                     approved.save()
                     join_group(approved, group)
@@ -372,10 +375,10 @@ def kickout(request):
 
 
 def dismiss(request):
-    user = Person.objects.get(request.session['uid'])
+    user = Person.objects.get(pk=request.session['uid'])
     if user.group and user.group.leader == user:
         user.group.delete()
         user.group = None
-        return HttpResponseRedirect(reverse('group:index'))
+        return HttpResponseRedirect(reverse('team:index'))
     else:
         return render(request, '404.jade')
