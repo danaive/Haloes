@@ -97,6 +97,12 @@ DATABASES = {
     }
 }
 
+# Session
+
+SESSION_COOKIE_AGE = 24 * 60 * 60
+SESSION_COOKIE_NAME = 'sessionkey'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
