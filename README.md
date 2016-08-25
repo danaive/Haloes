@@ -7,3 +7,5 @@ Waiting for DAWN !
 * user auth
 * xss fix
 * color in radar
+* add solved when join group
+* split session

@@ -266,7 +266,7 @@ def ranking(request):
         item.writeup = item.writeup_set.count()
         item.solved = item.challenges.filter(submit__status=True).count()
         item.fstate = 0
-        if user.following.filter(pk=item.pk):
+        if user and user.following.filter(pk=item.pk):
             item.fstate = 1
             if item.following.filter(pk=user.pk):
                 item.fstate = 2
@@ -278,7 +278,6 @@ def ranking(request):
             lambda x, y: x + y,
             map(lambda x: x.writeup_set.count(), item.members.all())
         )
-        # item.person_set.all().writeup_set.count()
     return render(request, 'ranking.jade', {
         'username': username,
         'apply': False if user.group else True,
