@@ -191,19 +191,26 @@ def switch(request):
 
 
 def search(request, pk=u'-1'):
-    if int(pk) != -1:
-        return OKAY
     if request.session.get('uid', None):
         user = Person.objects.get(pk=request.session['uid'])
     else:
         user = None
     username = user.username if user else None
-    value = request.GET.get('q', None)
     ret = {'username': username, 'ucnt': 0, 'privilege': user.privilege}
+    if int(pk) != -1:
+        ret['challenges'] = Challenge.objects.filter(pk=int(pk))
+        ret['xpersons'] = []
+        ret['writeups'] = []
+        ret['groups'] = []
+        ret['contests'] = []
+        ret['ucnt'] = -1
+        if not ret['challenges']:
+            return E404(request)
+        return render(request, 'search.jade', ret)
+    value = request.GET.get('q', None)
     if value == '':
         return render(request, 'search.jade', ret)
     from django.db.models import Q
-    print value, '----'
     ret['xpersons'] = Person.objects.filter(
         Q(username__icontains=value) | Q(school__icontains=value)
     )
@@ -224,5 +231,5 @@ def search(request, pk=u'-1'):
             item.writeup = Writeup.objects.filter(
                 author__in=item.members.all()).count()
         if user:
-            ret['apply'] = -1 if not user.apply_group else user.apply_group.pk
+            ret['apply'] = -1 if not user or not user.apply_group else user.apply_group.pk
     return render(request, 'search.jade', ret)
