@@ -280,7 +280,7 @@ def ranking(request):
         )
     return render(request, 'ranking.jade', {
         'username': username,
-        'apply': False if user.group else True,
+        'apply': False if user and user.group else True,
         'users': users,
         'groups': groups
     })
