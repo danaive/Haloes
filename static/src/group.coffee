@@ -106,12 +106,13 @@ $ ->
           $('#doneList').prepend "
             <ul class='list-inline' style='margin-left: 15px;'>
               <li class='text-success'><i class='fa fa-lg fa-check-square-o'></i></li>
-              <li>#{$(@).next().text()}</li>
+              <li class='checked-task'></li>
             </ul>
             <p class='text-muted' style='margin: 15px 50px;'>
               checked by <span class='text-warning'>you</span> just now
             </p>
             "
+          $('li.checked-task').text $(@).next().text()
 
   $('#comTask').on 'click', ->
     $(@).find('i')

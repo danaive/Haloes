@@ -129,7 +129,8 @@
           return function(data) {
             if (data.msg === 'okay') {
               $(_this).parent().fadeOut();
-              return $('#doneList').prepend("<ul class='list-inline' style='margin-left: 15px;'> <li class='text-success'><i class='fa fa-lg fa-check-square-o'></i></li> <li>" + ($(_this).next().text()) + "</li> </ul> <p class='text-muted' style='margin: 15px 50px;'> checked by <span class='text-warning'>you</span> just now </p>");
+              $('#doneList').prepend("<ul class='list-inline' style='margin-left: 15px;'> <li class='text-success'><i class='fa fa-lg fa-check-square-o'></i></li> <li class='checked-task'></li> </ul> <p class='text-muted' style='margin: 15px 50px;'> checked by <span class='text-warning'>you</span> just now </p>");
+              return $('li.checked-task').text($(_this).next().text());
             }
           };
         })(this)
