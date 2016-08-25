@@ -232,7 +232,7 @@ h1{
 
 button{
   padding: 5px 10px;
-  width: 70px;
+  width: 90px;
   height: 30px;
   background-color: transparent;
   border: 1px solid #999;
@@ -240,7 +240,7 @@ button{
   color: #999;
   margin-top: 20px;
   position: relative;
-  left: 250px;
+  left: 230px;
   cursor: pointer;
 }
 
