@@ -169,7 +169,7 @@
       return $('#avatarHolder').click();
     });
     if ($('h2').data('state') !== 1) {
-      $('.leader').hide();
+      $('.leader').remove();
     }
     $('h2').hover(function() {
       return $(this).find('a').fadeIn('slow');

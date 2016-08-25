@@ -56,6 +56,7 @@ $ ->
     maxView: 2
 
 
+
   $('a.memberName').on 'click', ->
     $('#assign').text $(@).text()
 
@@ -143,7 +144,7 @@ $ ->
     $('#avatarHolder').click()
 
   if($('h2').data('state') != 1)
-    $('.leader').hide()
+    $('.leader').remove()
 
   $('h2').hover(
     -> $(@).find('a').fadeIn 'slow'
