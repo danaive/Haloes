@@ -17,7 +17,7 @@ mixin userlist(user, pk)
         span.label.label-warning MISC
       if user.major == ''
         span.label.label-reverse UNDIFINED
-    td.text-center= user.team
+    td.text-center= user.group.name
     td.text-center= user.score
     td.text-center= user.solved
     td.text-center= user.writeup
