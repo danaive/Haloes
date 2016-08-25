@@ -20,7 +20,7 @@ def index(request, pk=u'-1'):
     else:
         user = None
     username = user.username if user else None
-    if not user.group and pk == -1:
+    if (not user or not user.group) and pk == -1:
         groups = Group.objects.order_by('-score')
         for item in groups:
             item.member = item.members.count()
@@ -29,9 +29,9 @@ def index(request, pk=u'-1'):
         return render(request, 'group-recruit.jade', {
             'groups': groups,
             'username': username,
-            'apply': -1 if not user.apply_group else user.apply_group.pk
+            'apply': -1 if not user or not user.apply_group else user.apply_group.pk
         })
-    elif pk == -1 or user.group.pk == pk:
+    elif user and (pk == -1 or user.group.pk == pk):
         group = user.group
     else:
         try:

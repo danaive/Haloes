@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .models import *
 from django.http import HttpResponse
+from django.shortcuts import render
 from datetime import timedelta
 import json
 
@@ -15,6 +16,14 @@ def response(msg, data=None):
     if data:
         dic.update(data)
     return HttpResponse(json.dumps(dic), content_type='application/json')
+
+
+def E404(request):
+    return render(request, '404.jade')
+
+
+def E403(request):
+    return render(request, '403.jade')
 
 
 OKAY = response('okay')

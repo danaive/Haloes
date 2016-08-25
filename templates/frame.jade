@@ -33,18 +33,16 @@ html(lang='en')
               input.form-control.search-query(name='q', type='text')
 
           ul.nav.navbar-nav.navbar-right
-            if self
-              li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
-                b= self
-                // span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
-              li: a.nav-link(href='#signOut') Sign out
-            elif username
+            //- if self
+            //-   li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
+            //-     b= self
+            //-   li: a.nav-link(href='#signOut') Sign out
+            if username
               li: a.nav-link(href='{% url "person:index" %}', style='font-size: 16px;')
                 b= username
-                // span.badge.badge-danger(style='margin-left: 6px; vertical-align: top;') 1
               li: a.nav-link(href='#signOut') Sign out
             else
-              li: a.nav-link(href='#signUp') Sign up
+              li#exist: a.nav-link(href='#signUp') Sign up
               li: a.nav-link(href='#signIn') Sign in
 
     .container(style='padding-top: 80px;')

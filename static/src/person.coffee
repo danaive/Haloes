@@ -117,9 +117,10 @@ $ ->
       )
 
   # avatar
-  $('[data-toggle="tooltip"]').tooltip()
-  $('#avatar').on 'click', ->
-    $('#avatarHolder').click()
+  if $('#avatar').siblings().length
+    $('[data-toggle="tooltip"]').tooltip()
+    $('#avatar').on 'click', ->
+      $('#avatarHolder').click()
 
   getNews = () ->
     step = 6

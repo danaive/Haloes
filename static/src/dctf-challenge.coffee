@@ -3,6 +3,7 @@ $ ->
   $('a[href$="contest/"]').addClass 'current'
   stickFooter()
 
+  # update here
   $('a[href^="#mod-"]').on 'click', ->
     pk = ($(@).attr 'href').substr 5
     $('#modalTitle').text $(@).text()

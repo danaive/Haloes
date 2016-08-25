@@ -54,26 +54,28 @@ block container
       .row(style='margin-bottom: 20px;')
         .col-md-3(style='margin-right: -20px;')
           img#avatar.img-thumbnail(src='#{MEDIA_URL}#{avatar}',
-            width='120', height='120', style='cursor: pointer;',
+            width='120', height='120', style='cursor: pointer;', 
             data-toggle='tooltip', data-placement='bottom', title='Update Your Avatar')
-          #iconHolder.img-thumbnail(style='width: 120px; height: 120px; display: none;')
-            i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
-          form(enctype='multipart/form-data')
-            input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
+          if self
+            #iconHolder.img-thumbnail(style='width: 120px; height: 120px; display: none;')
+              i.fa.fa-spinner.fa-5x.fa-spin(style='margin: 20px 20px;')
+            form(enctype='multipart/form-data')
+              input#avatarHolder(type='file', name='img', style='display: none;', onchange='uploadAvatar();')
         .col-md-9(style='margin-left: -20px;')
           h2(style='margin: 15px 0px;')
-            span#nickname= username
+            span#nickname= ownername
             small#infoMotto(style='margin-left: 10px; color: #aaa')= motto
-          unless self
-            a#updateBtn.btn.btn-link
-              | update&nbsp;
-              i.fa.fa-angle-double-down
-          else
-            a#followBtn.btn.btn-info(data-follow=follow, style='display: none;')
-              i.fa.fa-mars-double
-              | &nbsp;Follow
-            a#unfollowBtn.btn(style='display: none;')
-              | Unfollow
+          if username
+            if self
+              a#updateBtn.btn.btn-link
+                | update&nbsp;
+                i.fa.fa-angle-double-down
+            else
+              a#followBtn.btn.btn-info(data-follow=follow, style='display: none;')
+                i.fa.fa-mars-double
+                | &nbsp;Follow
+              a#unfollowBtn.btn(style='display: none;')
+                | Unfollow
 
       .row
         .col-md-5
@@ -121,9 +123,10 @@ block container
           canvas#radarChart(height='300', width='300', style='margin-left: 30px;')
         .col-md-2
           ul.list-unstyled
-            +chartLabel(username, '#89729E')
-            if self
-              +chartLabel(self, '#97BBCD')
+            +chartLabel(ownername, '#89729E')
+            if username
+              unless self 
+                +chartLabel(username, '#97BBCD')
 
     .col-md-4
       ul.nav.nav-pills

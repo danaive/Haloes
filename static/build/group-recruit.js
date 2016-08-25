@@ -4,6 +4,9 @@
     var apply;
     $('a[href$="group/"]').addClass('current');
     stickFooter();
+    if ($('#exist').length) {
+      $('.btn').attr('disabled', true);
+    }
     apply = $('#teamCont').data('pk');
     if (apply !== -1) {
       $('button.btn-default').hide();

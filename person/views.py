@@ -93,7 +93,10 @@ def sign_in(request):
 
 
 def sign_out(request):
-    del request.session['uid']
+    try:
+        del request.session['uid']
+    except:
+        pass
     return OKAY
 
 
@@ -168,21 +171,28 @@ def follow(request):
 def index(request, pk=u'-1'):
     pk = int(pk)
     data = {}
-    if pk != -1 and pk != request.session['uid']:
+    if request.session.get('uid', None):
+        user = Person.objects.get(pk=request.session['uid'])
         try:
             owner = Person.objects.get(pk=pk)
-            visitor = Person.objects.get(pk=request.session['uid'])
-            data['self'] = visitor.username
-            if visitor.following.filter(pk=pk):
-                data['follow'] = True
         except:
-            return render(request, '404.jade')
+            owner = user
+        if owner == user:
+            data['self'] = True
+        elif owner in user.following.all():
+            data['follow'] = True
+        data['username'] = user.username
     else:
-        owner = Person.objects.get(pk=request.session['uid'])
+        user = None
+        try:
+            owner = Person.objects.get(pk=pk)
+        except:
+            return E404(request)
+        data['username'] = None
     followings = owner.following.all()
     followers = owner.followers.all()
     data.update({
-        'username': owner.username,
+        'ownername': owner.username,
         'motto': owner.motto,
         'major': owner.major,
         'score': owner.score,
@@ -223,19 +233,22 @@ def score(request):
                 ),
                 'name': user.username
             })
-            visitor = Person.objects.get(pk=request.session['uid'])
-            if visitor.username != user.username:
-                tmp = [0] * 5
-                for challenge in visitor.challenges.filter(
-                    submit__status=True):
-                    tmp[cate[challenge.category]] += challenge.score
-                data['capacity'].append({
-                    'score': map(
-                        lambda x: 100 * tmp[x[1]] / MaxScore.objects.get(category=x[0]).score,
-                        sorted(cate.iteritems(), key=lambda x: x[1])
-                    ),
-                    'name': visitor.username
-                })
+            try:
+                visitor = Person.objects.get(pk=request.session['uid'])
+                if visitor.username != user.username:
+                    tmp = [0] * 5
+                    for challenge in visitor.challenges.filter(
+                        submit__status=True):
+                        tmp[cate[challenge.category]] += challenge.score
+                    data['capacity'].append({
+                        'score': map(
+                            lambda x: 100 * tmp[x[1]] / MaxScore.objects.get(category=x[0]).score,
+                            sorted(cate.iteritems(), key=lambda x: x[1])
+                        ),
+                        'name': visitor.username
+                    })
+            except:
+                pass
             # if sum(data['score']) == 0:
             #     return FAIL
             return response('okay', data)

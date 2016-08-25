@@ -138,10 +138,12 @@
         });
       }
     });
-    $('[data-toggle="tooltip"]').tooltip();
-    $('#avatar').on('click', function() {
-      return $('#avatarHolder').click();
-    });
+    if ($('#avatar').siblings().length) {
+      $('[data-toggle="tooltip"]').tooltip();
+      $('#avatar').on('click', function() {
+        return $('#avatarHolder').click();
+      });
+    }
     getNews = function() {
       var page, step;
       step = 6;
