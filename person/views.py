@@ -86,7 +86,7 @@ def sign_in(request):
                     if user.email_check != 'done':
                         return response('email')
                     request.session['uid'] = user.pk
-                    request.session[str(user.pk)] = '233'
+                    request.session[user.email] = '233'
                     return OKAY
             except:
                 return FAIL
