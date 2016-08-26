@@ -8,7 +8,7 @@ import json
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        GroupMaxScore.objects.all().update(score=0)
+        GroupMaxScore.objects.all().update(score=1)
         for group in Group.objects.all():
             group.solved.clear()
             for user in group.members.all():
@@ -16,6 +16,7 @@ class Command(BaseCommand):
                     group.solved.add(challenge)
             score = [0, 0, 0, 0, 0]
             cate = {'PWN': 0, 'REVERSE': 1, 'WEB': 2, 'CRYPTO': 3, 'MISC': 4}
+            group.score = 0
             for challenge in group.solved.all():
                 group.score += challenge.score
                 score[cate[challenge.category]] += challenge.score
@@ -25,4 +26,4 @@ class Command(BaseCommand):
                 if score[cate[key]] > gms.score:
                     gms.score = score[cate[key]]
                     gms.save()
-            print '%s: %d\'' % (group.name, group.score)
+            print '%s: %d\' %d' % (group.name, group.score, group.solved.all().count())
