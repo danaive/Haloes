@@ -25,6 +25,7 @@ class Person(models.Model):
     privilege = models.IntegerField(default=0)
     email_check = models.CharField(max_length=100)
     apply_group = models.ForeignKey('team.Group', null=True, on_delete=models.SET_NULL, related_name='appliers')
+    session_key = models.CharField(blank=True, max_length=50)
 
     def __unicode__(self):
         return self.username + '_' + self.email

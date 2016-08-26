@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.sessions.models import Session
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
@@ -40,8 +41,7 @@ def check_email(request, token):
         if sha256(key + user.password).hexdigest()[:32] == token[16:]:
             user.email_check = 'done'
             user.save()
-            request.session['uid'] = user.pk
-            return HttpResponseRedirect(reverse('person:index'))
+            return HttpResponseRedirect(reverse('login'))
     except:
         return render(request, '404.jade')
 
@@ -85,6 +85,12 @@ def sign_in(request):
                 if sha256(user.password + salt).hexdigest() == password:
                     if user.email_check != 'done':
                         return response('email')
+                    try:
+                        Session.objects.get(pk=user.session_key).delete()
+                    except:
+                        pass
+                    user.session_key = request.session.session_key
+                    user.save()
                     request.session['uid'] = user.pk
                     request.session[user.email] = '233'
                     return OKAY
@@ -95,9 +101,12 @@ def sign_in(request):
 
 def sign_out(request):
     try:
-        del request.session['uid']
+        user = Person.objects.get(pk=request.session['uid'])
+        user.session_key = ''
     except:
         pass
+    request.session.flush()
+    request.session.cycle()
     return OKAY
 
 
