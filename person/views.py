@@ -272,7 +272,7 @@ def ranking(request):
     else:
         user = None
     username = user.username if user else None
-    users = Person.objects.order_by('-score')
+    users = Person.objects.filter(email_check='done').order_by('-score')
     for item in users:
         item.writeup = item.writeup_set.count()
         item.solved = item.challenges.filter(submit__status=True).count()

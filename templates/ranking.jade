@@ -2,7 +2,7 @@ extends frame
 {% load staticfiles %}
 
 mixin userlist(user, pk)
-  tr(style='')
+  tr.user(style='display: none;')
     td.text-center: a(href='/person/#{pk}/')= user.nickname
     td.text-center
       if user.major == 'PWN'
@@ -28,7 +28,7 @@ mixin userlist(user, pk)
         i.fa.fa-star-o
 
 mixin teamlist(team, pk, apply)
-  tr(style='')
+  tr.team(style='display: none;')
     td.text-center: a(href='/group/#{pk}/')= team.name
     td.text-center= team.membern
     td.text-center= team.score
@@ -52,7 +52,7 @@ block container
               th.text-center Solved
               th.text-center WriteUp
               th
-          tbody#userCont(data-page='0')
+          tbody#userCont(data-page='0', data-focus='user')
             for item in users
               +userlist(item, item.pk)
         table#teamList.table.table-hover(style='display: none;')

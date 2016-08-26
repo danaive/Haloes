@@ -8,7 +8,9 @@ import json
 class Command(BaseCommand):
     def handle(self, *args, **options):
         for item in Session.objects.all():
-            print item.session_key, item.get_decoded().get('uid', None)
+            dic = item.get_decoded()
+            if 'uid' in dic:
+            print item.session_key, dic['uid']
             # self.stdout.write(item.get_decoded())
             # pk = json.loads(item.get_decoded()).get('uid', None)
             # if pk:
