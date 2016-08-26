@@ -55,7 +55,8 @@ def sign_up(request):
             email = rform.cleaned_data['email']
             if '@' not in username and len(username) <= 16:
                 try:
-                    assert Person.objects.filter(username=username) or Person.objects.filter(email=email)
+                    assert not Person.objects.filter(username=username)
+                    assert not Person.objects.filter(email=email)
                     user = Person.objects.create(
                         username=username,
                         password=password,
