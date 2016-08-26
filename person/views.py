@@ -43,7 +43,7 @@ def check_email(request, token):
             user.save()
             return HttpResponseRedirect(reverse('login'))
     except:
-        return render(request, '404.jade')
+        return HttpResponse('expired token')
 
 
 def sign_up(request):
@@ -197,7 +197,7 @@ def index(request, pk=u'-1'):
         try:
             owner = Person.objects.get(pk=pk)
         except:
-            return E404(request)
+            return HttpResponseRedirect(reverse('ranking'))
         data['username'] = None
     followings = owner.following.all()
     followers = owner.followers.all()
