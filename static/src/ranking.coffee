@@ -24,17 +24,22 @@ $ ->
         $('#userCont').data 'focus', 'team'
       stickFooter()
 
-  PAGE_ITEM_COUNT = 1
+  PAGE_ITEM_COUNT = 10
 
-  total = 0
-  $('tr.user').each ->
-    total += 1
-    if total <= PAGE_ITEM_COUNT
-      $(@).show()
-  total = 0
-  $('tr.team').each ->
-    if total <= PAGE_ITEM_COUNT
-      $(@).show()
+  inituser = () ->
+    total = 0
+    $('tr.user').each ->
+      total += 1
+      if total <= PAGE_ITEM_COUNT
+        $(@).show()
+  initteam = () ->
+    total = 0
+    $('tr.team').each ->
+      if total <= PAGE_ITEM_COUNT
+        $(@).show()
+
+  inituser()
+  initteam()
 
   $('[id^="pager"]').on 'click', ->
     focus = $('#userCont').data 'focus'
