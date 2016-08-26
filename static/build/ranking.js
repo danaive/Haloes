@@ -32,12 +32,13 @@
     inituser = function() {
       var total;
       total = 0;
-      return $('tr.user').each(function() {
+      $('tr.user').each(function() {
         total += 1;
         if (total <= PAGE_ITEM_COUNT) {
           return $(this).show();
         }
       });
+      return stickFooter();
     };
     initteam = function() {
       var total;

@@ -32,6 +32,7 @@ $ ->
       total += 1
       if total <= PAGE_ITEM_COUNT
         $(@).show()
+    stickFooter()
   initteam = () ->
     total = 0
     $('tr.team').each ->
