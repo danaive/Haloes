@@ -381,4 +381,4 @@ def dismiss(request):
         user.group = None
         return HttpResponseRedirect(reverse('team:index'))
     else:
-        return render(request, '404.jade')
+        return render(request, '403.jade')

@@ -95,7 +95,7 @@ def editor(request, pk='-1'):
         except:
             return render(request, '404.jade')
         if wp.author != user:
-            return render(request, '404.jade')
+            return render(request, '403.jade')
         return render(request, 'writeup-editor.jade', {
             'username': username,
             'content': wp.content,

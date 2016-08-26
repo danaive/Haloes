@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
@@ -205,7 +206,7 @@ def search(request, pk=u'-1'):
         ret['contests'] = []
         ret['ucnt'] = -1
         if not ret['challenges']:
-            return E404(request)
+            return HttpResponseRedirect(reverse('challenge:index'))
         return render(request, 'search.jade', ret)
     value = request.GET.get('q', None)
     if value == '':
