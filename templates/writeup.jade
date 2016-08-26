@@ -2,7 +2,7 @@ extends frame
 {% load staticfiles %}
 
 mixin writeupList(wp, pk)
-  tr
+  tr.wp(style='display: none;')
     td.text-center: a(href=pk)= wp.title
     td.text-center= wp.solve
     td.text-center
@@ -66,12 +66,12 @@ block container
               th.text-center Author
               th.text-center Team
               th
-          tbody
+          tbody#cont(data-page='0')
             for item in writeups
               +writeupList(item, item.pk)
       .btn-group.pull-right
-        button#prev.btn.btn-primary(data-page): i.fa.fa-long-arrow-left
-        button#next.btn.btn-primary: i.fa.fa-long-arrow-right
+        button#pagerPrev.btn.btn-primary: i.fa.fa-long-arrow-left
+        button#pagerNext.btn.btn-primary: i.fa.fa-long-arrow-right
       a.btn.btn-success.pull-left(href='editor/')
         i.fa.fa-cloud-upload
         | &nbsp;Submit

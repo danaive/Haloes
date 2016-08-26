@@ -29,7 +29,7 @@
         });
       }
     });
-    PAGE_ITEM_COUNT = 15;
+    PAGE_ITEM_COUNT = 10;
     total = 0;
     $('tr.ALL').each(function() {
       if ($(this).data('state') === 0) {

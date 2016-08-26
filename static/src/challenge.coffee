@@ -24,7 +24,7 @@ $ ->
           else
             $(@).bootstrapSwitch 'state', !state, true
 
-  PAGE_ITEM_COUNT = 15
+  PAGE_ITEM_COUNT = 10
 
   total = 0
   $('tr.ALL').each ->
