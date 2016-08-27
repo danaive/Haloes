@@ -10,7 +10,7 @@ class Command(BaseCommand):
         for item in Session.objects.all():
             dic = item.get_decoded()
             if 'uid' in dic:
-                print item.session_key, dic['key'], dic['uid']
+                print item.session_key, dic.get('key', '*'*32), dic['uid']
             # self.stdout.write(item.get_decoded())
             # pk = json.loads(item.get_decoded()).get('uid', None)
             # if pk:
