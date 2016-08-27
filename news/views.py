@@ -49,7 +49,7 @@ def submit_news(writeup):
 
 
 def solve_news(user, challenge):
-    News.objects.create(
+    News.objects.update_or_create(
         title=user.username,
         avatar=user.avatar.url,
         link='/person/%d/' % user.pk,

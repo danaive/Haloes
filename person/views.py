@@ -93,7 +93,6 @@ def sign_in(request):
                     user.session_key = request.session.session_key
                     user.save()
                     request.session['uid'] = user.pk
-                    request.session[user.email] = '233'
                     request.session['key'] = request.session.session_key
                     return OKAY
             except:
@@ -105,6 +104,7 @@ def sign_out(request):
     try:
         user = Person.objects.get(pk=request.session['uid'])
         user.session_key = ''
+        user.save()
     except:
         pass
     request.session.flush()
