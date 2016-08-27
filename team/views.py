@@ -16,7 +16,7 @@ import json
 def index(request, pk=u'-1'):
     pk = int(pk)
     try:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
     except:
         user = None
     username = user.username if user else None
@@ -80,7 +80,7 @@ def index(request, pk=u'-1'):
 
 def join(request):
     if request.is_ajax:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
         cf = CodeForm(request.POST)
         if cf.is_valid() and not user.group:
             code = cf.cleaned_data['code']
@@ -98,7 +98,7 @@ def join(request):
 
 def create(request):
     if request.is_ajax:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
         gf = GroupNameForm(request.POST)
         if gf.is_valid() and not user.group:
             from os import urandom
@@ -118,7 +118,7 @@ def create(request):
 
 def apply(request):
     if request.is_ajax:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
         gf = IntForm(request.POST)
         if gf.is_valid() and not user.group:
             pk = gf.cleaned_data['pk']
@@ -132,7 +132,7 @@ def apply(request):
 
 def withdraw(request):
     if request.is_ajax:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
         user.apply_group = None
         user.save()
         return OKAY
@@ -141,7 +141,7 @@ def withdraw(request):
 
 def new_task(request):
     if request.is_ajax:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
         group = user.group
         tf = TaskForm(request.POST)
         if tf.is_valid():
@@ -167,7 +167,7 @@ def new_task(request):
 
 def do_task(request):
     if request.is_ajax:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
         group = user.group
         tf = IntForm(request.POST)
         if tf.is_valid():
@@ -187,7 +187,7 @@ def do_task(request):
 
 def clear_task(request):
     if request.is_ajax:
-        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+        user = Person.objects.get(session_key=request.COOKIES['uid'])
         group = user.group
         tf = IntForm(request.POST)
         if tf.is_valid():
@@ -225,7 +225,7 @@ def get_score(request):
                 ),
                 'name': group.name
             })
-            visitor = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+            visitor = Person.objects.get(session_key=request.COOKIES['uid'])
             if visitor.group and visitor.group != group:
                 tmp = [0] * 5
                 for item in visitor.group.solved.all():
@@ -251,7 +251,7 @@ def update_avatar(request):
             img = request.FILES['img']
             if img.size > 500 * 1024:
                 return FAIL
-            group = Person.objects.get(session_key=request.COOKIES['sessionkey']).group
+            group = Person.objects.get(session_key=request.COOKIES['uid']).group
             group.avatar = img
             group.save()
             from PIL import Image
@@ -263,7 +263,7 @@ def update_avatar(request):
 
 
 def issue(request, pk=u'-1'):
-    user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    user = Person.objects.get(session_key=request.COOKIES['uid'])
     group = user.group
     pk = int(pk)
     if pk == -1:
@@ -301,7 +301,7 @@ def submit(request):
             try:
                 title = wf.cleaned_data['title']
                 content = wf.cleaned_data['content']
-                user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+                user = Person.objects.get(session_key=request.COOKIES['uid'])
                 wp = Issue.objects.create(
                     author=user,
                     group=user.group,
@@ -321,7 +321,7 @@ def comment(request):
         if cf.is_valid():
             try:
                 comment = Comment.objects.create(
-                    author=Person.objects.get(session_key=request.COOKIES['sessionkey']),
+                    author=Person.objects.get(session_key=request.COOKIES['uid']),
                     issue=Issue.objects.get(pk=cf.cleaned_data['issue']),
                     content=cf.cleaned_data['content']
                 )
@@ -340,20 +340,19 @@ def approve(request):
         gf = IntForm(request.POST)
         if gf.is_valid():
             try:
-                user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
-                # approved = Person.objects.get(pk=gf.cleaned_data['pk'])
-                # group = user.group
-                # if user == group.leader:
-                #     # group.members.add(approved)
-                #     approved.group = group
-                #     approved.apply_group = None
-                #     approved.save()
-                #     recalc_score(group)
-                #     join_group(approved, group)
-                #     return OKAY
-                # user.group.members.add(Person.objects.get(pk=gf.cleaned_data['pk']))
-                Person.objects.filter(pk=gf.cleaned_data['pk']).update(group=user.group)
-                return OKAY
+                user = Person.objects.get(session_key=request.COOKIES['uid'])
+                approved = Person.objects.get(pk=gf.cleaned_data['pk'])
+                group = user.group
+                if user == group.leader:
+                    # group.members.add(approved)
+                    approved.group = group
+                    approved.apply_group = None
+                    approved.save()
+                    recalc_score(group)
+                    join_group(approved, group)
+                    return OKAY
+                # Person.objects.filter(pk=gf.cleaned_data['pk']).update(group=user.group)
+                # return OKAY
             except:
                 pass
         return FAIL
@@ -365,7 +364,7 @@ def kickout(request):
         gf = IntForm(request.POST)
         if gf.is_valid():
             try:
-                user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+                user = Person.objects.get(session_key=request.COOKIES['uid'])
                 kicked = Person.objects.get(pk=gf.cleaned_data['pk'])
                 group = user.group
                 if kicked.group == group and user == group.leader:
@@ -379,7 +378,7 @@ def kickout(request):
 
 
 def dismiss(request):
-    user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    user = Person.objects.get(session_key=request.COOKIES['uid'])
     if user.group and user.group.leader == user:
         user.group.delete()
         user.group = None
