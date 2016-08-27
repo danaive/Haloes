@@ -18,9 +18,9 @@ import re
 
 
 def index(request):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     challenges = Challenge.objects.all()
@@ -65,7 +65,7 @@ def drop_attempt(request):
                 challenge = Challenge.objects.get(pk=pk)
             except:
                 return FAIL
-            user = Person.objects.get(session_key=request.session.session_key)
+            user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
             Submit.objects.filter(person=user, challenge=challenge).delete()
             return OKAY
     return ERROR
@@ -79,7 +79,7 @@ def submit(request):
             flag = cf.cleaned_data['flag']
             try:
                 challenge = Challenge.objects.get(pk=pk)
-                user = Person.objects.get(session_key=request.session.session_key)
+                user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
             except:
                 return ERROR
             if flag == challenge.flag:
@@ -162,7 +162,7 @@ def switch(request):
         if sf.is_valid():
             try:
                 challenge = Challenge.objects.get(pk=sf.cleaned_data['pk'])
-                user = Person.objects.get(session_key=request.session.session_key)
+                user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
                 if user.privilege > challenge.privilege:
                     return FAIL
             except:
@@ -192,9 +192,9 @@ def switch(request):
 
 
 def search(request, pk=u'-1'):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     ret = {'username': username, 'ucnt': 0, 'privilege': user.privilege}

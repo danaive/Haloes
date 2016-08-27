@@ -13,9 +13,9 @@ import json
 
 
 def index(request):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     writeups = Writeup.objects.all()
@@ -50,7 +50,7 @@ def like(request, pk):
     if request.is_ajax:
         try:
             wp = Writeup.objects.get(pk=pk)
-            user = Person.objects.get(session_key=request.session.session_key)
+            user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
             if user not in wp.likes.all():
                 wp.likes.add(user)
             else:
@@ -65,7 +65,7 @@ def star(request, pk):
     if request.is_ajax:
         try:
             wp = Writeup.objects.get(pk=pk)
-            user = Person.objects.get(session_key=request.session.session_key)
+            user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
             if user not in wp.stars.all():
                 wp.stars.add(user)
             else:
@@ -77,9 +77,9 @@ def star(request, pk):
 
 
 def editor(request, pk='-1'):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     origins = map(lambda x: x.title, Origin.objects.all())
@@ -149,7 +149,7 @@ def submit(request):
                 challenge = Challenge.objects.get(pk=wf.cleaned_data['challenge'])
                 content = wf.cleaned_data['content']
                 wp, state = Writeup.objects.update_or_create(
-                    author=Person.objects.get(session_key=request.session.session_key),
+                    author=Person.objects.get(session_key=request.COOKIES['sessionkey']),
                     challenge=challenge,
                     defaults={
                         'title': title,
@@ -165,9 +165,9 @@ def submit(request):
 
 
 def detail(request, pk):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     try:
@@ -219,7 +219,7 @@ def comment(request):
         if cf.is_valid():
             try:
                 comment = Comment.objects.create(
-                    author=Person.objects.get(session_key=request.session.session_key),
+                    author=Person.objects.get(session_key=request.COOKIES['sessionkey']),
                     writeup=Writeup.objects.get(pk=cf.cleaned_data['writeup']),
                     content=cf.cleaned_data['content']
                 )

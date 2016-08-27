@@ -28,9 +28,9 @@ class UTC(tzinfo):
 
 
 def index(request, pk='-1'):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     try:
@@ -62,15 +62,15 @@ def index(request, pk='-1'):
 
 
 def challenge(request, pk):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     pk = int(pk)
     try:
         challenges = Challenge.objects.filter(contest__pk=pk, public=True)
-        team = Person.objects.get(session_key=request.session.session_key).team
+        team = Person.objects.get(session_key=request.COOKIES['sessionkey']).team
         solved = map(
             lambda x: x.challenge,
             Ranking.objects.get(team=team, contest__pk=pk).solved.all()
@@ -91,9 +91,9 @@ def challenge(request, pk):
 
 def team(request, pk):
     pk = int(pk)
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     team = user.team
@@ -118,9 +118,9 @@ def team(request, pk):
 
 
 def ranking(request, pk):
-    if request.session.get('uid', None):
-        user = Person.objects.get(session_key=request.session.session_key)
-    else:
+    try:
+        user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
+    except:
         user = None
     username = user.username if user else None
     users = Person.objects.filter(team__ranks__pk=pk).order_by('-score')
@@ -163,7 +163,7 @@ def submit(request):
                 contest = Contest.objects.get(pk=contest)
             except:
                 return ERROR
-            user = Person.objects.get(session_key=request.session.session_key)
+            user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
             if flag == challenge.flag:
                 _, submit = Submit.objects.update_or_create(person=user,
                     challenge=challenge, defaults={'status': True})
