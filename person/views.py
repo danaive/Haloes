@@ -94,6 +94,7 @@ def sign_in(request):
                     user.save()
                     request.session['uid'] = user.pk
                     request.session[user.email] = '233'
+                    request.session['key'] = request.session.session_key
                     return OKAY
             except:
                 return FAIL
