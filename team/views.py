@@ -343,7 +343,7 @@ def approve(request):
                 user = Person.objects.get(session_key=request.COOKIES['uid'])
                 approved = Person.objects.get(pk=gf.cleaned_data['pk'])
                 group = user.group
-                if user == group.leader:
+                if approved.apply_group == group and user == group.leader:
                     # group.members.add(approved)
                     approved.group = group
                     approved.apply_group = None
