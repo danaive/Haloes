@@ -341,16 +341,19 @@ def approve(request):
         if gf.is_valid():
             try:
                 user = Person.objects.get(session_key=request.COOKIES['sessionkey'])
-                approved = Person.objects.get(pk=gf.cleaned_data['pk'])
-                group = user.group
-                if not approved.group and user == group.leader:
-                    group.members.add(approved)
-                    for item in user.challenges.filter(submit__status=True):
-                        group.solved.add(item)
-                    approved.apply_group = None
-                    approved.save()
-                    join_group(approved, group)
-                    return OKAY
+                # approved = Person.objects.get(pk=gf.cleaned_data['pk'])
+                # group = user.group
+                # if user == group.leader:
+                #     # group.members.add(approved)
+                #     approved.group = group
+                #     approved.apply_group = None
+                #     approved.save()
+                #     recalc_score(group)
+                #     join_group(approved, group)
+                #     return OKAY
+                # user.group.members.add(Person.objects.get(pk=gf.cleaned_data['pk']))
+                Person.objects.filter(pk=gf.cleaned_data['pk']).update(group=user.group)
+                return OKAY
             except:
                 pass
         return FAIL
@@ -367,6 +370,7 @@ def kickout(request):
                 group = user.group
                 if kicked.group == group and user == group.leader:
                     group.members.remove(kicked)
+                    recalc_score(group)
                     return OKAY
             except:
                 pass
@@ -381,4 +385,5 @@ def dismiss(request):
         user.group = None
         return HttpResponseRedirect(reverse('team:index'))
     else:
-        return render(request, '403.jade')
+        user.group = None
+        user.save()

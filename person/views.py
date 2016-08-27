@@ -90,10 +90,13 @@ def sign_in(request):
                         Session.objects.get(pk=user.session_key).delete()
                     except:
                         pass
+                    rd = urandom(12).encode('hex')
                     user.session_key = request.session.session_key
                     user.save()
                     request.session['uid'] = user.pk
                     request.session['key'] = request.session.session_key
+                    res = HTTPRequest('{"msg": "okay"}', content_type='application/json')
+                    res.set_cookie('uid', rd)
                     return OKAY
             except:
                 return FAIL
