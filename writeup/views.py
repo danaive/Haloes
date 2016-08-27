@@ -14,7 +14,7 @@ import json
 
 def index(request):
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -50,7 +50,7 @@ def like(request, pk):
     if request.is_ajax:
         try:
             wp = Writeup.objects.get(pk=pk)
-            user = Person.objects.get(pk=request.session['uid'])
+            user = Person.objects.get(session_key=request.session.session_key)
             if user not in wp.likes.all():
                 wp.likes.add(user)
             else:
@@ -65,7 +65,7 @@ def star(request, pk):
     if request.is_ajax:
         try:
             wp = Writeup.objects.get(pk=pk)
-            user = Person.objects.get(pk=request.session['uid'])
+            user = Person.objects.get(session_key=request.session.session_key)
             if user not in wp.stars.all():
                 wp.stars.add(user)
             else:
@@ -78,7 +78,7 @@ def star(request, pk):
 
 def editor(request, pk='-1'):
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -149,7 +149,7 @@ def submit(request):
                 challenge = Challenge.objects.get(pk=wf.cleaned_data['challenge'])
                 content = wf.cleaned_data['content']
                 wp, state = Writeup.objects.update_or_create(
-                    author=Person.objects.get(pk=request.session['uid']),
+                    author=Person.objects.get(session_key=request.session.session_key),
                     challenge=challenge,
                     defaults={
                         'title': title,
@@ -166,7 +166,7 @@ def submit(request):
 
 def detail(request, pk):
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -219,7 +219,7 @@ def comment(request):
         if cf.is_valid():
             try:
                 comment = Comment.objects.create(
-                    author=Person.objects.get(pk=request.session['uid']),
+                    author=Person.objects.get(session_key=request.session.session_key),
                     writeup=Writeup.objects.get(pk=cf.cleaned_data['writeup']),
                     content=cf.cleaned_data['content']
                 )

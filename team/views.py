@@ -16,7 +16,7 @@ import json
 def index(request, pk=u'-1'):
     pk = int(pk)
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -80,7 +80,7 @@ def index(request, pk=u'-1'):
 
 def join(request):
     if request.is_ajax:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         cf = CodeForm(request.POST)
         if cf.is_valid() and not user.group:
             code = cf.cleaned_data['code']
@@ -98,7 +98,7 @@ def join(request):
 
 def create(request):
     if request.is_ajax:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         gf = GroupNameForm(request.POST)
         if gf.is_valid() and not user.group:
             from os import urandom
@@ -118,7 +118,7 @@ def create(request):
 
 def apply(request):
     if request.is_ajax:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         gf = IntForm(request.POST)
         if gf.is_valid() and not user.group:
             pk = gf.cleaned_data['pk']
@@ -132,7 +132,7 @@ def apply(request):
 
 def withdraw(request):
     if request.is_ajax:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         user.apply_group = None
         user.save()
         return OKAY
@@ -141,7 +141,7 @@ def withdraw(request):
 
 def new_task(request):
     if request.is_ajax:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         group = user.group
         tf = TaskForm(request.POST)
         if tf.is_valid():
@@ -167,7 +167,7 @@ def new_task(request):
 
 def do_task(request):
     if request.is_ajax:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         group = user.group
         tf = IntForm(request.POST)
         if tf.is_valid():
@@ -187,7 +187,7 @@ def do_task(request):
 
 def clear_task(request):
     if request.is_ajax:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         group = user.group
         tf = IntForm(request.POST)
         if tf.is_valid():
@@ -225,7 +225,7 @@ def get_score(request):
                 ),
                 'name': group.name
             })
-            visitor = Person.objects.get(pk=request.session['uid'])
+            visitor = Person.objects.get(session_key=request.session.session_key)
             if visitor.group and visitor.group != group:
                 tmp = [0] * 5
                 for item in visitor.group.solved.all():
@@ -251,7 +251,7 @@ def update_avatar(request):
             img = request.FILES['img']
             if img.size > 500 * 1024:
                 return FAIL
-            group = Person.objects.get(pk=request.session['uid']).group
+            group = Person.objects.get(session_key=request.session.session_key).group
             group.avatar = img
             group.save()
             from PIL import Image
@@ -263,7 +263,7 @@ def update_avatar(request):
 
 
 def issue(request, pk=u'-1'):
-    user = Person.objects.get(pk=request.session['uid'])
+    user = Person.objects.get(session_key=request.session.session_key)
     group = user.group
     pk = int(pk)
     if pk == -1:
@@ -301,7 +301,7 @@ def submit(request):
             try:
                 title = wf.cleaned_data['title']
                 content = wf.cleaned_data['content']
-                user = Person.objects.get(pk=request.session['uid'])
+                user = Person.objects.get(session_key=request.session.session_key)
                 wp = Issue.objects.create(
                     author=user,
                     group=user.group,
@@ -321,7 +321,7 @@ def comment(request):
         if cf.is_valid():
             try:
                 comment = Comment.objects.create(
-                    author=Person.objects.get(pk=request.session['uid']),
+                    author=Person.objects.get(session_key=request.session.session_key),
                     issue=Issue.objects.get(pk=cf.cleaned_data['issue']),
                     content=cf.cleaned_data['content']
                 )
@@ -340,7 +340,7 @@ def approve(request):
         gf = IntForm(request.POST)
         if gf.is_valid():
             try:
-                user = Person.objects.get(pk=request.session['uid'])
+                user = Person.objects.get(session_key=request.session.session_key)
                 approved = Person.objects.get(pk=gf.cleaned_data['pk'])
                 group = user.group
                 if not approved.group and user == group.leader:
@@ -362,7 +362,7 @@ def kickout(request):
         gf = IntForm(request.POST)
         if gf.is_valid():
             try:
-                user = Person.objects.get(pk=request.session['uid'])
+                user = Person.objects.get(session_key=request.session.session_key)
                 kicked = Person.objects.get(pk=gf.cleaned_data['pk'])
                 group = user.group
                 if kicked.group == group and user == group.leader:
@@ -375,7 +375,7 @@ def kickout(request):
 
 
 def dismiss(request):
-    user = Person.objects.get(pk=request.session['uid'])
+    user = Person.objects.get(session_key=request.session.session_key)
     if user.group and user.group.leader == user:
         user.group.delete()
         user.group = None

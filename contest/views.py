@@ -29,7 +29,7 @@ class UTC(tzinfo):
 
 def index(request, pk='-1'):
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -63,14 +63,14 @@ def index(request, pk='-1'):
 
 def challenge(request, pk):
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
     pk = int(pk)
     try:
         challenges = Challenge.objects.filter(contest__pk=pk, public=True)
-        team = Person.objects.get(pk=request.session['uid']).team
+        team = Person.objects.get(session_key=request.session.session_key).team
         solved = map(
             lambda x: x.challenge,
             Ranking.objects.get(team=team, contest__pk=pk).solved.all()
@@ -92,7 +92,7 @@ def challenge(request, pk):
 def team(request, pk):
     pk = int(pk)
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -119,7 +119,7 @@ def team(request, pk):
 
 def ranking(request, pk):
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -163,7 +163,7 @@ def submit(request):
                 contest = Contest.objects.get(pk=contest)
             except:
                 return ERROR
-            user = Person.objects.get(pk=request.session['uid'])
+            user = Person.objects.get(session_key=request.session.session_key)
             if flag == challenge.flag:
                 _, submit = Submit.objects.update_or_create(person=user,
                     challenge=challenge, defaults={'status': True})

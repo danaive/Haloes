@@ -102,7 +102,7 @@ def sign_in(request):
 
 def sign_out(request):
     try:
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         user.session_key = ''
         user.save()
     except:
@@ -120,7 +120,7 @@ def update_avatar(request):
             img = request.FILES['img']
             if img.size > 500 * 1024:
                 return FAIL
-            user = Person.objects.get(pk=request.session['uid'])
+            user = Person.objects.get(session_key=request.session.session_key)
             user.avatar = img
             user.save()
             from PIL import Image
@@ -135,7 +135,7 @@ def update_info(request):
     if request.is_ajax:
         uform = UpdateForm(request.POST)
         if uform.is_valid():
-            user = Person.objects.get(pk=request.session['uid'])
+            user = Person.objects.get(session_key=request.session.session_key)
             email = uform.cleaned_data['email']
             if email and email != user.email:
                 user.check_email = _send_email_check(email)
@@ -171,7 +171,7 @@ def follow(request):
                 user = Person.objects.get(username=fform.cleaned_data['username'])
             except:
                 return ERROR
-            follower = Person.objects.get(pk=request.session['uid'])
+            follower = Person.objects.get(session_key=request.session.session_key)
             if follower.following.filter(pk=user.pk):
                 follower.following.remove(user)
             else:
@@ -184,7 +184,7 @@ def index(request, pk=u'-1'):
     pk = int(pk)
     data = {}
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
         try:
             owner = Person.objects.get(pk=pk)
         except:
@@ -246,7 +246,7 @@ def score(request):
                 'name': user.username
             })
             try:
-                visitor = Person.objects.get(pk=request.session['uid'])
+                visitor = Person.objects.get(session_key=request.session.session_key)
                 if visitor.username != user.username:
                     tmp = [0] * 5
                     for challenge in visitor.challenges.filter(
@@ -269,7 +269,7 @@ def score(request):
 
 def ranking(request):
     if request.session.get('uid', None):
-        user = Person.objects.get(pk=request.session['uid'])
+        user = Person.objects.get(session_key=request.session.session_key)
     else:
         user = None
     username = user.username if user else None
@@ -304,7 +304,7 @@ def get_news(request, pk=u'-1'):
         step = 6
         try:
             page = int(request.POST.get('page', 0))
-            user = Person.objects.get(pk=request.session['uid'])
+            user = Person.objects.get(session_key=request.session.session_key)
             focus = Person.objects.get(pk=pk) if pk != -1 and pk != user.pk else None
         except:
             return ERROR
