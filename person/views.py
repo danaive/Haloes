@@ -14,6 +14,7 @@ from os import urandom
 from hashlib import sha256
 from base64 import b64encode
 from datetime import timedelta
+from geetest import GeetestLib
 import json
 
 
@@ -31,6 +32,29 @@ def _send_email_check(email, username, password):
     send_mail('Email Confirm', 'Email Confirm for Haloes',
         'noreply@' + settings.DOMAIN_NAME, [email], html_message=html)
     return key
+
+
+def get_captcha(request):
+    if request.is_ajax:
+        gt =  GeetestLib(settings.CAPTCHA_PUB, settings.CAPTCHA_PRI)
+        status = gt.pre_process()
+        request.session[gt.GT_STATUS_SESSION_KEY] = status
+        return response('okay', json.loads(gt.get_response_str()))
+
+
+def validate_captcha(request):
+    if request.is_ajax:
+        gt = GeetestLib(settings.CAPTCHA_PUB, settings.CAPTCHA_PRI)
+        status = request.session[gt.GT_STATUS_SESSION_KEY]
+        challenge = request.POST['challenge']
+        validate = request.POST['validate']
+        seccode = request.POST['seccode']
+        if status:
+            result = gt.success_validate(challenge, validate, seccode)
+        else:
+            result = gt.failback_validate(challenge, validate, seccode)
+        return OKAY if result else FAIL
+    return ERROR
 
 
 @csrf_exempt
