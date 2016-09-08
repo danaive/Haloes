@@ -143,5 +143,10 @@ DOCKER_PORT = 2375
 
 DOCKER_VERSION = 'xxx' # update version here
 
-
 DOMAIN_NAME = 'whuctf.org'
+
+# Geetest Captcha
+
+CAPTCHA_PUB = 'e04f2780a17db1ffdb228d94bee5ea4d'
+
+CAPTCHA_PRI = 'a5666d7ab571f3f7b3a530bf423bd1ad'

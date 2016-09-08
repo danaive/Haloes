@@ -19,6 +19,7 @@ html(lang='en')
       input#username(placeholder='Email / Username')
       input#password(placeholder='Password', type='password')
       button#signIn(data-salt=salt) Sign in
+      button#guest(style='left: 40px;') Guest View
       #signInDone.alert.alert-success
         strong Welcome!
         p &nbsp;&nbsp;(o^∇^o)ﾉ
@@ -36,6 +37,7 @@ html(lang='en')
       input#rusername(placeholder='Username')
       input#rpassword(placeholder='Password', type='password')
       button#signUp Sign up
+      #captcha
       #signUpDone.alert.alert-success
         strong Check the Email to Activate Your Account plz.
       #signUpFail.alert.alert-warning
@@ -43,6 +45,7 @@ html(lang='en')
         p &nbsp;&nbsp;(´･･)ﾉ(._.`)
 
     script(src='{% static "assets/bootflat/js/jquery-1.10.1.min.js" %}')
+    script(src='http://static.geetest.com/static/tools/gt.js')
     script(src='{% static "assets/plugins/jquery.cookie.min.js" %}')
     script(src='{% static "assets/plugins/jquery.sha256.js" %}')
     script(src='{% static "assets/plugins/jquery.scrollify.min.js" %}')

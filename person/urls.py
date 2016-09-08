@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', views.index, name='index'),
     url(r'^get-news/$', views.get_news),
     url(r'^(?P<pk>\d+)/get-news/$', views.get_news),
+    url(r'^get_captcha/$', views.get_captcha),
+    url(r'^validate_captcha/$', views.validate_captcha),
 ]
