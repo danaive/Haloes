@@ -31,13 +31,14 @@ def index(request):
         for attr in attrs:
             cha_item[attr] = getattr(challenge, attr)
         cha_list.append(cha_item)
-    if user:
+
         # state:
         #  -1: not tried
         #   0: attampted
         #   1: solved
         #   2: team-solved
-        for i, challenge in enumerate(challenges):
+    for i, challenge in enumerate(challenges):
+        if user:
             state = -1
             if challenge in user.challenges.filter(submit__status=False):
                 state = 0
@@ -46,9 +47,8 @@ def index(request):
             elif user.group and user.group.solved.filter(pk=challenge.pk):
                 state = 2
             cha_list[i]['state'] = state
-            cha_list[i]['category'] = str(challenge.category)
-            cha_list[i]['solved'] = challenge.submit_set.filter(
-                status=True).count()
+        cha_list[i]['category'] = challenge.category
+        cha_list[i]['solved'] = challenge.submit_set.filter(status=True).count()
     return render(request, 'challenge.jade', {
         'username': username,
         'challenges': cha_list,
