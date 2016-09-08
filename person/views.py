@@ -18,22 +18,6 @@ from geetest import GeetestLib
 import json
 
 
-def _send_email_check(email, username, password):
-    if settings.DEBUG:
-        return 'done'
-    from django.core.mail import send_mail
-    from os.path import join
-    key = urandom(8).encode('hex')
-    html = open(join(settings.BASE_DIR, 'email_check.html')).read().format(
-        username=username.encode('utf-8'),
-        domain=settings.DOMAIN_NAME,
-        token=key + sha256(key + password).hexdigest()[:32]
-    )
-    send_mail('Email Confirm', 'Email Confirm for Haloes',
-        'noreply@' + settings.DOMAIN_NAME, [email], html_message=html)
-    return key
-
-
 def get_captcha(request):
     if request.is_ajax:
         gt =  GeetestLib(settings.CAPTCHA_PUB, settings.CAPTCHA_PRI)
@@ -68,6 +52,21 @@ def check_email(request, token):
             return HttpResponseRedirect(reverse('login'))
     except:
         return HttpResponse('expired token')
+
+
+def _send_email_check(email, username, password):
+    if settings.DEBUG: return 'done'
+    from django.core.mail import send_mail
+    from os.path import join
+    key = urandom(8).encode('hex')
+    html = open(join(settings.BASE_DIR, 'email_check.html')).read().format(
+        username=username.encode('utf-8'),
+        domain=settings.DOMAIN_NAME,
+        token=key + sha256(key + password).hexdigest()[:32]
+    )
+    send_mail('Email Confirm', 'Email Confirm for Haloes',
+        'noreply@' + settings.DOMAIN_NAME, [email], html_message=html)
+    return key
 
 
 def sign_up(request):
