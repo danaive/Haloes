@@ -26,7 +26,7 @@ $ ->
         success: (data) ->
           if data.msg == 'okay'
             $('#signInDone').fadeIn()
-            window.setTimeout 'location.href="person/"', 500
+            window.setTimeout 'location.href="/person/"', 500
           else if data.msg == 'fail'
             $('#signInFail').fadeIn()
           else if data.msg == 'email'
@@ -37,7 +37,7 @@ $ ->
   signup = ->
     if $('#remail').val() and $('#rusername').val() and $('#rpassword').val()
       $.ajax
-        url: 'person/sign-up/'
+        url: '/person/sign-up/'
         type: 'post'
         dataType: 'json'
         data:
@@ -54,7 +54,7 @@ $ ->
 
   $('#guest').on 'click', ->
     $('#signInDone').fadeIn()
-    window.setTimeout 'location.href="challenge/"', 500
+    window.setTimeout 'location.href="/challenge/"', 500
 
   handler = (captchaObj) ->
     $('#signUp').on 'click', ->
@@ -63,7 +63,7 @@ $ ->
         alert 'plz validate first'
         return
       $.ajax
-        url: 'person/validate_captcha/'
+        url: '/person/validate_captcha/'
         type: 'post'
         dataType: 'json'
         data:
@@ -78,7 +78,7 @@ $ ->
     captchaObj.onSuccess(signup)
 
   $.ajax
-    url: 'person/get_captcha/'
+    url: '/person/get_captcha/'
     type: 'get'
     dataType: 'json'
     success: (data) ->

@@ -13,7 +13,7 @@ html(lang='en')
         li
           .text
           .finger
-    form.login-form
+    .login-form
       {% csrf_token %}
       h1 Sign In
       input#username(placeholder='Email / Username')
@@ -31,7 +31,7 @@ html(lang='en')
       #alertError.alert.alert-warning
         strong Some Error Occured
         p &nbsp;&nbsp; ..(｡•ˇ‸ˇ•｡)..
-    form.reg-form
+    .reg-form
       h1 Sign Up
       input#remail(placeholder='Email')
       input#rusername(placeholder='Username')

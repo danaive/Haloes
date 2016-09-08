@@ -33,7 +33,7 @@
           success: function(data) {
             if (data.msg === 'okay') {
               $('#signInDone').fadeIn();
-              return window.setTimeout('location.href="person/"', 500);
+              return window.setTimeout('location.href="/person/"', 500);
             } else if (data.msg === 'fail') {
               return $('#signInFail').fadeIn();
             } else if (data.msg === 'email') {
@@ -48,7 +48,7 @@
     signup = function() {
       if ($('#remail').val() && $('#rusername').val() && $('#rpassword').val()) {
         return $.ajax({
-          url: 'person/sign-up/',
+          url: '/person/sign-up/',
           type: 'post',
           dataType: 'json',
           data: {
@@ -70,7 +70,7 @@
     };
     $('#guest').on('click', function() {
       $('#signInDone').fadeIn();
-      return window.setTimeout('location.href="challenge/"', 500);
+      return window.setTimeout('location.href="/challenge/"', 500);
     });
     handler = function(captchaObj) {
       $('#signUp').on('click', function() {
@@ -81,7 +81,7 @@
           return;
         }
         return $.ajax({
-          url: 'person/validate_captcha/',
+          url: '/person/validate_captcha/',
           type: 'post',
           dataType: 'json',
           data: {
@@ -99,7 +99,7 @@
       return captchaObj.onSuccess(signup);
     };
     return $.ajax({
-      url: 'person/get_captcha/',
+      url: '/person/get_captcha/',
       type: 'get',
       dataType: 'json',
       success: function(data) {
