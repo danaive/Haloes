@@ -31,14 +31,13 @@ def index(request):
         for attr in attrs:
             cha_item[attr] = getattr(challenge, attr)
         cha_list.append(cha_item)
-
-        # state:
-        #  -1: not tried
-        #   0: attampted
-        #   1: solved
-        #   2: team-solved
     for i, challenge in enumerate(challenges):
         if user:
+            # state:
+            #  -1: not tried
+            #   0: attampted
+            #   1: solved
+            #   2: team-solved
             state = -1
             if challenge in user.challenges.filter(submit__status=False):
                 state = 0
