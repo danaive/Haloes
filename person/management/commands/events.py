@@ -27,7 +27,6 @@ class Command(BaseCommand):
             event['location'] = vText(item['oj'])
             event['uid'] = item['id'] + '@whuctf.org'
             cal.add_component(event)
-        print '%d events checked' % len(events)
         f = open(os.path.join(settings.MEDIA_ROOT, 'acmevents.ics'), 'wb')
         f.write(cal.to_ical())
         f.close()
